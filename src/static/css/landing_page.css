@@ -1,0 +1,23 @@
+
+header {
+  height: 100vh;
+  background-image: url(../imgs/landingPage.jpg);
+  background-size: cover;
+  background-position: center;
+  margin-bottom: 50px;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+          flex-direction: column;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
+  text-align: center;
+}
+
+p {
+  width: 600px;
+  margin: 0 auto 20px;
+}

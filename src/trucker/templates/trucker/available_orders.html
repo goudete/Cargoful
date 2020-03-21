@@ -1,0 +1,67 @@
+{% extends 'trucker/base.html'%}
+
+{% block content%}
+{% load static %}
+
+
+  <style media="screen">
+      tr[data-href]{
+          cursor: pointer;
+      }
+  </style>
+
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+      <h1>Available Orders</h1>
+    </div>
+  </div>
+  <div class="row justify-content-center pt-2">
+    <div class="col-md-8">
+    <div class="card">
+    <table class="table table-striped">
+      <thead>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <tr>
+          <th scope="col">Shipping Company</th>
+          <th scope="col">Pickup Lat</th>
+          <th scope="col">Pickup Lng</th>
+          <th scope="col">Distance</th>
+          <th scope="col">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for av in available %}
+        <tr data-href="/trucker/accept_order/{{ av.id }}">
+          <th scope="row">{{ av.shipping_company.user.profile.company_name }}</th>
+          <td>{{ av.pickup_latitude }}</td>
+          <td>{{ av.pickup_longitude }}</td>
+          <td>{{ av.distance }}</td>
+          <td>{{ av.price }}</td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+    </div>
+
+   <!-- this needs to reference static file (?) -->
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", () => {
+            const rows = document.querySelectorAll("tr[data-href]");
+
+            rows.forEach(row => {
+                row.addEventListener("click", () => {
+                    window.location.href = row.dataset.href;
+                });
+            });
+      })
+    </script>
+
+  <!-- </div> -->
+  </div>
+</div>
+
+
+{% endblock%}

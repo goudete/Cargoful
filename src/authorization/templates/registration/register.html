@@ -1,0 +1,35 @@
+{% extends 'registration/base.html'%}
+{% block content%}
+{% load static %}
+
+  <h1>Register</h1>
+  <form method="post" action="{% url 'register' %}" >
+    {% csrf_token %}
+
+    {% for message in messages %}
+      <p id="messages">{{message}}</p>
+    {% endfor %}
+
+    <p>{{ form.username.label }}</p>
+    <p>{{ form.username }}</p>
+
+    <p>{{ form.email.label }}</p>
+    <p>{{ form.email }}</p>
+
+    <p>{{ form.password1.label }}</p>
+    <p>{{ form.password1 }}</p>
+
+    <p>{{ form.password2.label }}</p>
+    <p>{{ form.password2 }}</p>
+
+    <p>{{ profile_form.company_name.label }}</p>
+    <p>{{ profile_form.company_name }}</p>
+
+    <p>{{ profile_form.user_type.label }}</p>
+    <p>{{ profile_form.user_type }}</p>
+
+    <input type="submit" value="Register">
+  </form>
+  {{form.errors}}
+
+{% endblock %}

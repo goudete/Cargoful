@@ -1,0 +1,43 @@
+{% extends 'trucker/base.html'%}
+
+{% block content %}
+
+<div class="row justify-content-center mt-5">
+  <div class="col-md-8">
+    <h1>My Jobs</h1>
+  </div>
+</div>
+<div class="row justify-content-center pt-2">
+  <div class="col-md-8">
+    <div class="card">
+    <table class="table table-striped">
+      <thead>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <tr>
+          <th scope="col">Shipping Company</th>
+          <th scope="col">Pickup Lat</th>
+          <th scope="col">Pickup Lng</th>
+          <th scope="col">Distance</th>
+          <th scope="col">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for my in my_orders %}
+        <tr>
+          <th scope="row">{{ my.shipping_company.user.profile.company_name }}</th>
+          <td>{{ my.pickup_latitude }}</td>
+          <td>{{ my.pickup_longitude }}</td>
+          <td>{{ my.distance }}</td>
+          <td>{{ my.price }}</td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

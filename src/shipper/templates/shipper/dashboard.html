@@ -1,0 +1,70 @@
+{% extends 'shipper/base.html'%}
+
+{% block content %}
+{% load static %}
+
+
+<div class="row justify-content-center mt-5">
+  <div class="col-md-8">
+    <h1>My Orders</h1>
+  </div>
+</div>
+
+<div class="row justify-content-center pt-2">
+  <div class="col-md-8">
+    <p><b>Total Orders: {{set.count}}</b></p>
+  </div>
+  <div class="col-md-8 text-right">
+    <!-- <input type="button" onclick="window.location.href = 'post_order';" value="Post New Order" style = "float: right;"/>
+    <button type="button" class="btn btn-secondary btn-lg">New Order</button> -->
+    <a href="/shipper/post_order" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">New Order</a>
+  </div>
+</div>
+
+<div class="row justify-content-center pt-2">
+<div class="col-md-8">
+<div class="card">
+<table class="table table-striped">
+  <thead>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <tr>
+      <th scope = 'col'>Order Number</th>
+      <th scope="col">Status</th>
+      <th scope = "col">Trucking Company</th>
+      <th scope="col">Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for s in set %}
+    <tr>
+      <td>{{ s.id }}</td>
+      <th scope="row">
+        {% if s.status == 0 %}
+          Unassigned
+        {% elif s.status == 1 %}
+          Booked
+        {% elif s.status == 2 %}
+          In Transit
+        {% elif s.status == 3 %}
+          Delivered
+        {% elif s.status == 4 %}
+          Cancelled
+        {% endif %}
+      </th>
+      <th>
+        {% if s.status > 0 and s.status < 4 %}
+          {{ s.truck_company.user.profile.company_name}}
+        {% else %}
+          None
+        {% endif %}
+      </th>
+      <td>{{ s.price }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+  </div>
+</div>
+{% endblock %}
