@@ -16,6 +16,7 @@ from rest_framework.decorators import api_view
 from authorization.decorators import allowed_users
 import googlemaps
 from decimal import Decimal
+import math
 # Create your views here.
 
 @login_required
@@ -81,6 +82,30 @@ def confirm(request):
         pu_long = pu_geocode[0]['geometry']['location']['lng']
         del_lat = del_geocode[0]['geometry']['location']['lat']
         del_long = del_geocode[0]['geometry']['location']['lng']
+
+        """lines 86 - 103 are for getting mdpt of two lat/lng coordinates"""
+        x,y,z = 0,0,0
+        lat1,long1 = math.radians(pu_lat), math.radians(pu_long)
+        x += (math.cos(lat1)*math.cos(long1))
+        y += (math.cos(lat1)*math.sin(long1))
+        z += math.sin(lat1)
+        #
+        lat2,long2 = math.radians(del_lat), math.radians(del_long)
+        x += (math.cos(lat2)*math.cos(long2))
+        y += (math.cos(lat2)*math.sin(long2))
+        z += math.sin(lat2)
+        #avg
+        x /= 2
+        y/= 2
+        z/= 2
+        #get mdpts in radians
+        mdpt_long = math.degrees(math.atan2(y,x))
+        mdpt_sqrt = math.sqrt(x*x + y*y)
+        mdpt_lat = math.degrees(math.atan2(z, mdpt_sqrt))
+        """end mdpt calculation"""
+        #get the distance btwn pickup and delivery
+        dist = gmaps.distance_matrix([str(pu_lat) + " " + str(pu_long)], [str(del_lat) + " " + str(del_long)])['rows'][0]['elements'][0]
+        distance = Decimal(dist['distance']['text'].split(" ")[0].replace(",", ""))
         #other regular metrics
         date, time = jsn['pickup_date'], jsn['pickup_time']
         truck = jsn['truck_type']
@@ -92,22 +117,15 @@ def confirm(request):
     #long list of variables is for the html page, all of these will be displayed in the confirmation page
     return render(request, 'shipper/confirmation.html',
     {
-        'pu_st_number': pu_st_number,
-        'pu_st_route': pu_st_route,
-        'pu_city': pu_city,
-        'pu_state': pu_state,
-        'pu_zip': pu_zip,
-        'pu_country': pu_country,
-        'del_st_number': del_st_number,
-        'del_st_route': del_st_route,
-        'del_city': del_city,
-        'del_state': del_state,
-        'del_zip': del_zip,
-        'del_country': del_country,
+        'pu_addy': pu_address_full,
+        'del_addy': del_address_full,
         'pu_lat': pu_lat,
         'pu_long': pu_long,
         'del_lat': del_lat,
         'del_long': del_long,
+        'mid_lat': mdpt_lat,
+        'mid_long': mdpt_long,
+        'distance': distance,
         'date':date,
         'time': time,
         'truck': truck,
@@ -127,6 +145,7 @@ def order_success(request):
         jsn = json.loads(jdp) #get dictionary from json
         pu_lat, pu_long = jsn['pickup_latitude'], jsn['pickup_longitude']
         del_lat, del_long = jsn['delivery_latitude'], jsn['delivery_longitude']
+        dist = jsn['distance']
         order = Order_Form(request.POST)
         if order.is_valid():
             new_order = order.save(commit = False)
@@ -136,5 +155,6 @@ def order_success(request):
             new_order.pickup_longitude = pu_long
             new_order.delivery_latitude = del_lat
             new_order.delivery_longitude = del_long
+            new_order.distance = dist
             new_order.save()
             return HttpResponseRedirect('/shipper')

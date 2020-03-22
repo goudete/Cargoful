@@ -17,12 +17,19 @@
         width: 50%;
       }
       .marker {
-        background-image: url('/static/imgs/mapbox-icon.png');
+        background-image: url('/static/imgs/CargoFul Logo-12.png');
         background-size: cover;
-        width: 50px;
-        height: 50px;
+        width: 30px;
+        height: 30px;
         border-radius: 50%;
         cursor: pointer;
+      }
+      .mapboxgl-popup {
+        max-width: 200px;
+      }
+      .mapboxgl-popup-content {
+        text-align: center;
+        font-family: 'Open Sans', sans-serif;
       }
     </style>
 </head>
@@ -37,7 +44,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoicmZpdGNoIiwiYSI6ImNrN3dqdTYwYjAzNzUzZm85NXRre
 var map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/light-v10',
-  center: [-96, 37.8],
+  center: [{{mid_long}}, {{mid_lat}}],
   zoom: 3
 });
 
@@ -52,8 +59,8 @@ var geojson = {
       coordinates: [{{pu_long}}, {{pu_lat}}]
     },
     properties: {
-      title: 'Mapbox',
-      description: 'Washington, D.C.'
+      title: 'Pickup Location',
+      description: '{{pu_addy}}'
     }
   },
   {
@@ -63,8 +70,8 @@ var geojson = {
       coordinates: [{{del_long}}, {{del_lat}}]
     },
     properties: {
-      title: 'Mapbox',
-      description: 'San Francisco, California'
+      title: 'Delivery Location',
+      description: '{{del_addy}}'
     }
   }]
 };
@@ -79,6 +86,8 @@ geojson.features.forEach(function(marker) {
   // make a marker for each feature and add to the map
   new mapboxgl.Marker(el)
     .setLngLat(marker.geometry.coordinates)
+    .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+    .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
     .addTo(map);
 });
 </script>
@@ -89,6 +98,7 @@ geojson.features.forEach(function(marker) {
       <tr>
         <td class = 'label'><b>Pickup Address</b></td>
       </tr>
+      <!--
       <tr>
         <td class="label">Street</td>
         <td class="slimField"><input class="field" id="street_number" value = {{pu_st_number}} disabled="true"/></td>
@@ -107,6 +117,9 @@ geojson.features.forEach(function(marker) {
       <tr>
         <td class="label">Country</td>
         <td class="wideField" colspan="3"><input class="field" id="country" value = '{{pu_country}}' disabled="true"/></td>
+      </tr> -->
+      <tr>
+        <td class = 'widefield'><input class = 'field' id = 'addy' value = '{{pu_addy}}' size = '60' disabled = 'true'/></td>
       </tr>
       <!-- delivery address info -->
       <tr>
@@ -115,6 +128,7 @@ geojson.features.forEach(function(marker) {
       <tr>
         <td class = 'label'><b> Delivery Address</b></td>
       </tr>
+      <!--
       <tr>
         <td class="label">Street</td>
         <td class="slimField"><input class="field" id="street_number" value = {{del_st_number}} disabled="true"/></td>
@@ -133,6 +147,9 @@ geojson.features.forEach(function(marker) {
       <tr>
         <td class="label">Country</td>
         <td class="wideField" colspan="3"><input class="field" id="country" value = '{{del_country}}' disabled="true"/></td>
+      </tr> -->
+      <tr>
+        <td class = 'widefield'><input class = 'field' id = 'addy' value = '{{del_addy}}' size = '60' disabled = 'true'/></td>
       </tr>
     <!-- other order info -->
       <tr>
@@ -162,12 +179,13 @@ geojson.features.forEach(function(marker) {
         <td class = 'label'> Price </td>
         <td class = 'widefield'><input class = 'field' id = 'price' name = 'price' type = 'number' step = '0.01' value = {{price}} readonly></td>
       </tr>
-      <!-- lat and lng for pickup and delivery (hidden from user) -->
+      <!-- distance of order + lat and lng for pickup and delivery (hidden from user) -->
       <tr>
         <td class = 'widefield'><input class = 'field' id = 'pu_lat' name = 'pickup_latitude' type = 'number' value = {{pu_lat}} hidden = 'true' readonly></td>
         <td class = 'widefield'><input class = 'field' id = 'pu_long' name = 'pickup_longitude' type = 'number' value = {{pu_long}} hidden = 'true' readonly></td>
         <td class = 'widefield'><input class = 'field' id = 'del_lat' name = 'delivery_latitude' type = 'number' value = {{del_lat}} hidden = 'true' readonly></td>
         <td class = 'widefield'><input class = 'field' id = 'del_long' name = 'delivery_longitude' type = 'number' value = {{del_long}} hidden = 'true' readonly></td>
+        <td class = 'widefield'><input class = 'field' id = 'distance' name = 'distance' type = 'number' value = {{distance}} hidden = 'true' readonly></td>
       </tr>
     </table>
         <input type="submit" value="Confirm Order">
