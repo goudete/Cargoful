@@ -9,10 +9,17 @@ shipper contains everything that has to do with the shipper side
 ----
 How to clone and run:
 1. pull from github
-2. Activate virtual environment
+
+2. create .env file in src directory
+	- add SECRET_KEY=[insert secret key here]
+	- add DEBUG=on
+	- 
+
+3. Activate virtual environment
 	- go into project directory
 	- type into command line: 'source venv/bin/activate'
-3. Run Server
+
+4. Run Server
 	- move into 'src' folder
 	- type into command line: 'python manage.py runserver'
 	- copy and paste http address returned from command line
