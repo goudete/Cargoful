@@ -13,11 +13,16 @@ How to clone and run:
 2. create .env file in src directory
 	- add SECRET_KEY=[insert secret key here]
 	- add DEBUG=on
-	- 
 
-3. Activate virtual environment
+3. Create and activate virtual environment
 	- go into project directory
-	- type into command line: 'source venv/bin/activate'
+	- to create:
+		- Mac: 'python3 -m venv venv'
+		- Windows: 'py -m venv venv'
+	- to activate:
+		- type into command line: 'source venv/bin/activate'
+	- download packages:
+		- pip install -r requirements.txt
 
 4. Run Server
 	- move into 'src' folder
