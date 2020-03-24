@@ -1,26 +1,42 @@
-<p><b>Pickup Address Here </b><p>
-<div id="locationField">
-      <input id="autocomplete"
-             placeholder="Enter your address"
-             onFocus="geolocate()"
-             type="text"
-             size = '50'/>
+{% extends 'shipper/base.html'%}
+
+{% block content %}
+
+<div class="container">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+      <h1>New Order</h1>
+    </div>
+  </div>
+
+  <div class="row justify-content-center mt-3">
+    <div class="col-md-4">
+      <h5>Pick Up Address</h5>
+      <div id="locationField">
+            <input id="autocomplete"
+                   placeholder="Enter your address"
+                   onFocus="geolocate()"
+                   type="text"
+                   size = '50'/>
+      </div>
     </div>
 
-    <p><b>Delivery Address Here </b><p>
-    <div id="locationField">
-          <input id="autocomplete2"
-                 placeholder="Enter your address"
-                 onFocus="geolocate()"
-                 type="text"
-                 size = '50'/>
-        </div>
+    <div class="col-md-4">
+      <h5>Delivery Address</h5>
+      <div id="locationField">
+            <input id="autocomplete2"
+                   placeholder="Enter your address"
+                   onFocus="geolocate()"
+                   type="text"
+                   size = '50'/>
+      </div>
+    </div>
+  </div>
 
-    <!-- Note: The address components in this sample are typical. You might need to adjust them for
-               the locations relevant to your app. For more information, see
-         https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform
-    -->
-    <form action = 'confirmation' method = "post">{% csrf_token %}
+  <div class="row justify-content-center mt-5">
+    <form action = 'confirmation' method = "post">
+      {% csrf_token %}
     <table id="address">
       <tr>
         <td class="label"></td>
@@ -44,35 +60,62 @@
     </table>
 
 
-        <table id="address2">
-          <tr>
-            <td class="label"></td>
-            <td class="slimField"><input class="field" id="street_number2" name = 'delivery_st_number' hidden = 'true' disabled="true"/></td>
-            <td class="wideField" colspan="2"><input class="field" id="route2" name = 'delivery_st_route' hidden = 'true' disabled="true"/></td>
-          </tr>
-          <tr>
-            <td class="label"></td>
-            <td class="wideField" colspan="3"><input class="field" id="locality2" name = 'delivery_city' hidden = 'true' disabled="true"/></td>
-          </tr>
-          <tr>
-            <td class="label"></td>
-            <td class="slimField"><input class="field" id="administrative_area_level_12" name = 'delivery_state' hidden = 'true' disabled="true"/></td>
-            <td class="label"></td>
-            <td class="wideField"><input class="field" id="postal_code2" name = 'delivery_zip' hidden = 'true' disabled="true"/></td>
-          </tr>
-          <tr>
-            <td class="label"></td>
-            <td class="wideField" colspan="3"><input class="field" id="country2" name = 'delivery_country' hidden = 'true' disabled="true"/></td>
-          </tr>
-        </table>
+    <table id="address2">
+      <tr>
+        <td class="label"></td>
+        <td class="slimField"><input class="field" id="street_number2" name = 'delivery_st_number' hidden = 'true' disabled="true"/></td>
+        <td class="wideField" colspan="2"><input class="field" id="route2" name = 'delivery_st_route' hidden = 'true' disabled="true"/></td>
+      </tr>
+      <tr>
+        <td class="label"></td>
+        <td class="wideField" colspan="3"><input class="field" id="locality2" name = 'delivery_city' hidden = 'true' disabled="true"/></td>
+      </tr>
+      <tr>
+        <td class="label"></td>
+        <td class="slimField"><input class="field" id="administrative_area_level_12" name = 'delivery_state' hidden = 'true' disabled="true"/></td>
+        <td class="label"></td>
+        <td class="wideField"><input class="field" id="postal_code2" name = 'delivery_zip' hidden = 'true' disabled="true"/></td>
+      </tr>
+      <tr>
+        <td class="label"></td>
+        <td class="wideField" colspan="3"><input class="field" id="country2" name = 'delivery_country' hidden = 'true' disabled="true"/></td>
+      </tr>
+    </table>
 
-        {{form}}
-        <input type="submit" value="Post Order">
-        </form>
+    <div class="col-md-4 mt-4">
+      {{ form.pickup_date.label}}
+      {{ form.pickup_date}}
+    </div>
+    <div class="col-md-4 mt-4">
+      {{ form.pickup_time.label}}
+      {{ form.pickup_time}}
+    </div>
+    <div class="col-md-8 mt-4">
+      {{ form.truck_type.label}}
+      {{ form.truck_type }}
+    </div>
+    <div class="col-md-8 mt-4">
+      {{ form.price.label}}
+      {{ form.price }}
+    </div>
+    <div class="col-md-8 mt-4">
+      {{ form.contents.label}}
+      {{ form.contents }}
+    </div>
+    <div class="col-md-8 mt-4">
+      {{ form.instructions.label}}
+      {{ form.instructions }}
+    </div>
 
+    <input type="submit" value="Post Order">
+    </form>
+
+  </div>
+</div>
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"> </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKmjFt91GOvHaqyxpoiiqFQURjFST7U2I&libraries=places"></script> -->
-    <script>
+
+<script>
 // This sample uses the Autocomplete widget to help the user select a
 // place, then it retrieves the address components associated with that
 // place, and then it populates the form fields with those details.
@@ -182,6 +225,8 @@ function geolocate() {
     });
   }
 }
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKmjFt91GOvHaqyxpoiiqFQURjFST7U2I&libraries=places&callback=initAutocomplete"
-        async defer></script>
+</script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKmjFt91GOvHaqyxpoiiqFQURjFST7U2I&libraries=places&callback=initAutocomplete"async defer>
+  </script>
+
+{% endblock %}
