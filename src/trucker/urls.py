@@ -5,4 +5,5 @@ urlpatterns = [
     path('available_orders/', views.Available_Orders),
     path('', views.My_Orders),
     path('accept_order/<int:orderID>/', views.Accept_Order),
+    path('update_status', views.Update_Status),
 ]

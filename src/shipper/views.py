@@ -105,7 +105,8 @@ def confirm(request):
         """end mdpt calculation"""
         #get the distance btwn pickup and delivery
         dist = gmaps.distance_matrix([str(pu_lat) + " " + str(pu_long)], [str(del_lat) + " " + str(del_long)])['rows'][0]['elements'][0]
-        distance = Decimal(dist['distance']['text'].split(" ")[0].replace(",", ""))
+        distance = float(dist['distance']['text'].split(" ")[0].replace(",", ""))
+        print(distance)
         #other regular metrics
         date, time = jsn['pickup_date'], jsn['pickup_time']
         truck = jsn['truck_type']
@@ -146,6 +147,7 @@ def order_success(request):
         pu_lat, pu_long = jsn['pickup_latitude'], jsn['pickup_longitude']
         del_lat, del_long = jsn['delivery_latitude'], jsn['delivery_longitude']
         dist = jsn['distance']
+        print(dist)
         order = Order_Form(request.POST)
         if order.is_valid():
             new_order = order.save(commit = False)

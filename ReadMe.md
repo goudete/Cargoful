@@ -20,13 +20,16 @@ How to clone and run:
 		- Mac: 'python3 -m venv venv'
 		- Windows: 'py -m venv venv'
 	- to activate:
-		- type into command line: 'source venv/bin/activate'
+		- Mac: 'source venv/bin/activate'
+		- Windows: '.\venv\Scripts\activate'
 	- download packages:
 		- pip install -r requirements.txt
 
 4. Run Server
 	- move into 'src' folder
-	- type into command line: 'python manage.py runserver'
+	- type into command line:
+		- Mac: 'python manage.py runserver'
+		- Windows: 'py manage.py runserver'
 	- copy and paste http address returned from command line
 	  into browser
 ----
