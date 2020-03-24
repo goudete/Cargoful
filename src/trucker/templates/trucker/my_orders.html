@@ -29,11 +29,35 @@
           <th scope="row">{{ my.shipping_company.user.profile.company_name }}</th>
           <td>{{ my|reverse_geo_pickup }}</td>
           <td>{{ my|reverse_geo_delivery }}</td>
-          <td><select name="D1">
-        		<option value='Booked'>Booked</option>
-        		<option value="In Transit">In Transit</option>
-        		<option value="Delivered">Delivered</option>
-        		</select>
+          <td>
+            {% if my.status == 1 %}
+            <form action = 'update_status' method = 'post'>{% csrf_token %}
+                <select id = 'status' name="status">
+              		<option value='1'>Booked</option>
+              		<option value="2">In Transit</option>
+              		<option value="3">Delivered</option>
+            		</select>
+                <input type = 'number' id = 'order_id' name = 'order_id' value = {{my.id}} hidden = 'true'>
+                <input type = 'submit' value = 'Update Status'>
+            </form>
+            {% elif my.status == 2 %}
+            <form action = 'update_status' method = 'post'>{% csrf_token %}
+                <select id = 'status' name="status">
+              		<option value="2">In Transit</option>
+              		<option value="3">Delivered</option>
+            		</select>
+                <input type = 'number' id = 'order_id' name = 'order_id' value = {{my.id}} hidden = 'true'>
+                <input type = 'submit' value = 'Update Status'>
+            </form>
+            {% elif my.status == 3 %}
+            <form action = 'update_status' method = 'post'>{% csrf_token %}
+                <select id = 'status' name="status">
+              		<option value="3">Delivered</option>
+            		</select>
+                <input type = 'number' id = 'order_id' name = 'order_id' value = {{my.id}} hidden = 'true'>
+                <input type = 'submit' value = 'Update Status'>
+            </form>
+            {% endif %}
           </td>
           <td>{{ my.price }}</td>
         </tr>

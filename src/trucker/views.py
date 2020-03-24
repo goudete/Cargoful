@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from shipper.models import order, shipper
 from trucker.models import truck_company, trucks, driver
 from authorization.decorators import allowed_users
-
+from rest_framework.decorators import api_view
+import json
 # Create your views here.
 @login_required
 @allowed_users(allowed_roles=['Trucker'])
@@ -34,3 +35,16 @@ def Accept_Order(request, orderID):
     cur_order.status = 1
     cur_order.save()
     return HttpResponseRedirect('/trucker')
+
+@login_required
+@allowed_users(allowed_roles = ['Trucker'])
+@api_view(['POST'])
+def Update_Status(request):
+    if request.method == 'POST':
+        jdp = json.dumps(request.data) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
+        cur_order = order.objects.filter(id = jsn['order_id']).first()
+        cur_order.status = int(jsn['status'])
+        cur_order.save()
+        return HttpResponseRedirect('/trucker')

@@ -2,7 +2,7 @@
 
 {% block content%}
 {% load static %}
-
+{% load trucker_tags %}
 
   <style media="screen">
       tr[data-href]{
@@ -24,8 +24,8 @@
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <tr>
           <th scope="col">Shipping Company</th>
-          <th scope="col">Pickup Lat</th>
-          <th scope="col">Pickup Lng</th>
+          <th scope="col">Pickup Address</th>
+          <th scope="col">Delivery Address</th>
           <th scope="col">Distance</th>
           <th scope="col">Price</th>
         </tr>
@@ -35,8 +35,8 @@
         {% for av in available %}
         <tr data-href="/trucker/accept_order/{{ av.id }}">
           <th scope="row">{{ av.shipping_company.user.profile.company_name }}</th>
-          <td>{{ av.pickup_latitude }}</td>
-          <td>{{ av.pickup_longitude }}</td>
+          <td>{{ av|reverse_geo_pickup }}</td>
+          <td>{{ av|reverse_geo_delivery }}</td>
           <td>{{ av.distance }}</td>
           <td>{{ av.price }}</td>
         </tr>
