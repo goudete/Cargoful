@@ -1,34 +1,45 @@
 {% extends 'registration/base.html'%}
 
+{% load crispy_forms_tags %}
+
 {% block content%}
 
 <div class="container">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <div class="row justify-content-center mt-5">
+
+  <!-- <div class="row justify-content-center mt-5">
     <div class="col-md-8">
-      <h1>Login</h1>
+      <h1 style="color:Black;">Login</h1>
     </div>
+  </div> -->
+
+  <div class="row justify-content-center pt-5">
+    <form action="{% url 'login' %}" method="post">
+      {% csrf_token %}
+      <!-- Form -->
+
+
+      <div class="col-md-12">
+        {{ form.username|as_crispy_field }}
+      </div>
+
+      <div class="col-md-12">
+        {{ form.password|as_crispy_field }}
+      </div>
+
+      <!-- Buttons -->
+      <div class="row justify-content-center">
+        <div class="btn-group" role="group">
+            <a href="/register" type="button" class="btn btn-light mr-3" aria-pressed="true">Register</a>
+            <button type="submit" class="btn btn-secondary">Login</button>
+        </div>
+      </div>
+
+    </form>
   </div>
-
-  <div class="row justify-content-center pt-2">
-    <div class="col-md-8">
-      <form action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-
-        {{ form.username.label }}
-        {{ form.username }}
-
-        {{ form.password.label }}
-        {{ form.password }}
-
-        <p><input type="submit" value="login"></p>
-        <input type="hidden" name="next" value="{{ next }}">
-      </form>
-      {% for message in messages %}
-        <p id="messages">{{message}}</p>
-      {% endfor %}
-    </div>
-  </div>
+    {% for message in messages %}
+      <p id="messages">{{message}}</p>
+    {% endfor %}
 </div>
 
 {% endblock %}

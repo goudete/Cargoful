@@ -1,5 +1,7 @@
 {% extends 'registration/base.html'%}
 
+{% load crispy_forms_tags %}
+
 {% block content%}
 
 <div class="container">
@@ -19,26 +21,52 @@
           <p id="messages">{{message}}</p>
         {% endfor %}
 
-        <p>{{ form.username.label }}</p>
-        <p>{{ form.username }}</p>
+        <div class="row justify-content-center">
+          <div class="col-8">
+            {{ form.username|as_crispy_field }}
+          </div>
+        </div>
 
-        <p>{{ form.email.label }}</p>
-        <p>{{ form.email }}</p>
+        <div class="row justify-content-center">
+          <div class="col-8">
+            {{ form.email|as_crispy_field }}
+          </div>
+        </div>
 
-        <p>{{ form.password1.label }}</p>
-        <p>{{ form.password1 }}</p>
+        <div class="row justify-content-center">
+          <div class="col-8">
+            {{ form.password1|as_crispy_field }}
+          </div>
+        </div>
 
-        <p>{{ form.password2.label }}</p>
-        <p>{{ form.password2 }}</p>
+        <div class="row justify-content-center">
+          <div class="col-8">
+            {{ form.password2|as_crispy_field }}
+          </div>
+        </div>
 
-        <p>{{ profile_form.company_name.label }}</p>
-        <p>{{ profile_form.company_name }}</p>
+        <div class="row justify-content-center">
+          <div class="col-8">
+            {{ profile_form.company_name|as_crispy_field }}
+          </div>
+        </div>
 
-        <p>{{ profile_form.user_type.label }}</p>
-        <p>{{ profile_form.user_type }}</p>
+        <div class="row justify-content-center">
+          <div class="col-8">
+            {{ profile_form.user_type|as_crispy_field }}
+          </div>
+        </div>
 
-        <input type="submit" value="Register">
+
+        <!-- Buttons -->
+        <div class="row justify-content-center mb-5">
+          <div class="btn-group">
+              <!-- <a href="/accounts/login" type="button" class="btn btn-light mr-3" aria-pressed="true">Login</a> -->
+              <button type="submit" class="btn btn-secondary">Register</button>
+          </div>
+        </div>
       </form>
+
       {{form.errors}}
     </div>
   </div>

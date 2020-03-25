@@ -1,4 +1,4 @@
 #ignore file related to API keys
 .env
-venv/
+venv
 db.sqlite3
