@@ -35,8 +35,8 @@
         {% for av in available %}
         <tr data-href="/trucker/accept_order/{{ av.id }}">
           <th scope="row">{{ av.shipping_company.user.profile.company_name }}</th>
-          <td>{{ av|reverse_geo_pickup }}</td>
-          <td>{{ av|reverse_geo_delivery }}</td>
+          <td>{{ av.pickup_address }}</td>
+          <td>{{ av.delivery_address }}</td>
           <td>{{ av.distance }}</td>
           <td>{{ av.price }}</td>
         </tr>

@@ -27,8 +27,8 @@
         {% for my in my_orders %}
         <tr>
           <th scope="row">{{ my.shipping_company.user.profile.company_name }}</th>
-          <td>{{ my|reverse_geo_pickup }}</td>
-          <td>{{ my|reverse_geo_delivery }}</td>
+          <td>{{ my.pickup_address }}</td>
+          <td>{{ my.delivery_address }}</td>
           <td>
             {% if my.status == 1 %}
             <form action = 'update_status' method = 'post'>{% csrf_token %}

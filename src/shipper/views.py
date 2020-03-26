@@ -17,6 +17,8 @@ from authorization.decorators import allowed_users
 import googlemaps
 from decimal import Decimal
 import math
+from haversine import haversine, Unit
+from time import sleep
 # Create your views here.
 
 @login_required
@@ -104,9 +106,7 @@ def confirm(request):
         mdpt_lat = math.degrees(math.atan2(z, mdpt_sqrt))
         """end mdpt calculation"""
         #get the distance btwn pickup and delivery
-        dist = gmaps.distance_matrix([str(pu_lat) + " " + str(pu_long)], [str(del_lat) + " " + str(del_long)])['rows'][0]['elements'][0]
-        distance = float(dist['distance']['text'].split(" ")[0].replace(",", ""))
-        print(distance)
+        distance = round(haversine((pu_lat,pu_long), (del_lat,del_long)), 4)
         #other regular metrics
         date, time = jsn['pickup_date'], jsn['pickup_time']
         truck = jsn['truck_type']
@@ -144,19 +144,31 @@ def order_success(request):
     if request.method == "POST":
         jdp = json.dumps(request.data) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
+        #geocode stuff
         pu_lat, pu_long = jsn['pickup_latitude'], jsn['pickup_longitude']
         del_lat, del_long = jsn['delivery_latitude'], jsn['delivery_longitude']
-        dist = jsn['distance']
-        print(dist)
-        order = Order_Form(request.POST)
-        if order.is_valid():
-            new_order = order.save(commit = False)
+        #address stuff
+        pu_address, del_address = jsn['pickup_address'], jsn['delivery_address']
+        #distance
+        dist = float(jsn['distance'])
+        #create the customer_order_no field
+        id = request.user.id
+        ship = shipper.objects.filter(user = request.user).first()
+        num_orders = len(order.objects.filter(shipping_company = ship))+1
+        customer_order_no = 'CF'+str(id)+"-"+str(num_orders)
+        #create order
+        n_order = Order_Form(request.POST)
+        if n_order.is_valid():
+            new_order = n_order.save(commit = False)
             company = shipper.objects.filter(user = request.user).first()
+            new_order.customer_order_no = customer_order_no
             new_order.shipping_company = company
             new_order.pickup_latitude = pu_lat
             new_order.pickup_longitude = pu_long
             new_order.delivery_latitude = del_lat
             new_order.delivery_longitude = del_long
-            new_order.distance = dist
+            new_order.pickup_address = pu_address
+            new_order.delivery_address = del_address
+            new_order.distance = round(dist,3)
             new_order.save()
-            return HttpResponseRedirect('/shipper')
+            return render(request, 'shipper/order_success.html')

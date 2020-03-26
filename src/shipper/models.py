@@ -34,17 +34,23 @@ class order(models.Model):
     def get_orden_de_embarco(file):
         return os.path.join('orden_de_embarco', file)
     #fields
+    customer_order_no = models.CharField(default = '', max_length = 50) #this is for display on customer dashboard, format is 'cf<user_id><number>'
     shipping_company = models.ForeignKey(shipper, on_delete = models.PROTECT)
     truck_company = models.ForeignKey(truck_company, null=True, on_delete = models.CASCADE)
     driver = models.ForeignKey(driver, null = True, on_delete = models.SET_NULL)
+    #geocode and address info
     pickup_latitude = models.DecimalField(default = 0.0, max_digits = 9, decimal_places = 6)
     pickup_longitude = models.DecimalField(default = 0.0, max_digits = 9, decimal_places = 6)
     delivery_latitude = models.DecimalField(default = 0.0, max_digits = 9, decimal_places = 6)
     delivery_longitude = models.DecimalField(default = 0.0, max_digits = 9, decimal_places = 6)
+    pickup_address = models.TextField(default = "")
+    delivery_address = models.TextField(default = "")
+    #date info
     pickup_date = models.DateField(default = date.today, auto_now_add = False)
     delivery_date = models.DateField(default = date.today, auto_now_add = False)
+    #other specs
     price = models.DecimalField(default = 0.0, max_digits = 9, decimal_places = 2)
-    distance = models.DecimalField(default = 0.0, max_digits = 9, decimal_places = 6)
+    distance = models.DecimalField(default = 0.0, max_digits = 15, decimal_places = 6)
     carta_porte = models.ImageField(upload_to = get_carta_porte_path, blank = True, null = True)
     orden_de_embarco = models.ImageField(upload_to = get_orden_de_embarco, blank = True, null = True)
     shipment_number = models.PositiveIntegerField(default = 0)
@@ -92,4 +98,3 @@ class order(models.Model):
     3 -> delivered
     4 -> cancelled
     """
-    

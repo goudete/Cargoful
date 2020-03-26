@@ -17,14 +17,17 @@
   <form action = 'order_placed' method = "post">
     {% csrf_token %}
 
-    <div class="row justify-content-center mt-4">
-      <div class="col-4">
+    <div class="row justify-content-center">
+      <div class="col-8">
         <h5>Pickup Address</h5>
-        <input class = 'form-control' id = 'addy' value = '{{pu_addy}}' size = '60' disabled = 'true'/>
+        <input class = 'form-control' id = 'addy' name = 'pickup_address' type = 'text' value = '{{pu_addy}}' size = '60' readonly>
       </div>
-      <div class="col-4">
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-8">
         <h5>Delivery Address</h5>
-        <input class = 'form-control' id = 'addy' value = '{{del_addy}}' size = '60' disabled = 'true'/>
+        <input class = 'form-control' id = 'addy' name = 'delivery_address' type = 'text' value = '{{del_addy}}' size = '60' readonly>
       </div>
     </div>
 
@@ -75,9 +78,15 @@
 
     <div class="row justify-content-center mb-5 mt-5">
       <div class="btn-group">
+        <!-- cancel button -->
         <div class="col-5">
           <a href="/shipper" type="button" class="btn btn-danger" aria-pressed="true">Cancel</a>
         </div>
+        <!-- back and edit order button -->
+        <div class="col-5">
+          <input type="button" value="Edit Order" class = 'btn btn-primary' onclick="history.go(-1)">
+        </div>
+        <!-- confirm order button-->
         <div class="col-5">
           <button type="submit" class="btn btn-success">Confirm</button>
         </div>
