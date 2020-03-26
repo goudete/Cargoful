@@ -25,7 +25,7 @@ How to clone and run:
 	- download packages:
 		- pip install -r requirements.txt
 		- note on Mac: may get an error trying to install mysqlclient. If this error persists, 
-		  delete the line in requirements.txt that says 'mysqlclient'
+		  delete the line in requirements.txt that says 'mysqlclient==1.4.6'
 
 4. Run Server
 	- move into 'src' folder
