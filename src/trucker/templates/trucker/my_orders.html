@@ -16,9 +16,11 @@
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <tr>
           <th scope="col">Shipping Company</th>
-          <th scope = 'col'> Pickup Adress </th>
-          <th scope = 'col'> Delivery Address </th>
-          <th scope = 'col'> Status </th>
+          <th scope = 'col'>Pickup Adress</th>
+          <th scope = 'col'>Delivery Address</th>
+          <th scope = 'col'>Pickup Date</th>
+          <th scope = 'col'>Pickup Time</th>
+          <th scope = 'col'>Status</th>
           <th scope="col">Price</th>
         </tr>
       </thead>
@@ -29,6 +31,8 @@
           <th scope="row">{{ my.shipping_company.user.profile.company_name }}</th>
           <td>{{ my.pickup_address }}</td>
           <td>{{ my.delivery_address }}</td>
+          <td>{{ my.pickup_date }}</td>
+          <td>{{ my.pickup_time }}</td>
           <td>
             {% if my.status == 1 %}
             <form action = 'update_status' method = 'post'>{% csrf_token %}
