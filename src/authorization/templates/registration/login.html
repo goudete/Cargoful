@@ -16,9 +16,8 @@
   <div class="row justify-content-center pt-5">
     <form action="{% url 'login' %}" method="post">
       {% csrf_token %}
+
       <!-- Form -->
-
-
       <div class="col-md-12">
         {{ form.username|as_crispy_field }}
       </div>
@@ -37,9 +36,18 @@
 
     </form>
   </div>
-    {% for message in messages %}
+    <!-- {% for message in messages %}
       <p id="messages">{{message}}</p>
-    {% endfor %}
+    {% endfor %} -->
+
+    {{ form.errors }}
 </div>
+
+<style media="screen">
+.errorlist{
+    color: #E4007D;
+  }
+</style>
+
 
 {% endblock %}

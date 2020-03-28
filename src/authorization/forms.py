@@ -9,7 +9,13 @@ class CreateUserForm(UserCreationForm):
     class Meta():
         model = User
         fields = ('username', 'email', 'password1', 'password2')
-        #widgets = {attrs={'class':'form-control'}}
+        help_texts = {
+            'username': None,
+            'password1': None,
+            'password2': None,
+        }
+
+
 
 class ProfileForm(forms.ModelForm):
     class Meta:
@@ -17,14 +23,3 @@ class ProfileForm(forms.ModelForm):
         fields = ('user_type', 'company_name')
         USER_TYPES = (("Shipper", "Shipper"),("Trucker", "Trucker"),("Driver", "Driver"))
         widgets = {'user_type': forms.Select(choices=USER_TYPES)}
-        #,attrs={'class': 'form-control'}),}
-#
-# class ShipperCompanyNameForm(forms.ModelForm):
-#     class Meta:
-#         model = shipper
-#         fields = ('company_name',)
-#
-# class TruckerCompanyNameForm(forms.ModelForm):
-#     class Meta:
-#         model = trucker_company
-#         fields = ('company_name')

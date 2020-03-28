@@ -23,6 +23,18 @@
 
         <div class="row justify-content-center">
           <div class="col-8">
+            {{ profile_form.user_type|as_crispy_field }}
+          </div>
+        </div>
+
+        <div class="row justify-content-center">
+          <div class="col-8">
+            {{ profile_form.company_name|as_crispy_field }}
+          </div>
+        </div>
+
+        <div class="row justify-content-center">
+          <div class="col-8">
             {{ form.username|as_crispy_field }}
           </div>
         </div>
@@ -45,29 +57,16 @@
           </div>
         </div>
 
-        <div class="row justify-content-center">
-          <div class="col-8">
-            {{ profile_form.company_name|as_crispy_field }}
-          </div>
-        </div>
-
-        <div class="row justify-content-center">
-          <div class="col-8">
-            {{ profile_form.user_type|as_crispy_field }}
-          </div>
-        </div>
-
 
         <!-- Buttons -->
         <div class="row justify-content-center mb-5">
           <div class="btn-group">
-              <!-- <a href="/accounts/login" type="button" class="btn btn-light mr-3" aria-pressed="true">Login</a> -->
               <button type="submit" class="btn btn-secondary">Register</button>
           </div>
         </div>
       </form>
 
-      {{form.errors}}
+      <!-- {{form.errors}} -->
     </div>
   </div>
 </div>
