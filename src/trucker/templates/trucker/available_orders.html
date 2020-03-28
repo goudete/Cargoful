@@ -43,6 +43,12 @@
           <td>{{ av.pickup_time }}</td>
           <td>{{ av.distance }}</td>
           <td>{{ av.price }}</td>
+          <td>
+            <form action = "/trucker/accept_order" method = "post"> {% csrf_token %}
+            <input id = "order_id" name = "order_id" type = "number" value = {{av.id}} hidden = "true"/>
+            <button type = "submit" class = "btn btn-danger">accept order</button>
+          </form>
+          </td>
         </tr>
         {% endfor %}
 

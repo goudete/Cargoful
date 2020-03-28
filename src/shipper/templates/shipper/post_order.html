@@ -12,34 +12,39 @@
     </div>
   </div>
 
-  <div class="row justify-content-center mt-3">
-    <div class="col-md-4">
-      <h5>Pick Up Address</h5>
-        <div id="locationField">
-              <input class="form-control"
-                     id="autocomplete"
-                     placeholder="Enter pickup address"
-                     onFocus="geolocate()"
-                     type="text"
-                     size = '40'/>
-        </div>
-    </div>
+    <form class = 'needs-validation' action = 'confirmation' method = "post" novalidate>
+      {% csrf_token %}
 
-    <div class="col-md-4">
-      <h5>Delivery Address</h5>
-      <div id="locationField">
+      <div class="row justify-content-center mt-3">
+        <div class="col-md-4">
+          <h5>Pick Up Address</h5>
             <input class="form-control"
-                   id="autocomplete2"
-                   placeholder="Enter delivery address"
+                   onfocus="this.value=''"
+                   id="autocomplete"
                    onFocus="geolocate()"
+                   onchange = "doGeocode1()"
                    type="text"
                    size = '40'/>
-      </div>
-    </div>
-  </div>
+            <div class = "invalid-feedback">
+                  Please Choose a Pickup Address
+            </div>
+        </div>
 
-    <form action = 'confirmation' method = "post">
-      {% csrf_token %}
+        <div class="col-md-4">
+          <h5>Delivery Address</h5>
+                <input class="form-control"
+                       onfocus="this.value=''"
+                       id="autocomplete2"
+                       onFocus="geolocate()"
+                       onchange = "doGeocode2()"
+                       type="text"
+                       size = '40'/>
+                <div class = "invalid-feedback">
+                  Please Choose a Delivery Address
+                </div>
+        </div>
+      </div>
+
       <table id="address">
         <tr>
           <td class="label"></td>
@@ -89,30 +94,49 @@
       <div class="row justify-content-center">
         <div class="col-4">
           {{ form.pickup_date|as_crispy_field }}
+          <div class = "invalid-feedback">
+            Please Choose a Pickup Date
+          </div>
         </div>
         <div class="col-4">
           {{ form.pickup_time|as_crispy_field }}
+          <div class = "invalid-feedback">
+            Please Choose a Pickup Time
+          </div>
         </div>
       </div>
 
       <div class="row justify-content-center">
         <div class="col-4">
           {{ form.truck_type|as_crispy_field }}
+          <div class = "invalid-feedback">
+            Please Choose a Truck Type
+          </div>
         </div>
         <div class="col-4">
           {{form.price|as_crispy_field }}
+          <div class = "invalid-feedback">
+            Please Enter a Price
+          </div>
         </div>
+
       </div>
 
       <div class="row justify-content-center">
         <div class="col-8">
           {{ form.contents|as_crispy_field }}
+          <div class = "invalid-feedback">
+            Please Specify Contents
+          </div>
         </div>
       </div>
 
       <div class="row justify-content-center">
         <div class="col-8">
           {{ form.instructions|as_crispy_field }}
+          <div class = "invalid-feedback">
+            If You Have No Specific Instructions, Put N/A
+          </div>
         </div>
       </div>
 
@@ -279,8 +303,69 @@ function geolocate() {
     });
   }
 }
+
+//for checking if pickup address is ok
+function doGeocode1() {
+  var addr = document.getElementById("address");
+  // Get geocoder instance
+  var geocoder = new google.maps.Geocoder();
+
+  // Geocode the address
+  geocoder.geocode({
+    'address': addr.value
+  }, function(results, status) {
+    if (status === google.maps.GeocoderStatus.OK && results.length > 0) {
+
+      // set it to the correct, formatted address if it's valid
+      addr.value = results[0].formatted_address;;
+
+      // show an error if it's not
+    } else alert("Invalid Pickup Address");
+  });
+};
+
+//for checking if delivery address is ok
+function doGeocode2() {
+  var addr = document.getElementById("address");
+  // Get geocoder instance
+  var geocoder = new google.maps.Geocoder();
+
+  // Geocode the address
+  geocoder.geocode({
+    'address': addr.value
+  }, function(results, status) {
+    if (status === google.maps.GeocoderStatus.OK && results.length > 0) {
+
+      // set it to the correct, formatted address if it's valid
+      addr.value = results[0].formatted_address;;
+
+      // show an error if it's not
+    } else alert("Invalid Delivery Address");
+  });
+};
 </script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKmjFt91GOvHaqyxpoiiqFQURjFST7U2I&libraries=places&callback=initAutocomplete"async defer>
+  </script>
+
+  <script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (function() {
+    'use strict';
+    window.addEventListener('load', function() {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.getElementsByClassName('needs-validation');
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
   </script>
 
 {% endblock %}

@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import MaxValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from trucker.models import truck_company, driver
 from django.contrib.auth.models import User
 from datetime import date
@@ -49,7 +49,7 @@ class order(models.Model):
     pickup_date = models.DateField(default = date.today, auto_now_add = False)
     delivery_date = models.DateField(default = date.today, auto_now_add = False)
     #other specs
-    price = models.DecimalField(default = 0.0, max_digits = 9, decimal_places = 2)
+    price = models.DecimalField(default = 0.0, max_digits = 9, decimal_places = 2, validators=[MinValueValidator(0.0)])
     distance = models.DecimalField(default = 0.0, max_digits = 15, decimal_places = 6)
     carta_porte = models.ImageField(upload_to = get_carta_porte_path, blank = True, null = True)
     orden_de_embarco = models.ImageField(upload_to = get_orden_de_embarco, blank = True, null = True)
