@@ -22,9 +22,9 @@
                    onfocus="this.value=''"
                    id="autocomplete"
                    onFocus="geolocate()"
-                   onchange = "doGeocode1()"
                    type="text"
-                   size = '40'/>
+                   size = '40'
+                   required/>
             <div class = "invalid-feedback">
                   Please Choose a Pickup Address
             </div>
@@ -36,9 +36,9 @@
                        onfocus="this.value=''"
                        id="autocomplete2"
                        onFocus="geolocate()"
-                       onchange = "doGeocode2()"
                        type="text"
-                       size = '40'/>
+                       size = '40'
+                       required/>
                 <div class = "invalid-feedback">
                   Please Choose a Delivery Address
                 </div>
@@ -303,46 +303,6 @@ function geolocate() {
     });
   }
 }
-
-//for checking if pickup address is ok
-function doGeocode1() {
-  var addr = document.getElementById("address");
-  // Get geocoder instance
-  var geocoder = new google.maps.Geocoder();
-
-  // Geocode the address
-  geocoder.geocode({
-    'address': addr.value
-  }, function(results, status) {
-    if (status === google.maps.GeocoderStatus.OK && results.length > 0) {
-
-      // set it to the correct, formatted address if it's valid
-      addr.value = results[0].formatted_address;;
-
-      // show an error if it's not
-    } else alert("Invalid Pickup Address");
-  });
-};
-
-//for checking if delivery address is ok
-function doGeocode2() {
-  var addr = document.getElementById("address");
-  // Get geocoder instance
-  var geocoder = new google.maps.Geocoder();
-
-  // Geocode the address
-  geocoder.geocode({
-    'address': addr.value
-  }, function(results, status) {
-    if (status === google.maps.GeocoderStatus.OK && results.length > 0) {
-
-      // set it to the correct, formatted address if it's valid
-      addr.value = results[0].formatted_address;;
-
-      // show an error if it's not
-    } else alert("Invalid Delivery Address");
-  });
-};
 </script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKmjFt91GOvHaqyxpoiiqFQURjFST7U2I&libraries=places&callback=initAutocomplete"async defer>
   </script>
