@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <tr>
+          <th scope = 'col'>Order Number</th>
           <th scope="col">Shipping Company</th>
           <th scope = 'col'>Pickup Adress</th>
           <th scope = 'col'>Delivery Address</th>
@@ -28,7 +29,8 @@
 
         {% for my in my_orders %}
         <tr>
-          <th scope="row">{{ my.shipping_company.user.profile.company_name }}</th>
+          <td>{{ my.customer_order_no }}</td>
+          <td>{{ my.shipping_company.user.profile.company_name }}</td>
           <td>{{ my.pickup_address }}</td>
           <td>{{ my.delivery_address }}</td>
           <td>{{ my.pickup_date }}</td>

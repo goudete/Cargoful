@@ -22,8 +22,14 @@ def register_view(request):
             profile.save()
 
             username = form.cleaned_data.get('username')
-            messages.success(request, 'Account was created for ' + username)
-            return redirect('/accounts/login')
+            password = form.cleaned_data.get('password1')
+            # messages.success(request, 'Account was created for ' + username)
+
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                # return settings.LOGIN_REDIRECT_URL
+                return redirect('/login_success')
     else:
         form = CreateUserForm()
         profile_form = ProfileForm()

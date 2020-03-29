@@ -12,35 +12,55 @@
       <h1 style="color:Black;">Login</h1>
     </div>
   </div> -->
-
-  <div class="row justify-content-center pt-5">
-    <form action="{% url 'login' %}" method="post">
-      {% csrf_token %}
-
-      <!-- Form -->
-      <div class="col-md-12">
-        {{ form.username|as_crispy_field }}
-      </div>
-
-      <div class="col-md-12">
-        {{ form.password|as_crispy_field }}
-      </div>
-
-      <!-- Buttons -->
-      <div class="row justify-content-center">
-        <div class="btn-group" role="group">
-            <a href="/register" type="button" class="btn btn-light mr-3" aria-pressed="true">Register</a>
-            <button type="submit" class="btn btn-secondary">Login</button>
-        </div>
-      </div>
-
-    </form>
+  <div class="row pb-5">
+    <!-- adding some spacing -->
   </div>
-    <!-- {% for message in messages %}
+<!-- class="shadow p-3 mb-5 bg-white rounded" -->
+  <div class="row justify-content-center mt-5">
+    <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 25rem;">
+      <div class="card-body">
+      <h5 class="card-title">Login to you account</h5>
+        <form action="{% url 'login' %}" method="post">
+          {% csrf_token %}
+
+          <!-- Form -->
+          <div class="col-md-12">
+            {{ form.username|as_crispy_field }}
+          </div>
+
+          <div class="col-md-12">
+            {{ form.password|as_crispy_field }}
+          </div>
+
+          <!-- Buttons -->
+          <div class="row justify-content-center">
+            <div class="btn-group" role="group">
+                <button type="submit" class="btn btn-secondary">Login</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="row justify-content-center pt-1">
+    <h6>Don't have an account? <a href="/register">Sign up</a></h6>
+  </div>
+
+  <div class="row justify-content-center mt-4">
+    {% for message in messages %}
       <p id="messages">{{message}}</p>
+    {% endfor %}
+  </div>
+
+  <div class="row justify-content-center mt-4">
+    <!-- {% for error in form.errors %}
+      <p id="errors">{{error}}</p>
     {% endfor %} -->
 
     {{ form.errors }}
+  </div>
+
 </div>
 
 <style media="screen">
