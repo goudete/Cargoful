@@ -1,6 +1,6 @@
 {% extends 'shipper/base.html'%}
 
-{% load crispy_forms_tags %}
+
 
 {% block content %}
 
@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <div class="row justify-content-center mt-5">
     <div class="col-md-8">
-      <h1>New Order</h1>
+      <h1>Edit Order</h1>
     </div>
   </div>
 
@@ -24,6 +24,7 @@
                    onFocus="geolocate()"
                    type="text"
                    size = '40'
+                   value = "{{pu_addy}}"
                    required/>
             <div class = "invalid-feedback">
                   Please Choose a Pickup Address
@@ -38,6 +39,7 @@
                        onFocus="geolocate()"
                        type="text"
                        size = '40'
+                       value = "{{del_addy}}"
                        required/>
                 <div class = "invalid-feedback">
                   Please Choose a Delivery Address
@@ -93,61 +95,76 @@
       <!-- Form -->
       <div class="row justify-content-center">
         <div class="col-4">
-          {{ form.pickup_date|as_crispy_field }}
+          <h5>Pickup Date</h5>
+          <input class = 'form-control' id = 'datepicker' name="pickup_date" value = "{{date}}" size = '60' required/>
           <div class = "invalid-feedback">
             Please Choose a Pickup Date
           </div>
         </div>
         <div class="col-4">
-          {{ form.pickup_time|as_crispy_field }}
+          <h5>Pickup Time</h5>
+          <input class = "form-control" id = "timepicker" name = "pickup_time" value = {{time}} size = '60' required/>
           <div class = "invalid-feedback">
             Please Choose a Pickup Time
           </div>
         </div>
       </div>
 
-      <div class="row justify-content-center">
+      <div class="row justify-content-center mt-4">
         <div class="col-4">
-          {{ form.truck_type|as_crispy_field }}
-          <div class = "invalid-feedback">
-            Please Choose a Truck Type
-          </div>
+          <h5>Truck Type</h5>
+          <select id = 'truck_type' name="truck_type"  class = 'form-control' required>
+              <option value="Low Boy">Low Boy</option>
+              <option value="Caja Seca 48 pies">Caja Seca 48 pies</option>
+              <option value="Refrigerado 48 pies">Refrigerado 48 pies</option>
+              <option value="Plataforma 48 pies">Plataforma 48 pies</option>
+              <option value ='Caja Seca 53 pies'>Caja Seca 53 pies</option>
+              <option value ='Refrigerado 53 pies'>Refrigerado 53 pies</option>
+              <option value = 'Plataforma 53 pies'>Plataforma 53 pies</option>
+              <option value = 'Full'>Full</option>
+              <option value = 'Plataforma Full'>Plataforma Full</option>
+              <option value = 'Torton Caja Seca'>Torton Caja Seca</option>
+              <option value = 'Torton Refrigerado'>Torton Refrigerado</option>
+              <option value = 'Troton Plataforma'>Troton Plataforma</option>
+              <option value ='Rabon Caja Seca'>Rabon Caja Seca</option>
+              <option value = 'Rabon Refrigerado'>Rabon Refrigerado</option>
+              <option value = 'Rabon Plataforma'>Rabon Plataforma</option>
+              <option value = 'Camioneta 5.5 tons'>Camioneta 5.5 tons</option>
+              <option value = 'Camioneta 3.5 tons'>Camioneta 3.5 tons</option>
+              <option value = 'Camioneta 3.5 tons Plataforma'>Camioneta 3.5 tons Plataforma</option>
+              <option value = 'Camioneta 1.5 tons'>Camioneta 1.5 tons</option>
+              <option value = 'Camioneta 3.5 tons Redilla'>Camioneta 3.5 tons Redilla</option>
+          </select>
         </div>
         <div class="col-4">
-          {{form.price|as_crispy_field }}
-          <div class = "invalid-feedback">
-            Please Enter a Price
-          </div>
+          <h5>Price</h5>
+          <input class = 'form-control' id = 'price' name="price" type="number" step="0.01" value = {{price}} size = '60' required/>
         </div>
-
       </div>
 
-      <div class="row justify-content-center">
+      <div class="row justify-content-center mt-3">
         <div class="col-8">
-          {{ form.contents|as_crispy_field }}
-          <div class = "invalid-feedback">
-            Please Specify Contents
-          </div>
+          <h5>Contents</h5>
+          <input class = 'form-control' id = 'contents' name="contents" type="text" value = "{{contents}}" size = '60' required/>
         </div>
       </div>
 
-      <div class="row justify-content-center">
+      <div class = "row justify-content-center mt-3">
         <div class="col-8">
-          {{ form.instructions|as_crispy_field }}
-          <div class = "invalid-feedback">
-            If You Have No Specific Instructions, Put N/A
-          </div>
+          <h5>Instructions</h5>
+          <input class = 'form-control' id = 'instructions' name="instructions" type="text" value = "{{instructions}}" size = '60' required/>
         </div>
       </div>
+
 
       <!-- Buttons -->
       <div class="row justify-content-center mb-5">
         <div class="btn-group">
           <div class="col-5">
-            <a href="/shipper" type="button" class="btn btn-danger" aria-pressed="true">Cancel</a>
+            <a href="/shipper" type="button" class="btn btn-danger mt-3" aria-pressed="true">Cancel</a>
           </div>
           <div class="col-5">
-            <button type="submit" class="btn btn-success">Post</button>
+            <button type="submit" class="btn btn-success mt-3">Confirm</button>
           </div>
         </div>
       </div>

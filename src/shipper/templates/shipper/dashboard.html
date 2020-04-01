@@ -31,6 +31,7 @@
       <th scope = 'col'>Order Number</th>
       <th scope = 'col'>Pickup Address</th>
       <th scope = 'col'>Delivery Address</th>
+      <th scope = 'col'>Pickup Date</th>
       <th scope = 'col'>Contents</th>
       <th scope="col">Status</th>
       <th scope = "col">Trucking Company</th>
@@ -43,6 +44,7 @@
       <td>{{ s.customer_order_no }}</td>
       <td>{{ s.pickup_address}}</td>
       <td>{{ s.delivery_address }}</td>
+      <td>{{ s.pickup_date }}</td>
       <td>{{ s.contents }}</td>
       <th scope="row">
         {% if s.status == 0 %}

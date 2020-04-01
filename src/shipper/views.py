@@ -23,23 +23,33 @@ from time import sleep
 
 @login_required
 @allowed_users(allowed_roles=['Shipper'])
+@api_view(['POST', 'GET'])
 def post_order(request):
+    #if the method is a POST, then a user is editing an order from the confirmation page
     if request.method == 'POST':
-        """not sure this actually runs, bc request is a GET"""
-        #new order form
-        order_form = Order_Form(request.POST)
-        #check all input is valid
-        if order_form.is_valid():
-            new_order = order_form.save(commit = False)
-            #query the user in the shipper ta
-            company = shipper.objects.filter(user = request.user).first()
-            new_order.shipping_company = company
-            #serialize order to json file
-            serializer = Order_Serializer(new_order)
-            json = JSONRenderer().render(serializer.data)
-            return Response(json)
+        jdp = json.dumps(request.data) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
+        #getting order specs
+        #print(jsn)
+        pu_addy, del_addy = jsn['pickup_address'], jsn['delivery_address']
+        date, time = jsn['pickup_date'], jsn['pickup_time']
+        truck, price = jsn['truck_type'], jsn['price']
+        contents, instructions = jsn['contents'], jsn['instructions']
+        #render a copy of order form (different HTML file b/c there is no crispy forms)
+        return render(request, 'shipper/change_order.html',
+        {
+            'pu_addy': pu_addy,
+            'del_addy': del_addy,
+            'date': date,
+            'time': time,
+            'truck': truck,
+            'price': price,
+            'contents': contents,
+            'instructions': instructions
+        })
+    #if the method is a get then the user is posting a new order for the first time
     else:
-        """pretty sure this is what runs"""
         order_form = Order_Form()
     return render(request, 'shipper/post_order.html', {'form': order_form})
 
@@ -62,21 +72,11 @@ def confirm(request):
         """stuff for handling json inside request"""
         jdp = json.dumps(request.data) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
-        jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
-        jsn.pop('initial-pickup_date') #remove unnecessary stuff
         #get necessary info
-        #these are for the pickup address
-        pu_st_number, pu_st_route = jsn['pickup_st_number'], jsn['pickup_st_route']
-        pu_city, pu_state = jsn['pickup_city'], jsn['pickup_state']
-        pu_zip, pu_country = jsn['pickup_zip'], jsn['pickup_country']
-        #these are for delivery address
-        del_st_number, del_st_route = jsn['delivery_st_number'], jsn['delivery_st_route']
-        del_city, del_state = jsn['delivery_city'], jsn['delivery_state']
-        del_zip, del_country = jsn['delivery_zip'], jsn['delivery_country']
         #use googlemaps api to get lat and long for pickup and delivery
         gmaps = googlemaps.Client(key='AIzaSyCKmjFt91GOvHaqyxpoiiqFQURjFST7U2I')
-        pu_address_full = str(pu_st_number) + " " + pu_st_route + ", " + pu_city + ", " + pu_state + " " + str(pu_zip) +", " + pu_country
-        del_address_full = str(del_st_number) + " " + del_st_route + ", " + del_city + ", " + del_state + " " + str(del_zip) +", " + del_country
+        pu_address_full = jsn['pu_addy']
+        del_address_full = jsn['del_addy']
         pu_geocode = gmaps.geocode(pu_address_full)
         del_geocode = gmaps.geocode(del_address_full)
         #get lat  and lng
