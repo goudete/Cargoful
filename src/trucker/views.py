@@ -7,6 +7,7 @@ from authorization.decorators import allowed_users
 from rest_framework.decorators import api_view
 import json
 import math
+from django.contrib import messages
 # Create your views here.
 @login_required
 @allowed_users(allowed_roles=['Trucker'])
@@ -71,7 +72,8 @@ def Accept_Order(request):
         cur_order.truck_company = me
         cur_order.status = 1
         cur_order.save()
-        return render(request, 'trucker/accepted.html')
+        messages.info(request, "Order " + str(cur_order.customer_order_no) + " Accepted")
+        return HttpResponseRedirect('/trucker')
 
 @login_required
 @allowed_users(allowed_roles = ['Trucker'])

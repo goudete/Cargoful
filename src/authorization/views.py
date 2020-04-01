@@ -29,6 +29,7 @@ def register_view(request):
             if user is not None:
                 login(request, user)
                 # return settings.LOGIN_REDIRECT_URL
+                messages.success(request, "Welcome to CargoFul " + str(username) + "!")
                 return redirect('/login_success')
     else:
         form = CreateUserForm()

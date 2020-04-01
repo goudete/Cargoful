@@ -96,14 +96,14 @@
       <div class="row justify-content-center">
         <div class="col-4">
           <h5>Pickup Date</h5>
-          <input class = 'form-control' id = 'datepicker' name="pickup_date" value = "{{date}}" size = '60' required/>
+          <input class = 'form-control' id = 'datepicker' name="pickup_date" value = "{{ date }}" size = '60' required/>
           <div class = "invalid-feedback">
             Please Choose a Pickup Date
           </div>
         </div>
         <div class="col-4">
           <h5>Pickup Time</h5>
-          <input class = "form-control" id = "timepicker" name = "pickup_time" value = {{time}} size = '60' required/>
+          <input class = "form-control" id = "timepicker" name = "pickup_time" value = "{{ time }}" size = '60' required/>
           <div class = "invalid-feedback">
             Please Choose a Pickup Time
           </div>
@@ -114,26 +114,13 @@
         <div class="col-4">
           <h5>Truck Type</h5>
           <select id = 'truck_type' name="truck_type"  class = 'form-control' required>
-              <option value="Low Boy">Low Boy</option>
-              <option value="Caja Seca 48 pies">Caja Seca 48 pies</option>
-              <option value="Refrigerado 48 pies">Refrigerado 48 pies</option>
-              <option value="Plataforma 48 pies">Plataforma 48 pies</option>
-              <option value ='Caja Seca 53 pies'>Caja Seca 53 pies</option>
-              <option value ='Refrigerado 53 pies'>Refrigerado 53 pies</option>
-              <option value = 'Plataforma 53 pies'>Plataforma 53 pies</option>
-              <option value = 'Full'>Full</option>
-              <option value = 'Plataforma Full'>Plataforma Full</option>
-              <option value = 'Torton Caja Seca'>Torton Caja Seca</option>
-              <option value = 'Torton Refrigerado'>Torton Refrigerado</option>
-              <option value = 'Troton Plataforma'>Troton Plataforma</option>
-              <option value ='Rabon Caja Seca'>Rabon Caja Seca</option>
-              <option value = 'Rabon Refrigerado'>Rabon Refrigerado</option>
-              <option value = 'Rabon Plataforma'>Rabon Plataforma</option>
-              <option value = 'Camioneta 5.5 tons'>Camioneta 5.5 tons</option>
-              <option value = 'Camioneta 3.5 tons'>Camioneta 3.5 tons</option>
-              <option value = 'Camioneta 3.5 tons Plataforma'>Camioneta 3.5 tons Plataforma</option>
-              <option value = 'Camioneta 1.5 tons'>Camioneta 1.5 tons</option>
-              <option value = 'Camioneta 3.5 tons Redilla'>Camioneta 3.5 tons Redilla</option>
+              {% for key, value in truck_dict %}
+                {% if value == truck %}
+                  <option value = "{{ key }}" selected>{{ value }}</option>
+                {% else %}
+                  <option  value="{{ key }}">{{ value }}</option>
+                {% endif %}
+             {% endfor %}
           </select>
         </div>
         <div class="col-4">
@@ -203,8 +190,7 @@
     $('#timepicker').timepicker({
       interval: 60,
       minHour: 8,
-      maxHour: 23,
-      defaultTime: '8'
+      maxHour: 23
     });
 });
 </script>

@@ -19,6 +19,7 @@ from decimal import Decimal
 import math
 from haversine import haversine, Unit
 from time import sleep
+from django.contrib import messages
 # Create your views here.
 
 @login_required
@@ -31,12 +32,39 @@ def post_order(request):
         jsn = json.loads(jdp) #get dictionary from json
         jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
         #getting order specs
-        #print(jsn)
         pu_addy, del_addy = jsn['pickup_address'], jsn['delivery_address']
         date, time = jsn['pickup_date'], jsn['pickup_time']
+        #format time
+        if int(time.split(":")[0]) >= 12:
+            time = str(int(time.split(":")[0]) -12) + ":" +str(time.split(":")[1]) + " PM"
+        else:
+            time = str(time) + " AM"
+        #other specs
         truck, price = jsn['truck_type'], jsn['price']
         contents, instructions = jsn['contents'], jsn['instructions']
         #render a copy of order form (different HTML file b/c there is no crispy forms)
+        TRUCK_TYPES = [
+            ('Low Boy', 'Low Boy'),
+            ('Caja Seca 48 pies', 'Caja Seca 48 pies'),
+            ('Refrigerado 48 pies', 'Refrigerado 48 pies'),
+            ('Plataforma 48 pies', 'Plataforma 48 pies'),
+            ('Caja Seca 53 pies', 'Caja Seca 53 pies'),
+            ('Refrigerado 53 pies', 'Refrigerado 53 pies'),
+            ('Plataforma 53 pies', 'Plataforma 53 pies'),
+            ('Full', 'Full'),
+            ('Plataforma Full', 'Plataforma Full'),
+            ('Torton Caja Seca', 'Torton Caja Seca'),
+            ('Torton Refrigerado', 'Torton Refrigerado'),
+            ('Troton Plataforma', 'Troton Plataforma'),
+            ('Rabon Caja Seca', 'Rabon Caja Seca'),
+            ('Rabon Refrigerado', 'Rabon Refrigerado'),
+            ('Rabon Plataforma', 'Rabon Plataforma'),
+            ('Camioneta 5.5 tons', 'Camioneta 5.5 tons'),
+            ('Camioneta 3.5 tons', 'Camioneta 3.5 tons'),
+            ('Camioneta 3.5 tons Plataforma', 'Camioneta 3.5 tons Plataforma'),
+            ('Camioneta 1.5 tons', 'Camioneta 1.5 tons'),
+            ('Camioneta 3.5 tons Redilla', 'Camioneta 3.5 tons Redilla'),
+        ] #this dict is for the dropdown menu for truck type
         return render(request, 'shipper/change_order.html',
         {
             'pu_addy': pu_addy,
@@ -44,6 +72,7 @@ def post_order(request):
             'date': date,
             'time': time,
             'truck': truck,
+            'truck_dict': TRUCK_TYPES,
             'price': price,
             'contents': contents,
             'instructions': instructions
@@ -72,6 +101,7 @@ def confirm(request):
         """stuff for handling json inside request"""
         jdp = json.dumps(request.data) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
+        print(jsn)
         #get necessary info
         #use googlemaps api to get lat and long for pickup and delivery
         gmaps = googlemaps.Client(key='AIzaSyCKmjFt91GOvHaqyxpoiiqFQURjFST7U2I')
@@ -108,7 +138,15 @@ def confirm(request):
         #get the distance btwn pickup and delivery
         distance = round(haversine((pu_lat,pu_long), (del_lat,del_long)), 4)
         #other regular metrics
-        date, time = jsn['pickup_date'], jsn['pickup_time']
+        date = jsn['pickup_date']
+        time = jsn['pickup_time']
+        #account for time being in PM
+        if time.split(" ")[1] == "PM":
+            hour = int(time.split(" ")[0].split(":")[0])
+            hour += 12
+            time = str(hour) + ":" + time.split(" ")[0].split(":")[1]+" PM"
+        print(time)
+        #other specs
         truck = jsn['truck_type']
         cargo = jsn['contents']
         instructions = jsn['instructions']
@@ -171,4 +209,5 @@ def order_success(request):
             new_order.delivery_address = del_address
             new_order.distance = round(dist,3)
             new_order.save()
-            return render(request, 'shipper/order_success.html')
+            messages.info(request, "Order "+ str(customer_order_no) + " Placed Successfully")
+            return HttpResponseRedirect('/shipper')

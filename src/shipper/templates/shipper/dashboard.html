@@ -1,6 +1,28 @@
 {% extends 'shipper/base.html'%}
 
 {% block content %}
+<!-- Welcome and Successful order messages -->
+{% if messages %}
+{% for message in messages %}
+{% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+<div class="row justify-content-center alert alert-primary pt-3 pb-3" role="alert">
+  <div class="col-md-8">
+    <h4>{{ message }}</h4>
+  </div>
+</div>
+{% endif %}
+
+{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+<div class="row justify-content-center alert alert-primary pt-3 pb-3" role="alert">
+  <div class="col-md-8">
+    <h4>{{ message }}</h4>
+  </div>
+</div>
+{% endif %}
+
+{% endfor %}
+{% endif %}
+<!-- messages end here -->
 
 
 <div class="row justify-content-center mt-5">
