@@ -48,42 +48,78 @@
     }
   </style>
   <!-- Confirmation page boilerplate ends here -->
-
 </head>
-   <body class="c-app">
-     <!-- Navbar -->
-     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-         <div class="d-flex flex-grow-1">
-             <span class="w-100 d-lg-none d-block"></span>
-             <a class="navbar-brand" href="/shipper">
-               <img src="/static/imgs/CargoFulPigeon.png" width="200" height="40" class="d-inline-block align-top"
-             </a>
-             <div class="d-flex flex-row-reverse text-right">
-                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar7">
-                     <span class="navbar-toggler-icon"></span>
-                 </button>
-             </div>
-         </div>
-         <div class="d-flex">
-           <ul class="nav">
-             <li>
-               <span>Hello, {{request.user}}</span>
-             </li>
-             <li class="nav-item mr-3">
-                 <a href="/shipper/" class="btn btn-secondary">My Orders</a>
-             </li>
-             <li class="nav-item mr-5">
-                 <a href="{% url 'logout' %}" class="btn btn-secondary">Logout</a>
-             </li>
-          </ul>
-         </div>
-     </nav>
 
-      {% block content%}
-      {% endblock %}
+<body class="c-app">
+ <!-- Navbar -->
+ <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+     <div class="d-flex flex-grow-1">
+         <span class="w-100 d-lg-none d-block"></span>
+         <a class="navbar-brand" href="/shipper">
+           <img src="/static/imgs/CargoFulPigeon.png" width="200" height="40" class="d-inline-block align-top"
+         </a>
+         <div class="d-flex flex-row-reverse text-right">
+             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar7">
+                 <span class="navbar-toggler-icon"></span>
+             </button>
+         </div>
+     </div>
+     <div class="d-flex">
+       <ul class="nav">
+         <li>
+           <span>Hello, {{request.user}}</span>
+         </li>
+         <li class="nav-item mr-3">
+             <a href="/shipper/" class="btn btn-secondary">My Orders</a>
+         </li>
+         <li class="nav-item mr-5">
+             <a href="{% url 'logout' %}" class="btn btn-secondary">Logout</a>
+         </li>
+      </ul>
+     </div>
+ </nav>
 
-   <!-- Popper.js first, then CoreUI JS -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js" integrity="sha384-L2pyEeut/H3mtgCBaUNw7KWzp5n9&#43;4pDQiExs933/5QfaTh8YStYFFkOzSoXjlTb" crossorigin="anonymous"></script>
-   <script src="https://unpkg.com/@coreui/coreui@3.0.0-rc.0/dist/js/coreui.min.js"></script>
-   </body>
+  {% block content%}
+  {% endblock %}
+
+<!-- Popper.js first, then CoreUI JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js" integrity="sha384-L2pyEeut/H3mtgCBaUNw7KWzp5n9&#43;4pDQiExs933/5QfaTh8YStYFFkOzSoXjlTb" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@coreui/coreui@3.0.0-rc.0/dist/js/coreui.min.js"></script>
+
+  <!-- Footer -->
+  <footer class="page-footer font-small navbar-dark bg-dark mt-4">
+
+    <!-- Footer Links -->
+    <div class="container text-center text-md-left">
+
+      <!-- Footer links -->
+      <div class="row text-center text-md-left mt-3 pb-3">
+
+        <!-- Grid column -->
+        <div class="col-md-2 mxr-auto mt-3">
+          <h6 class="text-uppercase mb-4 font-weight-bold text-white">CargoFul</h6>
+          <p class="text-white">Disrupting Mexican Logistics</p>
+        </div>
+
+        <!-- Grid column -->
+        <hr class="w-100 clearfix d-md-none">
+
+        <!-- Grid column -->
+        <div class="col-md-2 ml-auto mt-3 text-white">
+          <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
+          <!-- <p class="text-white">
+            <i class="fas fa-home mr-3"></i> Mexico City, Mexico</p> -->
+          <p class="text-white">
+            <i class="fas fa-envelope mr-3"></i> help@cargoful.org</p>
+        </div>
+        <!-- Grid column -->
+
+      </div>
+
+    </div>
+
+  </footer>
+  <!-- Footer -->
+
+  </body>
 </html>

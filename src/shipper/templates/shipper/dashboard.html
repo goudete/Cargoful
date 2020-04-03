@@ -6,17 +6,21 @@
 {% for message in messages %}
 {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
 <div class="row justify-content-center alert alert-primary pt-3 pb-3" role="alert">
-  <div class="col-md-8">
-    <h4>{{ message }}</h4>
-  </div>
+  <!-- <div class="card shadow p-3 m-2 bg-white rounded" style="width: 25rem;"> -->
+    <div class="col-md-8">
+      <h4>{{ message }}</h4>
+    </div>
+  <!-- </div> -->
 </div>
 {% endif %}
 
 {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
 <div class="row justify-content-center alert alert-primary pt-3 pb-3" role="alert">
-  <div class="col-md-8">
-    <h4>{{ message }}</h4>
-  </div>
+  <!-- <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 25rem;"> -->
+    <div class="col-md-8">
+      <h4>{{ message }}</h4>
+    </div>
+  <!-- </div> -->
 </div>
 {% endif %}
 
