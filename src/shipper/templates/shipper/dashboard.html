@@ -23,7 +23,23 @@
 {% endfor %}
 {% endif %}
 <!-- messages end here -->
-
+<style>
+  #dashboard{
+    height:500px;
+  }
+  #table tbody{
+    height: 300px;
+    overflow-y: auto;
+  }
+  #table thead th{
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 5;
+    background-color: white;
+    color: black;
+  }
+</style>
 
 <div class="row justify-content-center mt-5">
   <div class="col-md-10">
@@ -35,17 +51,17 @@
   <div class="col-md-10">
     <p><b>Total Orders: {{set.count}}</b></p>
   </div>
-  <div class="col-md-10 text-right">
+  <div class="col-md-10">
     <!-- <input type="button" onclick="window.location.href = 'post_order';" value="Post New Order" style = "float: right;"/>
     <button type="button" class="btn btn-secondary btn-lg">New Order</button> -->
     <a href="/shipper/post_order" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">New Order</a>
   </div>
 </div>
 
-<div class="row justify-content-center pt-2">
+<div class="row justify-content-center pt-2" id = 'dashboard'>
 <div class="col-md-10">
 <div class="card">
-<table class="table table-striped">
+<table class="table table-striped" id = 'table'>
   <thead>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">

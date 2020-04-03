@@ -24,6 +24,24 @@
 
 {% endfor %}
 {% endif %}
+<!--styling to make table overflow scroll -->
+<style>
+  #dashboard{
+    height: 500px;
+  }
+  table tbody{
+    height: 300px;
+    overflow-y: auto;
+  }
+  table thead th{
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 5;
+    background-color: white;
+    color: black;
+  }
+</style>
 <!-- messages end here -->
 <div class="row justify-content-center mt-5">
   <div class="col-md-10">
@@ -31,7 +49,7 @@
   </div>
 </div>
 <!-- start of table -->
-<div class="row justify-content-center pt-2">
+<div class="row justify-content-center pt-2" id = 'dashboard'>
   <div class="col-md-10">
     <div class="card">
     <table class="table table-striped">
@@ -64,40 +82,46 @@
           <td>
             {% if my.status == 1 %}
             <form action = 'update_status' method = 'post'>{% csrf_token %}
-                <select class = 'form-control pl-5 pr-5' id = 'status' name="status">
+              <div class = 'form-group'>
+                <select class = 'custom-select custom-select-sm' style = "width:auto;" id = 'status' name="status">
               		<option value='1' selected>Booked</option>
               		<option value="2">In Transit</option>
               		<option value="3">Delivered</option>
             		</select>
+              </div>
                 <input type = 'number' id = 'order_id' name = 'order_id' value = {{my.id}} hidden = 'true'>
                 <div class="row justify-content-center">
                   <div class="btn-group" role="group">
-                      <button type="submit" class="btn btn-secondary mt-2">Update</button>
+                      <button type="submit" class="btn btn-secondary mt-1">Update</button>
                   </div>
                 </div>
             </form>
             {% elif my.status == 2 %}
             <form action = 'update_status' method = 'post'>{% csrf_token %}
-                <select class = 'form-control' id = 'status' name="status">
-              		<option value="2" selected>In Transit</option>
-              		<option value="3">Delivered</option>
-            		</select>
+              <div class = 'form-group'>
+                <select class = 'custom-select custom-select-sm' style = "width:auto;" id = 'status' name="status">
+                	<option value="2" selected>In Transit</option>
+                	<option value="3">Delivered</option>
+              	</select>
+              </div>
                 <input type = 'number' id = 'order_id' name = 'order_id' value = {{my.id}} hidden = 'true'>
                 <div class="row justify-content-center">
                   <div class="btn-group" role="group">
-                      <button type="submit" class="btn btn-secondary mt-2">Update</button>
+                      <button type="submit" class="btn btn-secondary mt-1">Update</button>
                   </div>
                 </div>
             </form>
             {% elif my.status == 3 %}
             <form action = 'update_status' method = 'post'>{% csrf_token %}
-                <select class = 'form-control' id = 'status' name="status">
+              <div class = 'form-group'>
+                <select class = 'custom-select custom-select-sm' style = "width:auto;" id = 'status' name="status">
               		<option value="3" selected>Delivered</option>
             		</select>
+              </div>
                 <input type = 'number' id = 'order_id' name = 'order_id' value = {{my.id}} hidden = 'true'>
                 <div class="row justify-content-center">
                   <div class="btn-group" role="group">
-                      <button type="submit" class="btn btn-secondary mt-2">Update</button>
+                      <button type="submit" class="btn btn-secondary mt-1">Update</button>
                   </div>
                 </div>
             </form>

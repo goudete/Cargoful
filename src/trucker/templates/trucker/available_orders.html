@@ -8,6 +8,21 @@
       tr[data-href]{
           cursor: pointer;
       }
+    #dashboard{
+      height: 500px;
+    }
+    table tbody{
+      height: 300px;
+      overflow-y: auto;
+    }
+    table thead th{
+      position: sticky;
+      position: -webkit-sticky;
+      top: 0;
+      z-index: 5;
+      background-color: white;
+      color: black;
+    }
   </style>
   <div class="row justify-content-center mt-5">
     <div class="col-md-10">
@@ -15,7 +30,7 @@
     </div>
   </div>
   <!--start of dashboard-->
-  <div class="row justify-content-center pt-2">
+  <div class="row justify-content-center pt-2" id = 'dashboard'>
     <div class="col-md-10">
     <div class="card">
     <table class="table table-striped">
@@ -56,20 +71,8 @@
 
       </tbody>
     </table>
+
     </div>
-
-   <!-- this needs to reference static file (?) -->
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", () => {
-            const rows = document.querySelectorAll("tr[data-href]");
-
-            rows.forEach(row => {
-                row.addEventListener("click", () => {
-                    window.location.href = row.dataset.href;
-                });
-            });
-      })
-    </script>
   </div>
 </div>
 
