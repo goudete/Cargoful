@@ -9,14 +9,14 @@
           cursor: pointer;
       }
   </style>
-
   <div class="row justify-content-center mt-5">
-    <div class="col-md-8">
+    <div class="col-md-10">
       <h1>Available Orders</h1>
     </div>
   </div>
+  <!--start of dashboard-->
   <div class="row justify-content-center pt-2">
-    <div class="col-md-8">
+    <div class="col-md-10">
     <div class="card">
     <table class="table table-striped">
       <thead>
@@ -43,12 +43,12 @@
           <td>{{ av.delivery_address }}</td>
           <td>{{ av.pickup_date }}</td>
           <td>{{ av.pickup_time }}</td>
-          <td>{{ av.distance }}</td>
+          <td>{{ av.distance }} KM</td>
           <td>{{ av.price }}</td>
           <td>
             <form action = "/trucker/accept_order" method = "post"> {% csrf_token %}
             <input id = "order_id" name = "order_id" type = "number" value = {{av.id}} hidden = "true"/>
-            <button type = "submit" class = "btn btn-secondary">Accept</button>
+            <button type = "submit" class = "btn btn-secondary">Review</button>
           </form>
           </td>
         </tr>

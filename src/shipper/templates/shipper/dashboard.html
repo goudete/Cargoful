@@ -26,16 +26,16 @@
 
 
 <div class="row justify-content-center mt-5">
-  <div class="col-md-8">
+  <div class="col-md-10">
     <h1>My Orders</h1>
   </div>
 </div>
 
 <div class="row justify-content-center pt-2">
-  <div class="col-md-8">
+  <div class="col-md-10">
     <p><b>Total Orders: {{set.count}}</b></p>
   </div>
-  <div class="col-md-8 text-right">
+  <div class="col-md-10 text-right">
     <!-- <input type="button" onclick="window.location.href = 'post_order';" value="Post New Order" style = "float: right;"/>
     <button type="button" class="btn btn-secondary btn-lg">New Order</button> -->
     <a href="/shipper/post_order" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">New Order</a>
@@ -43,7 +43,7 @@
 </div>
 
 <div class="row justify-content-center pt-2">
-<div class="col-md-8">
+<div class="col-md-10">
 <div class="card">
 <table class="table table-striped">
   <thead>
@@ -54,6 +54,7 @@
       <th scope = 'col'>Pickup Address</th>
       <th scope = 'col'>Delivery Address</th>
       <th scope = 'col'>Pickup Date</th>
+      <th scope = 'col'>Distance</th>
       <th scope = 'col'>Contents</th>
       <th scope="col">Status</th>
       <th scope = "col">Trucking Company</th>
@@ -67,6 +68,7 @@
       <td>{{ s.pickup_address}}</td>
       <td>{{ s.delivery_address }}</td>
       <td>{{ s.pickup_date }}</td>
+      <td>{{ s.distance }} KM</td>
       <td>{{ s.contents }}</td>
       <th scope="row">
         {% if s.status == 0 %}

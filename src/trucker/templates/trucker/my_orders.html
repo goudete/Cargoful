@@ -26,12 +26,13 @@
 {% endif %}
 <!-- messages end here -->
 <div class="row justify-content-center mt-5">
-  <div class="col-md-8">
+  <div class="col-md-10">
     <h1>My Jobs</h1>
   </div>
 </div>
+<!-- start of table -->
 <div class="row justify-content-center pt-2">
-  <div class="col-md-8">
+  <div class="col-md-10">
     <div class="card">
     <table class="table table-striped">
       <thead>
@@ -42,6 +43,7 @@
           <th scope="col">Shipping Company</th>
           <th scope = 'col'>Pickup Adress</th>
           <th scope = 'col'>Delivery Address</th>
+          <th scope = 'col'>Distance</th>
           <th scope = 'col'>Pickup Date</th>
           <th scope = 'col'>Pickup Time</th>
           <th scope = 'col'>Status</th>
@@ -56,35 +58,48 @@
           <td>{{ my.shipping_company.user.profile.company_name }}</td>
           <td>{{ my.pickup_address }}</td>
           <td>{{ my.delivery_address }}</td>
+          <td>{{ my.distance }} KM</td>
           <td>{{ my.pickup_date }}</td>
           <td>{{ my.pickup_time }}</td>
           <td>
             {% if my.status == 1 %}
             <form action = 'update_status' method = 'post'>{% csrf_token %}
-                <select id = 'status' name="status">
-              		<option value='1'>Booked</option>
+                <select class = 'form-control pl-5 pr-5' id = 'status' name="status">
+              		<option value='1' selected>Booked</option>
               		<option value="2">In Transit</option>
               		<option value="3">Delivered</option>
             		</select>
                 <input type = 'number' id = 'order_id' name = 'order_id' value = {{my.id}} hidden = 'true'>
-                <input type = 'submit' value = 'Update Status'>
+                <div class="row justify-content-center">
+                  <div class="btn-group" role="group">
+                      <button type="submit" class="btn btn-secondary mt-2">Update</button>
+                  </div>
+                </div>
             </form>
             {% elif my.status == 2 %}
             <form action = 'update_status' method = 'post'>{% csrf_token %}
-                <select id = 'status' name="status">
-              		<option value="2">In Transit</option>
+                <select class = 'form-control' id = 'status' name="status">
+              		<option value="2" selected>In Transit</option>
               		<option value="3">Delivered</option>
             		</select>
                 <input type = 'number' id = 'order_id' name = 'order_id' value = {{my.id}} hidden = 'true'>
-                <input type = 'submit' value = 'Update Status'>
+                <div class="row justify-content-center">
+                  <div class="btn-group" role="group">
+                      <button type="submit" class="btn btn-secondary mt-2">Update</button>
+                  </div>
+                </div>
             </form>
             {% elif my.status == 3 %}
             <form action = 'update_status' method = 'post'>{% csrf_token %}
-                <select id = 'status' name="status">
-              		<option value="3">Delivered</option>
+                <select class = 'form-control' id = 'status' name="status">
+              		<option value="3" selected>Delivered</option>
             		</select>
                 <input type = 'number' id = 'order_id' name = 'order_id' value = {{my.id}} hidden = 'true'>
-                <input type = 'submit' value = 'Update Status'>
+                <div class="row justify-content-center">
+                  <div class="btn-group" role="group">
+                      <button type="submit" class="btn btn-secondary mt-2">Update</button>
+                  </div>
+                </div>
             </form>
             {% endif %}
           </td>

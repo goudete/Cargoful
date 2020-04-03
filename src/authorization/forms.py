@@ -31,5 +31,5 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('user_type', 'company_name')
-        USER_TYPES = (("Shipper", "Shipper"),("Trucker", "Trucker"),("Driver", "Driver"))
+        USER_TYPES = (("Shipper", "Shipper"),("Trucker", "Trucker"))
         widgets = {'user_type': forms.Select(choices=USER_TYPES)}

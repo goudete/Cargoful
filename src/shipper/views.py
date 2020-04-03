@@ -207,7 +207,7 @@ def order_success(request):
             new_order.delivery_longitude = del_long
             new_order.pickup_address = pu_address
             new_order.delivery_address = del_address
-            new_order.distance = round(dist,3)
+            new_order.distance = round(dist,2)
             new_order.save()
             messages.info(request, "Order "+ str(customer_order_no) + " Placed Successfully")
             return HttpResponseRedirect('/shipper')
