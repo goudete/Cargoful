@@ -20,7 +20,21 @@ import math
 from haversine import haversine, Unit
 from time import sleep
 from django.contrib import messages
+import environ
+import os
 # Create your views here.
+
+#for getting sensitive info
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+#Environment variables
+#https://www.mattlayman.com/building-saas/django-environ-django-debug-toolbar/
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+env_file = os.path.join(BASE_DIR, ".env")
+environ.Env.read_env(env_file)
+Google_API = env("GMAPS_API_KEY")
 
 @login_required
 @allowed_users(allowed_roles=['Shipper'])
@@ -75,12 +89,13 @@ def post_order(request):
             'truck_dict': TRUCK_TYPES,
             'price': price,
             'contents': contents,
-            'instructions': instructions
+            'instructions': instructions,
+            'g_api': Google_API
         })
     #if the method is a get then the user is posting a new order for the first time
     else:
         order_form = Order_Form()
-    return render(request, 'shipper/post_order.html', {'form': order_form})
+    return render(request, 'shipper/post_order.html', {'form': order_form, 'g_api': Google_API})
 
 #display shipper dashboard
 @login_required
@@ -101,10 +116,9 @@ def confirm(request):
         """stuff for handling json inside request"""
         jdp = json.dumps(request.data) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
-        print(jsn)
         #get necessary info
         #use googlemaps api to get lat and long for pickup and delivery
-        gmaps = googlemaps.Client(key='AIzaSyCKmjFt91GOvHaqyxpoiiqFQURjFST7U2I')
+        gmaps = googlemaps.Client(key=Google_API)
         pu_address_full = jsn['pu_addy']
         del_address_full = jsn['del_addy']
         pu_geocode = gmaps.geocode(pu_address_full)
@@ -145,7 +159,6 @@ def confirm(request):
             hour = int(time.split(" ")[0].split(":")[0])
             hour += 12
             time = str(hour) + ":" + time.split(" ")[0].split(":")[1]+" PM"
-        print(time)
         #other specs
         truck = jsn['truck_type']
         cargo = jsn['contents']
@@ -170,7 +183,7 @@ def confirm(request):
         'truck': truck,
         'cargo': cargo,
         'instruct': instructions,
-        'price': price
+        'price': price,
     })
 
 #if the order is confirmed, then this page is rendered, it saves the order to db
