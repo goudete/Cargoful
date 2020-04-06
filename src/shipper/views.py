@@ -49,7 +49,9 @@ def post_order(request):
         pu_addy, del_addy = jsn['pickup_address'], jsn['delivery_address']
         date, time = jsn['pickup_date'], jsn['pickup_time']
         #format time
-        if int(time.split(":")[0]) >= 12:
+        if int(time.split(":")[0]) == 12:
+            time = str(time) + " PM"
+        elif int(time.split(":")[0]) > 12:
             time = str(int(time.split(":")[0]) -12) + ":" +str(time.split(":")[1]) + " PM"
         else:
             time = str(time) + " AM"
@@ -157,7 +159,8 @@ def confirm(request):
         #account for time being in PM
         if time.split(" ")[1] == "PM":
             hour = int(time.split(" ")[0].split(":")[0])
-            hour += 12
+            if hour < 12:
+                hour += 12
             time = str(hour) + ":" + time.split(" ")[0].split(":")[1]+" PM"
         #other specs
         truck = jsn['truck_type']
