@@ -26,13 +26,11 @@
       margin: 0;
       padding: 0;
     }
-
     #map {
       height: 300px;
       width: 50%;
     }
     .marker {
-      background-image: url('/static/imgs/CargoFul Logo-12.png');
       background-size: cover;
       width: 30px;
       height: 30px;
@@ -56,7 +54,7 @@
      <div class="d-flex flex-grow-1">
          <span class="w-100 d-lg-none d-block"></span>
          <a class="navbar-brand" href="/shipper">
-           <img src="/static/imgs/CargoFulPigeon.png" width="200" height="40" class="d-inline-block align-top"
+           <img src="{% static 'imgs/CargoFulPigeon.png' %}" width="200" height="40" class="d-inline-block align-top"
          </a>
          <div class="d-flex flex-row-reverse text-right">
              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar7">

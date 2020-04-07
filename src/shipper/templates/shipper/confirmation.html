@@ -1,4 +1,5 @@
 {% extends 'shipper/base.html'%}
+{% load static %}
 
 {% block content %}
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -11,6 +12,8 @@
 
   <div class="row justify-content-center mt-5">
     <div id='map'></div>
+    <div id = 'mark1' style='background-image: url("{% static "imgs/CargoFulLogo-12.png" %}");'></div>
+    <div id = 'mark2' style='background-image: url("{% static "imgs/CargoFulLogo-12.png" %}");'></div>
   </div>
 
   <form action = 'order_placed' method = "post">
@@ -132,20 +135,21 @@ var geojson = {
   }]
 };
 
-// add markers to map
-geojson.features.forEach(function(marker) {
+var mark1 = document.getElementById('mark1');
+mark1.className = 'marker';
+new mapboxgl.Marker(mark1)
+  .setLngLat(geojson.features[0].geometry.coordinates)
+  .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+  .setHTML('<h3>' + geojson.features[0].properties.title + '</h3><p>' + geojson.features[0].properties.description + '</p>'))
+  .addTo(map);
 
-  // create a HTML element for each feature
-  var el = document.createElement('div');
-  el.className = 'marker';
-
-  // make a marker for each feature and add to the map
-  new mapboxgl.Marker(el)
-    .setLngLat(marker.geometry.coordinates)
-    .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-    .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
-    .addTo(map);
-});
+var mark2 = document.getElementById('mark2');
+mark2.className = 'marker';
+new mapboxgl.Marker(mark2)
+  .setLngLat(geojson.features[1].geometry.coordinates)
+  .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+  .setHTML('<h3>' + geojson.features[1].properties.title + '</h3><p>' + geojson.features[1].properties.description + '</p>'))
+  .addTo(map);
 
 </script>
 
