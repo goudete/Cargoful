@@ -1,0 +1,51 @@
+{% extends 'registration/base.html'%}
+
+{% block content %}
+<!-- <div class="container"> -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <style>
+    .jumbotron {
+      background-image: url("/static/imgs/home_image.jpg");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      height: 100vh;
+    }
+
+    body {
+      font-family: 'Helvetica Neue';
+    }
+
+    h1 {
+      color: white;
+      text-align: center;
+    }
+  </style>
+
+
+<div class="jumbotron jumbotron-fluid">
+  <div class="container-fluid">
+
+    <div class="row">
+      <div class="col">
+        <h1 class="display-3">Welcome to the Shipping Platform Designed for the Future</h1>
+      </div>
+    </div>
+
+    <div class="row justify-content-center mt-5">
+      <div class="btn-group">
+        <div class="col-6">
+          <a href="/accounts/login" class="btn btn-secondary btn-lg p-2">Log In</a>
+        </div>
+        <div class="col-6">
+          <a href="/register" class="btn btn-secondary btn-lg p-2">Register</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+{% endblock %}

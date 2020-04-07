@@ -71,3 +71,6 @@ def logout_view(request):
     logout(request)
     return redirect('/accounts/login')
     #minuto 30:11 https://www.youtube.com/watch?v=tUqUdu0Sjyc
+
+def home_view(request):
+    return render(request, 'registration/home.html')
