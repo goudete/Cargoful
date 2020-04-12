@@ -62,9 +62,9 @@
           <td>{{ av.price }}</td>
           <td>
             <form action = "/trucker/accept_order" method = "post"> {% csrf_token %}
-            <input id = "order_id" name = "order_id" type = "number" value = {{av.id}} hidden = "true"/>
-            <button type = "submit" class = "btn btn-secondary">Review</button>
-          </form>
+              <input id = "order_id" name = "order_id" type = "number" value = {{av.id}} hidden = "true"/>
+              <button type = "submit" class = "btn btn-secondary">Review</button>
+            </form>
           </td>
         </tr>
         {% endfor %}

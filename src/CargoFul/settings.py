@@ -44,6 +44,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 INSTALLED_APPS = [
     'shipper',
     'trucker',
+    'cf_admin',
     'authorization.apps.AuthorizationConfig',
     'crispy_forms',
     'django.contrib.admin',

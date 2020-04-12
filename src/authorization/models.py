@@ -6,3 +6,4 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_type = models.CharField(max_length=30)
     company_name = models.CharField(max_length=30)
+    is_approved = models.BooleanField(default = False)

@@ -1,6 +1,7 @@
 {% extends 'shipper/base.html'%}
 
 {% block content %}
+
 <!-- Welcome and Successful order messages -->
 {% if messages %}
 {% for message in messages %}
@@ -27,6 +28,25 @@
 {% endfor %}
 {% endif %}
 <!-- messages end here -->
+
+<!-- Pending Account Acceptance Message -->
+{% if company.user.profile.is_approved == False %}
+<div class="row justify-content-center mt-3">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Your Account is Pending Approval</h5>
+        <p class="card-text">
+          Reach out if you have any questions: help@cargoful.org
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+<!-- Pending Account Acceptance Message Ends -->
+
+
 <style>
   #table tbody{
     height: 300px;
@@ -54,7 +74,9 @@
   </div>
 
   <div class="col-md-10">
+    {% if  company.user.profile.is_approved == True %}
     <a href="/shipper/post_order" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">New Order</a>
+    {% endif %}
   </div>
 </div>
 
@@ -78,6 +100,7 @@
       <th scope="col">Price</th>
     </tr>
   </thead>
+
   <tbody>
     {% for s in set %}
     <tr>
@@ -89,14 +112,16 @@
       <td>{{ s.contents }}</td>
       <th scope="row">
         {% if s.status == 0 %}
-          Unassigned
+          Pending Approval
         {% elif s.status == 1 %}
-          Booked
+          Unassigned
         {% elif s.status == 2 %}
-          In Transit
+          Booked
         {% elif s.status == 3 %}
-          Delivered
+          In Transit
         {% elif s.status == 4 %}
+          Delivered
+        {% elif s.status == 5 %}
           Cancelled
         {% endif %}
       </th>

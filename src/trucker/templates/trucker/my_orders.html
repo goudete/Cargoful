@@ -24,6 +24,25 @@
 
 {% endfor %}
 {% endif %}
+
+<!-- Pending Account Acceptance Message -->
+{% if me.user.profile.is_approved == False %}
+<div class="row justify-content-center mt-3">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Your Account is Pending Approval</h5>
+        <p class="card-text">
+          Reach out if you have any questions: help@cargoful.org
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+<!-- Pending Account Acceptance Message Ends -->
+
+
 <!--styling to make table overflow scroll -->
 <style>
 

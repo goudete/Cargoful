@@ -11,11 +11,12 @@ from django.utils import timezone
 #company_name is now in Profile model (located in authorization)
 class shipper(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
+    # is_approved = models.BooleanField(default = False)
     active_orders = models.PositiveIntegerField(default = 0)
     total_orders = models.PositiveIntegerField(default = 0)
     cancelled_orders = models.PositiveIntegerField(default = 0)
     rating = models.PositiveIntegerField(default = 0, validators = [MaxValueValidator(5)])
-    USERNAME_FIELD = 'email'
+    # USERNAME_FIELD = 'email'
 
 """with the @receiver decorator, we can link a signal with a function. This is what is used
 to update shipper model data when a shipper registers"""
@@ -34,6 +35,7 @@ class order(models.Model):
     def get_orden_de_embarco(file):
         return os.path.join('orden_de_embarco', file)
     #fields
+    is_approved = models.BooleanField(default = False)
     customer_order_no = models.CharField(default = '', max_length = 50) #this is for display on customer dashboard, format is 'cf<user_id><number>'
     shipping_company = models.ForeignKey(shipper, on_delete = models.PROTECT)
     truck_company = models.ForeignKey(truck_company, null=True, on_delete = models.CASCADE)
@@ -92,10 +94,10 @@ class order(models.Model):
     #status has 4 options
     status = models.PositiveIntegerField(default = 0, validators = [MaxValueValidator(5)])
     """for the status field:
-    0 -> awaiting approval from admin
-    1 -> unassigned (not booked yet)
+    0 -> pending approval
+    1 -> unassigned
     2 -> booked
     3 -> in transit
     4 -> delivered
-    5 -> cancelled/denied approval from admin
+    5 -> cancelled
     """

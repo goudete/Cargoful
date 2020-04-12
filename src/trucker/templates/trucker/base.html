@@ -77,6 +77,7 @@
              <li class="nav-item mr-3">
                  <a href="/trucker/" class="btn btn-secondary">My Jobs</a>
              </li>
+             {% if me.user.profile.is_approved == True %}
              <li class="nav-item mr-3">
                  <a href="/trucker/available_orders" class="btn btn-secondary">Find Jobs</a>
              </li>

@@ -17,7 +17,7 @@ from django.contrib.auth.models import User
 def Available_Orders(request):
     if request.method == 'GET':
         connections = Friend.objects.friends(request.user) #get the current shippers connected w/ this trucker
-        avail = order.objects.filter(status__exact=0) #all available orders
+        avail = order.objects.filter(status__exact=1) #all available orders
         available = [] #list of orders posted by shippers connected with trucker
         for a in avail:
             if a.shipping_company.user in connections:
@@ -31,7 +31,7 @@ def My_Orders(request):
     if request.method == 'GET':
         me = truck_company.objects.filter(user=request.user).first()
         my_orders = order.objects.filter(truck_company=me)
-    return render(request, 'trucker/my_orders.html', {'my_orders': my_orders})
+    return render(request, 'trucker/my_orders.html', {'my_orders': my_orders, 'me' : me})
 
 
 @login_required
