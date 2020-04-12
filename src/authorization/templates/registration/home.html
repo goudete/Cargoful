@@ -1,11 +1,10 @@
 {% extends 'registration/base.html'%}
-
+{% load static %}
 {% block content %}
 <!-- <div class="container"> -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <style>
     .jumbotron {
-      background-image: url("/static/imgs/home_image.jpg");
       background-size: cover;
       background-repeat: no-repeat;
       background-attachment: fixed;
@@ -23,7 +22,7 @@
   </style>
 
 
-<div class="jumbotron jumbotron-fluid">
+<div class="jumbotron jumbotron-fluid" style='background-image: url("{% static "imgs/home_image.jpg" %}");'>
   <div class="container-fluid">
 
     <div class="row">

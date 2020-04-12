@@ -1,0 +1,80 @@
+{% extends 'shipper/base.html'%}
+{% load static %}
+{% block content %}
+<!-- Welcome and Successful order messages -->
+<style>
+  #table tbody{
+    height: 300px;
+    overflow-y: auto;
+  }
+  #table thead th{
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 5;
+    background-color: white;
+    color: black;
+  }
+
+</style>
+
+<div class="row justify-content-center mt-5">
+  <div class="col-md-8">
+    <h1>Truckers Matching Your Search</h1>
+  </div>
+  <div class = "col-md-8">
+    <a href="/shipper/search_truckers" class = "btn btn-secondary">See All</a>
+  </div>
+</div>
+
+<div class="row justify-content-center pt-2" id = 'dashboard'>
+<div class="col-md-8">
+<div class="card">
+<table class="table table-striped" id = 'table'>
+  {% if truckers|length > 0 %}
+  <thead>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <tr>
+      <th scope = 'col'>Company Name</th>
+      <th scope = 'col'>Connection</th> <!-- this is an empty column to have a button for sending a connection request -->
+    </tr>
+  </thead>
+  <tbody>
+    {% for trucker in truckers %}
+    <tr>
+      <td>{{ trucker.company_name }}</td>
+      {% if trucker.user in connects %}
+      <td style = "color:green;">Connected <img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></td>
+      {% elif trucker.user in pending %}
+      <td style = "color: orange;">Pending <img src="{% static 'imgs/orange_arrow_2.png' %}" alt="" border=3 height=15 width=15></img></td>
+      {% else %}
+      <td>
+        <form action = 'send_connection_request' method = 'post'>
+          {% csrf_token %}
+          <input type = "number" name = "trucker_id" value = {{trucker.user.id}} hidden = 'true'>
+          <button  class="btn btn-secondary" type = "submit">Connect</button>
+        </form>
+      </td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+  {% else %}
+  <thead>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <tr>
+      <th scope = 'col'></th> <!-- this is an empty column to have a button for sending a connection request -->
+    </tr>
+  </thead>
+  <tbody>
+    <td align = "center"><h4><b>No Truckers Match Your Search</b></h4></td>
+  </tbody>
+  {% endif %}
+</table>
+</div>
+</div>
+</div>
+
+{% endblock %}

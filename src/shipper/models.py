@@ -90,11 +90,12 @@ class order(models.Model):
         default = 'LB'
         )
     #status has 4 options
-    status = models.PositiveIntegerField(default = 0, validators = [MaxValueValidator(4)])
+    status = models.PositiveIntegerField(default = 0, validators = [MaxValueValidator(5)])
     """for the status field:
-    0 -> unassigned (not booked yet)
-    1 -> booked
-    2 -> in transit
-    3 -> delivered
-    4 -> cancelled
+    0 -> awaiting approval from admin
+    1 -> unassigned (not booked yet)
+    2 -> booked
+    3 -> in transit
+    4 -> delivered
+    5 -> cancelled/denied approval from admin
     """

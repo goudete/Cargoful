@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.admin.widgets',
     'rest_framework',
     'storages',
+    'friendship',
 ]
 
 MIDDLEWARE = [

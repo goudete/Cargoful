@@ -8,12 +8,20 @@ from rest_framework.decorators import api_view
 import json
 import math
 from django.contrib import messages
+from authorization.models import Profile
+from friendship.models import FriendshipRequest, Friend, Follow
+from django.contrib.auth.models import User
 # Create your views here.
 @login_required
 @allowed_users(allowed_roles=['Trucker'])
 def Available_Orders(request):
     if request.method == 'GET':
-        available = order.objects.filter(status__exact=0)
+        connections = Friend.objects.friends(request.user) #get the current shippers connected w/ this trucker
+        avail = order.objects.filter(status__exact=0) #all available orders
+        available = [] #list of orders posted by shippers connected with trucker
+        for a in avail:
+            if a.shipping_company.user in connections:
+                available.append(a)
         return render(request, 'trucker/available_orders.html', {'available': available})
 
 
@@ -86,4 +94,93 @@ def Update_Status(request):
         cur_order = order.objects.filter(id = jsn['order_id']).first()
         cur_order.status = int(jsn['status'])
         cur_order.save()
+        return HttpResponseRedirect('/trucker')
+
+@login_required
+@allowed_users(allowed_roles=['Trucker'])
+def Show_Connects(request):
+    connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
+    connections = Friend.objects.friends(request.user) #query existing connections
+    return render(request, 'trucker/connects.html', {'requests': connect_requests, 'connections': connections})
+
+@login_required
+@allowed_users(allowed_roles = ['Trucker'])
+@api_view(['POST'])
+def Accept_Connect(request):
+    if request.method == 'POST':
+        jdp = json.dumps(request.data) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        req = FriendshipRequest.objects.get(id = jsn['request_id'])
+        req.accept()
+        Follow.objects.add_follower(request.user, req.from_user)
+        messages.info(request, "Connection from " + str(req.from_user.profile.company_name) + " Accepted")
+        return HttpResponseRedirect('/trucker/connection_requests')
+
+@login_required
+@allowed_users(allowed_roles = ['Trucker'])
+@api_view(['POST'])
+def Deny_Connect(request):
+    if request.method == 'POST':
+        jdp = json.dumps(request.data) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        req = FriendshipRequest.objects.get(id = jsn['request_id'])
+        req.reject()
+        req.delete()
+        return HttpResponseRedirect('/trucker/connection_requests')
+
+@login_required
+@allowed_users(allowed_roles = ['Trucker'])
+@api_view(['POST', 'GET'])
+def Search_Shippers(request):
+    if request.method == 'POST':
+        jdp = json.dumps(request.data) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        query = jsn['query'] #what was queried in searchbar
+        #get a query set of truckers for the searchbar
+        connection_list = Friend.objects.friends(request.user) #list of ppl user already connected with
+        pending_connects = Friend.objects.sent_requests(user=request.user)  #list of connections you have sent
+        pending = [] #the list of recipients of the connects in pending_connects
+        #get the recipients
+        for p in pending_connects:
+            if Friend.objects.are_friends(request.user, p.to_user):
+                continue #if users are already friends disregard
+            elif p in Friend.objects.rejected_requests(user=p.to_user):
+                continue #if user rejected connection disregard
+            else:
+                pending.append(p.to_user)
+        #get the ppl whose company names match your query
+        query_set = []
+        queries = query.split(" ") #turns a search like "trucking company" -> [trucking, company]
+        for word in queries:
+            truckers = Profile.objects.filter(user_type = "Shipper").filter(company_name__icontains = word).distinct() #get truckers that have any of the words in company name
+            for trucker in truckers:
+                query_set.append(trucker)
+        return render(request, 'trucker/search_connections.html', {'shippers': set(query_set), 'connects': connection_list, 'pending': pending})
+    #if the request is a GET, then the user wants to see all shippers on the platform
+    else:
+        connection_list = Friend.objects.friends(request.user) #list of ppl user already connected with
+        pending_connects = Friend.objects.sent_requests(user=request.user)  #list of connections you have sent
+        pending = [] #the list of recipients of the connects in pending_connects
+        #get the recipients
+        for p in pending_connects:
+            if Friend.objects.are_friends(request.user, p.to_user):
+                continue #if users are already friends disregard
+            elif p in Friend.objects.rejected_requests(user=p.to_user):
+                continue #if user rejected connection disregard
+            else:
+                pending.append(p.to_user)
+        shippers = Profile.objects.filter(user_type = "Shipper")
+        return render(request, 'trucker/search_connections.html', {'shippers': set(shippers), 'connects': connection_list, 'pending': pending})
+
+@login_required
+@allowed_users(allowed_roles = ['Trucker'])
+@api_view(['POST'])
+def Send_Connection_Request(request):
+    if request.method == 'POST':
+        jdp = json.dumps(request.data) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        receiver = User.objects.filter(id = jsn['shipper_id']).first() #get recipient of request
+        sender = request.user
+        Friend.objects.add_friend(sender, receiver) #send 'friend request' which in this case is a connection request
+        messages.info(request, "Requested Connection With "+ str(receiver.profile.company_name))
         return HttpResponseRedirect('/trucker')
