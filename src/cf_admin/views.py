@@ -77,3 +77,26 @@ def Accept_Order(request):
     cur_order.save()
     messages.success(request, "Order " + str(cur_order.customer_order_no) + " successfully approved")
     return HttpResponseRedirect('/cf_admin')
+
+@api_view(['POST'])
+def Delete_User(request):
+    jdp = json.dumps(request.data) #get request into json form
+    jsn = json.loads(jdp) #get dictionary from json
+    jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
+
+    profile = Profile.objects.get(id=jsn['profile_id'])
+    user = User.objects.get(id=profile.user.id)
+    user.delete()
+    messages.info(request, str(profile.company_name) + " successfully deleted")
+    return HttpResponseRedirect('/cf_admin')
+
+@api_view(['POST'])
+def Delete_Order(request):
+    jdp = json.dumps(request.data) #get request into json form
+    jsn = json.loads(jdp) #get dictionary from json
+    jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
+
+    cur_order = order.objects.get(id=jsn['order_id'])
+    cur_order.delete()
+    messages.info(request, str(cur_order.customer_order_no) + " successfully deleted")
+    return HttpResponseRedirect('/cf_admin')

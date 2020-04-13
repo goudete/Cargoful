@@ -78,6 +78,12 @@
           <button type = "submit" class = "btn btn-secondary">Approve</button>
         </form>
       </td>
+      <td>
+        <form action = "/cf_admin/delete_user" method = "post"> {% csrf_token %}
+          <input id="profile_id" name="profile_id" type="number" value="{{s.id}}" hidden="true"/>
+          <button type = "submit" class = "btn btn-secondary">Delete</button>
+        </form>
+      </td>
     </tr>
     {% endfor %}
   </tbody>
@@ -130,6 +136,12 @@
         <form action = "/cf_admin/approve_order" method = "post"> {% csrf_token %}
           <input id = "order_id" name = "order_id" type = "number" value = {{o.id}} hidden = "true"/>
           <button type = "submit" class = "btn btn-secondary">Review</button>
+        </form>
+      </td>
+      <td>
+        <form action = "/cf_admin/delete_order" method = "post"> {% csrf_token %}
+          <input id="order_id" name="order_id" type="number" value="{{s.id}}" hidden="true"/>
+          <button type = "submit" class = "btn btn-secondary">Delete</button>
         </form>
       </td>
     </tr>
