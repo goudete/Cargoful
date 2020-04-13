@@ -12,17 +12,19 @@ from authorization.models import Profile
 from friendship.models import FriendshipRequest, Friend, Follow
 from django.contrib.auth.models import User
 # Create your views here.
+
 @login_required
 @allowed_users(allowed_roles=['Trucker'])
 def Available_Orders(request):
     if request.method == 'GET':
+        me = truck_company.objects.filter(user=request.user).first()
         connections = Friend.objects.friends(request.user) #get the current shippers connected w/ this trucker
         avail = order.objects.filter(status__exact=1) #all available orders
         available = [] #list of orders posted by shippers connected with trucker
         for a in avail:
             if a.shipping_company.user in connections:
                 available.append(a)
-        return render(request, 'trucker/available_orders.html', {'available': available})
+        return render(request, 'trucker/available_orders.html', {'available': available, 'me' : me})
 
 
 @login_required
@@ -38,6 +40,7 @@ def My_Orders(request):
 @allowed_users(allowed_roles=['Trucker'])
 @api_view(['POST'])
 def Confirm_Order(request):
+    me = truck_company.objects.filter(user=request.user).first()
     jdp = json.dumps(request.data) #get request into json form
     jsn = json.loads(jdp) #get dictionary from json
     jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
@@ -65,13 +68,14 @@ def Confirm_Order(request):
     mdpt_long = math.degrees(math.atan2(y,x))
     mdpt_sqrt = math.sqrt(x*x + y*y)
     mdpt_lat = math.degrees(math.atan2(z, mdpt_sqrt))
-    return render(request, 'trucker/confirm_order.html', {'order': cur_order, 'mid_long': mdpt_long, 'mid_lat': mdpt_lat})
+    return render(request, 'trucker/confirm_order.html', {'order': cur_order, 'mid_long': mdpt_long, 'mid_lat': mdpt_lat, 'me' : me})
 
 @login_required
 @allowed_users(allowed_roles = ['Trucker'])
 @api_view(['POST'])
 def Accept_Order(request):
     if request.method == 'POST':
+        me = truck_company.objects.filter(user=request.user).first()
         jdp = json.dumps(request.data) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
         jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
@@ -88,6 +92,7 @@ def Accept_Order(request):
 @api_view(['POST'])
 def Update_Status(request):
     if request.method == 'POST':
+        me = truck_company.objects.filter(user=request.user).first()
         jdp = json.dumps(request.data) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
         jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
@@ -99,15 +104,17 @@ def Update_Status(request):
 @login_required
 @allowed_users(allowed_roles=['Trucker'])
 def Show_Connects(request):
+    me = truck_company.objects.filter(user=request.user).first()
     connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
     connections = Friend.objects.friends(request.user) #query existing connections
-    return render(request, 'trucker/connects.html', {'requests': connect_requests, 'connections': connections})
+    return render(request, 'trucker/connects.html', {'requests': connect_requests, 'connections': connections, 'me' : me})
 
 @login_required
 @allowed_users(allowed_roles = ['Trucker'])
 @api_view(['POST'])
 def Accept_Connect(request):
     if request.method == 'POST':
+        me = truck_company.objects.filter(user=request.user).first()
         jdp = json.dumps(request.data) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
         req = FriendshipRequest.objects.get(id = jsn['request_id'])
@@ -121,6 +128,7 @@ def Accept_Connect(request):
 @api_view(['POST'])
 def Deny_Connect(request):
     if request.method == 'POST':
+        me = truck_company.objects.filter(user=request.user).first()
         jdp = json.dumps(request.data) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
         req = FriendshipRequest.objects.get(id = jsn['request_id'])
@@ -132,6 +140,7 @@ def Deny_Connect(request):
 @allowed_users(allowed_roles = ['Trucker'])
 @api_view(['POST', 'GET'])
 def Search_Shippers(request):
+    me = truck_company.objects.filter(user=request.user).first()
     if request.method == 'POST':
         jdp = json.dumps(request.data) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
@@ -155,7 +164,7 @@ def Search_Shippers(request):
             truckers = Profile.objects.filter(user_type = "Shipper").filter(company_name__icontains = word).distinct() #get truckers that have any of the words in company name
             for trucker in truckers:
                 query_set.append(trucker)
-        return render(request, 'trucker/search_connections.html', {'shippers': set(query_set), 'connects': connection_list, 'pending': pending})
+        return render(request, 'trucker/search_connections.html', {'shippers': set(query_set), 'connects': connection_list, 'pending': pending, 'me' : me})
     #if the request is a GET, then the user wants to see all shippers on the platform
     else:
         connection_list = Friend.objects.friends(request.user) #list of ppl user already connected with
@@ -170,12 +179,13 @@ def Search_Shippers(request):
             else:
                 pending.append(p.to_user)
         shippers = Profile.objects.filter(user_type = "Shipper")
-        return render(request, 'trucker/search_connections.html', {'shippers': set(shippers), 'connects': connection_list, 'pending': pending})
+        return render(request, 'trucker/search_connections.html', {'shippers': set(shippers), 'connects': connection_list, 'pending': pending, 'me' : me})
 
 @login_required
 @allowed_users(allowed_roles = ['Trucker'])
 @api_view(['POST'])
 def Send_Connection_Request(request):
+    me = truck_company.objects.filter(user=request.user).first()
     if request.method == 'POST':
         jdp = json.dumps(request.data) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
