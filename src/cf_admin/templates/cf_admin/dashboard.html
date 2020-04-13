@@ -140,7 +140,7 @@
       </td>
       <td>
         <form action = "/cf_admin/delete_order" method = "post"> {% csrf_token %}
-          <input id="order_id" name="order_id" type="number" value="{{s.id}}" hidden="true"/>
+          <input id="order_id" name="order_id" type="number" value="{{o.id}}" hidden="true"/>
           <button type = "submit" class = "btn btn-secondary">Delete</button>
         </form>
       </td>
