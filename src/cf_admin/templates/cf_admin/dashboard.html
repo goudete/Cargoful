@@ -74,13 +74,13 @@
       <td>{{ u.user.email}}</td>
       <td>
         <form action = "/cf_admin/approve_user" method = "post"> {% csrf_token %}
-          <input id="profile_id" name="profile_id" type="number" value="{{s.id}}" hidden="true"/>
+          <input id="profile_id" name="profile_id" type="number" value="{{u.id}}" hidden = "true"/>
           <button type = "submit" class = "btn btn-secondary">Approve</button>
         </form>
       </td>
       <td>
         <form action = "/cf_admin/delete_user" method = "post"> {% csrf_token %}
-          <input id="profile_id" name="profile_id" type="number" value="{{s.id}}" hidden="true"/>
+          <input id="profile_id" name="profile_id" type="number" value="{{u.id}}" hidden="true"/>
           <button type = "submit" class = "btn btn-secondary">Delete</button>
         </form>
       </td>
@@ -117,7 +117,8 @@
       <th scope = 'col'>Delivery Address</th>
       <th scope = 'col'>Contents</th>
       <th scope="col">Price</th>
-
+      <th scope = "col"></th>
+      <th scope = "col"></th>
     </tr>
   </thead>
 
