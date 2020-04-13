@@ -17,9 +17,7 @@ def See_Dashboard(request):
     if request.method == "GET":
         new_users = Profile.objects.filter(is_approved = False)
         new_orders = order.objects.filter(is_approved = False)
-        set = list(chain(new_users, new_orders))
-
-        return render(request, 'cf_admin/dashboard.html', {'set' : set})
+        return render(request, 'cf_admin/dashboard.html', {'users' : new_users, 'orders': new_orders})
 
 @api_view(['POST'])
 def Approve_User(request):

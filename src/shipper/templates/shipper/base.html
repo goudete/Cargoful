@@ -22,10 +22,6 @@
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-    }
     #map {
       height: 300px;
       width: 50%;
@@ -43,6 +39,19 @@
     .mapboxgl-popup-content {
       text-align: center;
       font-family: 'Open Sans', sans-serif;
+    }
+    html, body {
+    height: 100%;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+    .content {
+      flex: 1 0 auto;
+    }
+    .footer {
+      flex-shrink: 0;
     }
   </style>
   <!-- Confirmation page boilerplate ends here -->
@@ -88,9 +97,10 @@
      </div>
  </nav>
 
+ <div class = "content">
   {% block content%}
   {% endblock %}
-
+</div>
 <!-- Popper.js first, then CoreUI JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js" integrity="sha384-L2pyEeut/H3mtgCBaUNw7KWzp5n9&#43;4pDQiExs933/5QfaTh8YStYFFkOzSoXjlTb" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@coreui/coreui@3.0.0-rc.0/dist/js/coreui.min.js"></script>

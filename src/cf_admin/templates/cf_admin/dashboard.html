@@ -67,11 +67,11 @@
   </thead>
 
   <tbody>
-    {% for s in set %}
+    {% for u in users %}
     <tr>
-      <td>{{ s.user_type }}</td>
-      <td>{{ s.company_name }}</td>
-      <td>{{ s.user.email}}</td>
+      <td>{{ u.user_type }}</td>
+      <td>{{ u.company_name }}</td>
+      <td>{{ u.user.email}}</td>
       <td>
         <form action = "/cf_admin/approve_user" method = "post"> {% csrf_token %}
           <input id="profile_id" name="profile_id" type="number" value="{{s.id}}" hidden="true"/>
@@ -116,25 +116,23 @@
   </thead>
 
   <tbody>
-    {% for s in set %}
-    {% if s.customer_order_no %}
+    {% for o in orders %}
     <tr>
-      <td>{{ s.customer_order_no }}</td>
-      <td>{{ s.shipping_company.user.profile.company_name }}</td>
-      <td>{{ s.shipping_company.user.email}}</td>
-      <td>{{ s.pickup_date }}</td>
-      <td>{{ s.pickup_address}}</td>
-      <td>{{ s.delivery_address }}</td>
-      <td>{{ s.contents }}</td>
-      <td>{{ s.price }}</td>
+      <td>{{ o.customer_order_no }}</td>
+      <td>{{ o.shipping_company.user.profile.company_name }}</td>
+      <td>{{ o.shipping_company.user.email}}</td>
+      <td>{{ o.pickup_date }}</td>
+      <td>{{ o.pickup_address}}</td>
+      <td>{{ o.delivery_address }}</td>
+      <td>{{ o.contents }}</td>
+      <td>{{ o.price }}</td>
       <td>
         <form action = "/cf_admin/approve_order" method = "post"> {% csrf_token %}
-          <input id = "order_id" name = "order_id" type = "number" value = {{s.id}} hidden = "true"/>
+          <input id = "order_id" name = "order_id" type = "number" value = {{o.id}} hidden = "true"/>
           <button type = "submit" class = "btn btn-secondary">Review</button>
         </form>
       </td>
     </tr>
-    {% endif %}
     {% endfor %}
   </tbody>
 </table>
