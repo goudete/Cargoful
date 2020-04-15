@@ -17,11 +17,11 @@ class shipper(models.Model):
 
 """with the @receiver decorator, we can link a signal with a function. This is what is used
 to update shipper model data when a shipper registers"""
-# @receiver(post_save, sender=User)
-# def update_shipper_signal(sender, instance, created, **kwargs):
-#     if created:
-#         shipper.objects.create(user=instance)
-#     instance.shipper.save()
+@receiver(post_save, sender=User)
+def update_shipper_signal(sender, instance, created, **kwargs):
+    if created:
+        shipper.objects.create(user=instance)
+    instance.shipper.save()
 
 """ this is the order model, an order is a shipment"""
 class order(models.Model):

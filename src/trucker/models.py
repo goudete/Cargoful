@@ -11,17 +11,17 @@ class truck_company(models.Model):
     completed_orders = models.PositiveIntegerField(default=0)
     incomplete_orders = models.PositiveIntegerField(default=0)
     rating = models.PositiveIntegerField(default=0, validators=[MaxValueValidator(5)])
-#     def _str_(self):
-#         return self.company_name
-# @receiver(post_save, sender=User)
-# def update_truck_company_signal(sender, instance, created, **kwargs):
-#     if created:
-#         truck_company.objects.create(user=instance)
-#     instance.truck_company.save()
+    def _str_(self):
+        return self.company_name
+@receiver(post_save, sender=User)
+def update_truck_company_signal(sender, instance, created, **kwargs):
+    if created:
+        truck_company.objects.create(user=instance)
+    instance.truck_company.save()
 
 class trucks(models.Model):
     truck_company = models.ForeignKey(truck_company, on_delete=models.CASCADE)
-    driver = models.ForeignKey(driver, on_delete=models.CASCADE)
+    driver = models.ForeignKey('driver', on_delete=models.CASCADE)
     licence_plate = models.CharField(max_length=15)
     #truck_type is an option field, the user can pick one of the following
     TRUCK_TYPES = [
@@ -55,8 +55,8 @@ class trucks(models.Model):
     year = models.PositiveIntegerField(default=0)
     available_capacity = models.PositiveIntegerField(default=0)
 
-    # def _str_(self):
-    #     return self.licence_plate
+    def _str_(self):
+        return self.licence_plate
 
 class driver(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
@@ -67,5 +67,5 @@ class driver(models.Model):
     orders_completed = models.PositiveIntegerField(default=0)
     rating = models.PositiveIntegerField(default=0, validators=[MaxValueValidator(5)])
 
-    # def _str_(self):
-    #     return self.fname
+    def _str_(self):
+        return self.fname
