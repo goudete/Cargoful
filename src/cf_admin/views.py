@@ -4,7 +4,10 @@ from shipper.models import order, shipper
 from trucker.models import truck_company
 from authorization.models import Profile
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from rest_framework.decorators import api_view
+from authorization.decorators import allowed_users
+
 from itertools import chain
 import json
 import math
@@ -12,6 +15,8 @@ from django.contrib import messages
 
 
 # Create your views here.
+@login_required
+@allowed_users(allowed_roles=['Cf_admin'])
 def See_Dashboard(request):
     #first check that request is a GET
     if request.method == "GET":
@@ -19,6 +24,8 @@ def See_Dashboard(request):
         new_orders = order.objects.filter(is_approved = False)
         return render(request, 'cf_admin/dashboard.html', {'users' : new_users, 'orders': new_orders})
 
+@login_required
+@allowed_users(allowed_roles=['Cf_admin'])
 @api_view(['POST'])
 def Approve_User(request):
     if request.method == 'POST':
@@ -33,6 +40,8 @@ def Approve_User(request):
         return HttpResponseRedirect('/cf_admin')
 
 
+@login_required
+@allowed_users(allowed_roles=['Cf_admin'])
 @api_view(['POST'])
 def Approve_Order(request):
     if request.method == 'POST':
@@ -65,12 +74,13 @@ def Approve_Order(request):
         return render(request, 'cf_admin/confirm_order.html', {'order' : cur_order, 'mid_long': mdpt_long, 'mid_lat': mdpt_lat})
 
 
+@login_required
+@allowed_users(allowed_roles=['Cf_admin'])
 @api_view(['POST'])
 def Accept_Order(request):
     jdp = json.dumps(request.data) #get request into json form
     jsn = json.loads(jdp) #get dictionary from json
     jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
-
     cur_order = order.objects.get(id=jsn['order_id'])
     cur_order.is_approved = True
     cur_order.status = 1
@@ -78,24 +88,26 @@ def Accept_Order(request):
     messages.success(request, "Order " + str(cur_order.customer_order_no) + " successfully approved")
     return HttpResponseRedirect('/cf_admin')
 
+@login_required
+@allowed_users(allowed_roles=['Cf_admin'])
 @api_view(['POST'])
 def Delete_User(request):
     jdp = json.dumps(request.data) #get request into json form
     jsn = json.loads(jdp) #get dictionary from json
     jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
-
     profile = Profile.objects.get(id=jsn['profile_id'])
     user = User.objects.get(id=profile.user.id)
     user.delete()
     messages.info(request, str(profile.company_name) + " successfully deleted")
     return HttpResponseRedirect('/cf_admin')
 
+@login_required
+@allowed_users(allowed_roles=['Cf_admin'])
 @api_view(['POST'])
 def Delete_Order(request):
     jdp = json.dumps(request.data) #get request into json form
     jsn = json.loads(jdp) #get dictionary from json
     jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
-
     cur_order = order.objects.get(id=jsn['order_id'])
     cur_order.delete()
     messages.info(request, str(cur_order.customer_order_no) + " successfully deleted")

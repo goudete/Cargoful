@@ -8,15 +8,12 @@ from django.dispatch import receiver
 from django.utils import timezone
 
 """this is the shipper model, a shipper has cargo that they need delivered"""
-#company_name is now in Profile model (located in authorization)
 class shipper(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
-    # is_approved = models.BooleanField(default = False)
     active_orders = models.PositiveIntegerField(default = 0)
     total_orders = models.PositiveIntegerField(default = 0)
     cancelled_orders = models.PositiveIntegerField(default = 0)
     rating = models.PositiveIntegerField(default = 0, validators = [MaxValueValidator(5)])
-    # USERNAME_FIELD = 'email'
 
 """with the @receiver decorator, we can link a signal with a function. This is what is used
 to update shipper model data when a shipper registers"""
