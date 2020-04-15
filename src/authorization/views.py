@@ -63,6 +63,8 @@ def login_success(request):
             return redirect('/shipper')
         elif usertype == 'Trucker':
             return redirect('/trucker')
+        elif usertype == 'Cf_admin':
+            return redirect('/cf_admin')
         else:
             return HttpResponse('Have yet to develop Driver View! :)')
 
