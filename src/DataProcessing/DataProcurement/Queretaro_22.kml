@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Queretaro_22</name>
+    <description/>
+    <Style id="icon-1899-0288D1-nodesc-normal">
+      <IconStyle>
+        <color>ffd18802</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1899-0288D1-nodesc-highlight">
+      <IconStyle>
+        <color>ffd18802</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1899-0288D1-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-0288D1-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-0288D1-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name>Untitled layer</name>
+      <Placemark>
+        <name>Amealco</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -100.1469744,20.1865094,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Arroyo Seco</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -99.6878432,21.5471976,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Bernal</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -99.9423166,20.7379323,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Cadereyta de Montes</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -99.8208632,20.6904037,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Ezequiel Montes</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -99.8962279,20.6713387,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Jalpan de Serra</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -99.4714352,21.2190312,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>La Estancia</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -100.0659476,20.420091,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Landa de Matamoros</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -99.3201359,21.1842187,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Palmillas</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -99.9412377,20.3340163,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Pedro Escobedo</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -100.1395169,20.5010443,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Pinal de Amoles</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -99.6255669,21.1354507,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Santiago de Querétaro</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -100.3898881,20.5887932,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>San Joaquín</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -99.5649876,20.916487,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>San Juan del Río</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -99.9856344,20.3951106,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>San Pablo Toliman</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -99.8988876,20.8564718,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Santa Rosa Jáuregui</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -100.447453,20.7414547,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tequisquiapan</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -99.8850586,20.5187326,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tolimán</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -99.9283477,20.9067463,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Villa Pueblito</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -100.4403251,20.5354158,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Villa Progreso</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -99.8346569,20.6416667,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vizarron De Montes</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -99.7218738,20.8302019,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>
