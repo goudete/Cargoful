@@ -3,6 +3,25 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+<!-- this is for bootstrap popover as well as the information icon -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+<!--styling for load spinner -->
+<<style media="screen">
+  .loader {
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 4px;
+    height: 4px;
+    animation: spin 2s linear infinite;
+    position: absolute;
+    float: left;
+  }
+  .loader_text{
+    text-indent: 1.5em;
+  }
+</style>
 
 <div class="container">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -118,9 +137,25 @@
           <div class = "invalid-feedback">
             Please Enter a Price
           </div>
+          <!-- loading spinner and info icon-->
+          <div class="row">
+            <div class="col">
+              <div class="loader-block" id = id_loader_block>
+                <div class="loader" id = "loader_spinner"></div>
+                <div class="loader_text" id = "spinner_text" onclick = "popupToggle()">Calculating Recommended Price...
+                </div>
+              </div>
+            </div>
+            <div class="col-md-auto">
+              <a tabindex="0" class="btn btn-sm btn-outline-primary py-0" role="button" data-toggle="popover" data-trigger="focus" style="font-size: 0.8em;"
+              id = "id_info_button" title="CargoFul Price Recommendation" data-content="Based on the truck type you selected as well as the distance of the trip, CargoFul suggests setting this price.">
+              <i class="fas fa-info-circle"></i>
+            </a>
+            </div>
+          </div>
         </div>
-
       </div>
+
 
       <div class="row justify-content-center">
         <div class="col-8">
@@ -158,6 +193,7 @@
 </div>
 
 <!-- for dropdown calendar -->
+
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>
 <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
@@ -191,6 +227,11 @@
     });
 });
 </script>
+<script>
+$(document).ready(function(){
+  $('[data-toggle="popover"]').popover();
+});
+</script>
 
 <!-- for selecting addresses -->
 <script>
@@ -201,6 +242,7 @@
 // parameter when you first load the API. For example:
 // <script
 // src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
 
 var placeSearch, autocomplete, autocomplete2;
 
@@ -221,6 +263,44 @@ var componentForm2 = {
   country2: 'long_name',
   postal_code2: 'short_name'
 };
+//This script gets the data from the address fields and sends it to the price calculation view
+function fillInPrice(){
+  console.log(document.getElementById('autocomplete').value);
+  $("#id_loader_block").show();
+  var puAddy = document.getElementById('autocomplete').value;
+  var delAddy = document.getElementById('autocomplete2').value;
+  console.log(puAddy);
+  console.log(delAddy);
+  var truck_type = document.getElementById('id_truck_type').value;
+
+  $.ajax({
+    url: 'ajax/ajax_price_calculation',
+    data: {
+      'puAddy': puAddy,
+      'delAddy': delAddy,
+      'truck_type':truck_type
+    },
+    dataType: 'json',
+    success: function (data) {
+      dist = data.distance;
+      price = data.price;
+      pu_state_name = data.pu_state_name;
+      del_state_name = data.del_state_name;
+      pu_coords = data.pu_city_coords;
+      del_coords = data.del_city_coords;
+      //del_lat,del_long = data.del_city_coords;
+      console.log("pick up state is");
+      console.log(pu_state_name);
+      console.log("delivery state is:");
+      console.log(del_state_name);
+      document.getElementById('id_price').value = price;
+      //$("#id_loader_block").hide();
+      $("#loader_spinner").hide();
+      document.getElementById('spinner_text').innerText = "Recommended Price (pesos)"
+      $("#id_info_button").show();
+    }
+  });
+}
 
 function initAutocomplete() {
   // Create the autocomplete object, restricting the search predictions to
@@ -267,6 +347,10 @@ function fillInAddress() {
       document.getElementById(addressType).value = val;
     }
   }
+  if (document.getElementById('id_truck_type').value.length > 0 &&
+      document.getElementById('autocomplete2').value.length > 0){
+    fillInPrice(); //if other required fields for price are populated, calculate price
+    }
 }
 
 function fillInAddress2(){
@@ -285,6 +369,10 @@ function fillInAddress2(){
       //console.log(val)
       document.getElementById(addressType.concat(2)).value = val;
     }
+  }
+  if (document.getElementById('autocomplete').value.length > 0 &&
+      document.getElementById('id_truck_type').value.length > 0){
+    fillInPrice(); //if other required fields for price are populated, calculate price
   }
 }
 
@@ -326,6 +414,24 @@ function geolocate() {
       });
     }, false);
   })();
+  </script>
+  <!-- All the following scripts are for pricing algo -->
+  <!-- onload hide loader and info icon -->
+  <script>
+    $( document ).ready(function() {
+        $("#id_loader_block").hide();
+        $("#id_info_button").hide();
+    });
+  </script>
+  <!-- on change in the truck type field, send address data to view via ajax to calculate price -->
+  <!-- (only executes if address fields are populated) -->
+  <script>
+      $("#id_truck_type").change(function () {
+        if (document.getElementById('autocomplete').value.length > 0 &&
+            document.getElementById('autocomplete2').value.length > 0){
+          fillInPrice()
+      }
+      });
   </script>
 
 {% endblock %}

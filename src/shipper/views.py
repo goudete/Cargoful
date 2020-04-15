@@ -25,10 +25,12 @@ import environ
 import os
 from friendship.models import Friend, Follow, Block, FriendshipRequest
 from django.contrib.auth.models import User
+from DataProcessing.santiModel import pricingModel
 # Create your views here.
 
 #for getting sensitive info
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 #Environment variables
 #https://www.mattlayman.com/building-saas/django-environ-django-debug-toolbar/
 env = environ.Env(
@@ -63,26 +65,31 @@ def post_order(request):
         contents, instructions = jsn['contents'], jsn['instructions']
         #render a copy of order form (different HTML file b/c there is no crispy forms)
         TRUCK_TYPES = [
-            ('Low Boy', 'Low Boy'),
-            ('Caja Seca 48 pies', 'Caja Seca 48 pies'),
-            ('Refrigerado 48 pies', 'Refrigerado 48 pies'),
-            ('Plataforma 48 pies', 'Plataforma 48 pies'),
-            ('Caja Seca 53 pies', 'Caja Seca 53 pies'),
-            ('Refrigerado 53 pies', 'Refrigerado 53 pies'),
-            ('Plataforma 53 pies', 'Plataforma 53 pies'),
-            ('Full', 'Full'),
-            ('Plataforma Full', 'Plataforma Full'),
-            ('Torton Caja Seca', 'Torton Caja Seca'),
-            ('Torton Refrigerado', 'Torton Refrigerado'),
-            ('Troton Plataforma', 'Troton Plataforma'),
-            ('Rabon Caja Seca', 'Rabon Caja Seca'),
-            ('Rabon Refrigerado', 'Rabon Refrigerado'),
-            ('Rabon Plataforma', 'Rabon Plataforma'),
-            ('Camioneta 5.5 tons', 'Camioneta 5.5 tons'),
-            ('Camioneta 3.5 tons', 'Camioneta 3.5 tons'),
-            ('Camioneta 3.5 tons Plataforma', 'Camioneta 3.5 tons Plataforma'),
-            ('Camioneta 1.5 tons', 'Camioneta 1.5 tons'),
-            ('Camioneta 3.5 tons Redilla', 'Camioneta 3.5 tons Redilla'),
+        ('Low Boy', 'Low Boy'),
+        ('Caja Seca 48 pies', 'Caja Seca 48 pies'),
+        ('Refrigerado 48 pies', 'Refrigerado 48 pies'),
+        ('Plataforma 48 pies', 'Plataforma 48 pies'),
+        ('Caja Seca 53 pies', 'Caja Seca 53 pies'),
+        ('Refrigerado 53 pies', 'Refrigerado 53 pies'),
+        ('Plataforma 53 pies', 'Plataforma 53 pies'),
+        ('Full Caja Seca', 'Full Caja Seca'),
+        ('Full Refrigerado','Full Refrigerado'),
+        ('Full Plataforma', 'Full Plataforma'),
+        ('Torton Caja Seca', 'Torton Caja Seca'),
+        ('Torton Refrigerado', 'Torton Refrigerado'),
+        ('Torton Plataforma', 'Torton Plataforma'),
+        ('Rabon Caja Seca', 'Rabon Caja Seca'),
+        ('Rabon Refrigerado', 'Rabon Refrigerado'),
+        ('Rabon Plataforma', 'Rabon Plataforma'),
+        ('Camioneta 5.5 tons Seca', 'Camioneta 5.5 tons Seca'),
+        ('Camioneta 5.5 tons Refrigerada','Camioneta 5.5 tons Refrigerada'),
+        ('Camioneta 5.5 tons Plataforma','Camioneta 5.5 tons Plataforma'),
+        ('Camioneta 3.5 tons Seca', 'Camioneta 3.5 tons Seca'),
+        ('Camioneta 3.5 tons Refrigerada','Camioneta 3.5 tons Refrigerada'),
+        ('Camioneta 3.5 tons Redila', 'Camioneta 3.5 tons Redila'),
+        ('Camioneta 1.5 tons Seca', 'Camioneta 1.5 tons Seca'),
+        ('Camioneta 1.5 tons Refrigerada', 'Camioneta 1.5 tons Refrigerada'),
+        ('Camioneta 1.5 tons Redila','Camioneta 1.5 tons Redila')
         ] #this dict is for the dropdown menu for truck type
         return render(request, 'shipper/change_order.html',
         {
@@ -273,6 +280,72 @@ def show_truckers(request):
                 pending.append(p.to_user)
         truckers = Profile.objects.filter(user_type = "Trucker")
         return render(request, 'shipper/search_connections.html', {'truckers': set(truckers), 'connects': connection_list, 'pending': pending})
+
+def ajax_price_calculation(request):
+
+    pu_address_full = request.GET.get('puAddy', None)
+    del_address_full = request.GET.get('delAddy', None)
+    truck_type = request.GET.get('truck_type', None)
+
+    gmaps = googlemaps.Client(key=Google_API)
+    pu_geocode = gmaps.geocode(pu_address_full)
+    #get lat  and lng
+    pu_lat = pu_geocode[0]['geometry']['location']['lat']
+    pu_long = pu_geocode[0]['geometry']['location']['lng']
+
+    del_geocode = gmaps.geocode(del_address_full)
+    del_lat = del_geocode[0]['geometry']['location']['lat']
+    del_long = del_geocode[0]['geometry']['location']['lng']
+
+    "the following code gets the city name from the geocode, needed for pricing algorithm"
+    pu_address_components = pu_geocode[0]['address_components']
+    for dict in pu_address_components:
+        if 'administrative_area_level_1' in dict['types']:
+            pu_state_name = dict['long_name']
+            break
+    del_address_components = del_geocode[0]['address_components']
+    for dict in del_address_components:
+        if 'administrative_area_level_1' in dict['types']:
+            del_state_name = dict['long_name']
+            break
+
+    """lines 86 - 103 are for getting mdpt of two lat/lng coordinates"""
+    x,y,z = 0,0,0
+    lat1,long1 = math.radians(pu_lat), math.radians(pu_long)
+    x += (math.cos(lat1)*math.cos(long1))
+    y += (math.cos(lat1)*math.sin(long1))
+    z += math.sin(lat1)
+    #
+    lat2,long2 = math.radians(del_lat), math.radians(del_long)
+    x += (math.cos(lat2)*math.cos(long2))
+    y += (math.cos(lat2)*math.sin(long2))
+    z += math.sin(lat2)
+    #avg
+    x /= 2
+    y/= 2
+    z/= 2
+    #get mdpts in radians
+    mdpt_long = math.degrees(math.atan2(y,x))
+    mdpt_sqrt = math.sqrt(x*x + y*y)
+    mdpt_lat = math.degrees(math.atan2(z, mdpt_sqrt))
+    """end mdpt calculation"""
+    #get the distance btwn pickup and delivery
+    distance = round(haversine((pu_lat,pu_long), (del_lat,del_long)), 4)
+
+    #price = round(float(calculatePrice(distance,'Ciudad de México','Ciudad de México',
+    #                            pu_city_name,del_city_name,truck_type)))
+    price = pricingModel.calculatePrice(distance,'Aguascalientes','Aguascalientes',truck_type,
+                                        float(pu_lat),float(pu_long),float(del_lat),float(del_long))
+
+    data = {
+        'distance':distance,
+        'price': price,
+        'pu_state_name': pu_state_name,
+        'del_state_name': del_state_name,
+        # 'pu_city_coords': (pu_lat,pu_long),
+        # 'del_city_coords':(del_lat,del_long)
+    }
+    return JsonResponse(data)
 
 @login_required
 @allowed_users(allowed_roles=['Shipper'])

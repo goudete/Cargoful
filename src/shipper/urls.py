@@ -10,5 +10,6 @@ urlpatterns = [
     path('connection_requests', views.show_connects), #this url is for when a shipper sees their connections
     path('accept_request', views.accept_request), #this url is for when a shipper accepts a connection from a trucker
     path('deny_request', views.deny_request), #this url is for when a trucker denies a request
-    path('send_connection_request', views.make_connection_request, name = 'request'), #this url is for making a new connection request between a shipper and trucker
+    path('send_connection_request', views.make_connection_request, name = 'request'), #this url is for making a new connection request between a shipper and trucker,
+    path('ajax/ajax_price_calculation', views.ajax_price_calculation, name = 'price_calculation'), #to calculate price
 ]
