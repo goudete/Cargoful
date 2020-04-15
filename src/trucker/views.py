@@ -82,7 +82,7 @@ def Accept_Order(request):
         cur_order = order.objects.filter(id = jsn['order_id']).first()
         me = truck_company.objects.filter(user = request.user).first()
         cur_order.truck_company = me
-        cur_order.status = 1
+        cur_order.status = 2
         cur_order.save()
         messages.info(request, "Order " + str(cur_order.customer_order_no) + " Accepted")
         return HttpResponseRedirect('/trucker')
