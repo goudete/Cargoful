@@ -1,0 +1,136 @@
+{% extends 'shipper/base.html'%}
+
+{% block content %}
+<!--styling to make table overflow scroll -->
+<style>
+  table tbody{
+    height: 300px;
+    overflow-y: auto;
+  }
+  table thead th{
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 5;
+    background-color: white;
+    color: black;
+  }
+</style>
+<!-- messages end here -->
+
+<!-- dash of connections -->
+<div class="row justify-content-center mt-5">
+  <div class="col-md-8">
+    <h1>Connection Requests</h1>
+  </div>
+</div>
+
+<!-- start of pending requests table -->
+<div class="row justify-content-center pt-2" id = 'dashboard'>
+  <div class="col-md-8">
+    <div class="card">
+    <table class="table table-striped">
+      {% if requests|length > 0 %}
+      <thead>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <tr>
+          <th scope = 'col'>Company Name</th>
+          <th scope = 'col'></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in requests %}
+        <tr>
+          <td>{{ r.from_user.profile.company_name }}</td>
+          <td>
+            <form action = 'accept_request' method = 'POST'>
+              {% csrf_token %}
+              <input type = 'number' name = 'request_id' value = {{r.id}} hidden = 'true'>
+              <button type = 'submit' class = 'btn btn-success'>Accept</button>
+              <button type = 'submit' formaction = 'deny_request' class = 'btn btn-danger'>Decline</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      {% else %}
+      <thead>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <tr>
+          <th scope = 'col'></th>
+        </tr>
+      </thead>
+      <tbody>
+        <td align = "center"><h4><b>No Pending Connections</b></h4></td>
+      </tbody>
+      {% endif %}
+    </table>
+    </div>
+  </div>
+</div>
+<!--start of status_updates table -->
+<div class="row justify-content-center mt-5">
+  <div class="col-md-8">
+    <h1>Order Updates</h1>
+  </div>
+</div>
+<div class="row justify-content-center pt-2" id = 'dashboard'>
+  <div class="col-md-8">
+    <div class="card">
+    <table class="table table-striped">
+      {% if status_updates|length > 0 %}
+      <thead>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <tr>
+          <th scope = 'col'>Order Number</th>
+          <th scope = 'col'></th>
+          <th scope = 'col'></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in status_updates %}
+        <tr>
+          <td>{{ s.order.customer_order_no }}</td>
+          {% if s.old_status == 1 %}
+          <td>{{ s.trucker.user.profile.company_name }} has accepted order {{ s.order.customer_order_no }}</td>
+          {% else %}
+          <td>{{ s.trucker.user.profile.company_name }} has updated order {{ s.order.customer_order_no }} from
+            {% if s.old_status == 2 %}
+              <b>Booked</b>
+            {% elif s.old_status == 3 %}
+              <b>In Transit</b>
+            {% endif %} to
+            {% if s.new_status == 3 %}
+              <b>In Transit</b>
+            {% elif s.new_status == 4 %}
+              <b>Delivered</b>
+            {% endif %}</td>
+          {% endif %}
+          <td>
+            <form action = 'read_status_update' method = 'POST'>
+              {% csrf_token %}
+              <input type = 'number' name = 'status_id' value = {{s.id}} hidden = 'true'>
+              <button type = 'submit' class = 'btn btn-success'>Ok</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      {% else %}
+      <thead>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <tr>
+          <th scope = 'col'></th>
+        </tr>
+      </thead>
+      <tbody>
+        <td align = "center"><h4><b>No Order Updates</b></h4></td>
+      </tbody>
+      {% endif %}
+    </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

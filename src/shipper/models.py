@@ -103,3 +103,18 @@ class order(models.Model):
     4 -> delivered
     5 -> cancelled
     """
+
+#this model is only for when a trucker updates the status of an order
+class status_update(models.Model):
+    trucker = models.ForeignKey(truck_company, on_delete = models.CASCADE) #the trucker that updated the order
+    shipper = models.ForeignKey(shipper, on_delete = models.CASCADE) #the shipper whose order is being updated
+    old_status = models.PositiveIntegerField(default = 0, validators = [MaxValueValidator(5)]) #the previous status of order
+    new_status = models.PositiveIntegerField(default = 0, validators = [MaxValueValidator(5)]) #the updated status of order
+    order = models.ForeignKey(order, on_delete = models.CASCADE) #the order associated w/ this status update
+    date_time_changed = models.DateTimeField(auto_now_add = True, blank = True) #the date and time it was updated
+    read = models.BooleanField(default = False) #if this is false, then it shows up in notifications, if its teue it does not
+
+#this model is for when a shipper posts a new order, truckers connected with that shipper are notified
+class order_post_notification(models.Model):
+    order = models.ForeignKey(order, on_delete = models.CASCADE) #order associated w/ notification
+    truckers = models.ManyToManyField(User) #truckers that can see this notification

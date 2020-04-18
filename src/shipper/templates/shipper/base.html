@@ -87,8 +87,11 @@
          <li class="nav-item mr-3">
              <a href="/shipper/" class="btn btn-secondary">My Orders</a>
          </li>
+         <li class = "nav-item mr-3">
+           <a href = "/shipper/notifications" class = "btn btn-secondary">Notifications{% if num_notifications > 0 %} ({{ num_notifications }}){% endif %}</a>
+         </li>
          <li class = 'nav-item mr-3'>
-           <a href = "/shipper/connection_requests" class = "btn btn-secondary">My Connections</a>
+           <a href = "/shipper/connection_requests" class = "btn btn-secondary">My Truckers</a>
          </li>
          <li class="nav-item mr-5">
              <a href="{% url 'logout' %}" class="btn btn-secondary">Logout</a>

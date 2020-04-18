@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from shipper.models import order, shipper
+from shipper.models import order, shipper, order_post_notification
 from trucker.models import truck_company
 from authorization.models import Profile
 from django.contrib.auth.models import User
@@ -12,6 +12,7 @@ from itertools import chain
 import json
 import math
 from django.contrib import messages
+from friendship.models import FriendshipRequest, Friend, Follow
 
 
 # Create your views here.
@@ -85,6 +86,16 @@ def Accept_Order(request):
     cur_order.is_approved = True
     cur_order.status = 1
     cur_order.save()
+    #send out a message to the shipper's connected truckers that this order is available
+    notification = order_post_notification(order = cur_order)
+    notification.save()
+    shipper = cur_order.shipping_company #get the shipper associated w/ the order
+    trucker_connection_list = Friend.objects.friends(shipper.user) #list of all truckers connected w/ that shipper
+    #add those shippers to the notification
+    for trucker in trucker_connection_list:
+        notification.truckers.add(trucker)
+    notification.save()
+    #done w/ order notification for truckers
     messages.success(request, "Order " + str(cur_order.customer_order_no) + " successfully approved")
     return HttpResponseRedirect('/cf_admin')
 

@@ -53,6 +53,17 @@
   .footer {
     flex-shrink: 0;
   }
+  .circle
+    {
+    width:10px;
+    height:10px;
+    border-radius:5px;
+    font-size:5px;
+    color:#fff;
+    line-height:10px;
+    text-align:center;
+    background:red;
+    }
 </style>
 <!-- Confirmation page boilerplate ends here -->
 
@@ -91,8 +102,11 @@
                  <a href="/trucker/available_orders" class="btn btn-secondary">Find Jobs</a>
              </li>
              {% endif %}
+             <li class="nav-item mr-3">
+                 <a href="/trucker/notifications" class="btn btn-secondary">Notifications{% if num_notifications > 0 %} ({{ num_notifications }}){% endif %}</a>
+             </li>
              <li class = 'nav-item mr-3'>
-               <a href = "/trucker/connection_requests" class = "btn btn-secondary">My Connections</a>
+               <a href = "/trucker/connection_requests" class = "btn btn-secondary">My Shippers</a>
              </li>
              <li class="nav-item mr-5">
                  <a href="{% url 'logout' %}" class="btn btn-secondary">Logout</a>

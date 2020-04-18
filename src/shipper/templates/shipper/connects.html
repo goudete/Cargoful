@@ -1,5 +1,5 @@
 {% extends 'shipper/base.html'%}
-
+{% load static %}
 {% block content %}
 <!--styling to make table overflow scroll -->
 <style>
@@ -21,7 +21,7 @@
 <!-- dash of connections -->
 <div class="row justify-content-center mt-5">
   <div class="col-md-8">
-    <h1>My Connections</h1>
+    <h1>My Truckers</h1>
   </div>
 </div>
 
@@ -30,18 +30,24 @@
   <div class="col-md-8">
     <div class="card">
     <table class="table table-striped">
-      {% if connections|length > 0 %}
+      {% if connections|length > 0 or pending|length > 0 %}
       <thead>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <tr>
           <th scope = 'col'>Company Name</th>
+          <th scope = 'col'>Status</th>
         </tr>
       </thead>
       <tbody>
         {% for c in connections %}
         <tr>
           <td>{{ c.profile.company_name }}</td>
+          {% if c not in pending %}
+          <td color = "green">Connected <img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></td>
+          {% else %}
+          <td color = "orange">Pending <img src="{% static 'imgs/orange_arrow_2.png' %}" alt="" border=3 height=15 width=15></img></td>
+          {% endif %}
         </tr>
         {% endfor %}
       </tbody>
@@ -55,55 +61,6 @@
       </thead>
       <tbody>
         <td align = "center"><h4><b>No Connections Yet</b></h4></td>
-      </tbody>
-      {% endif %}
-    </table>
-    </div>
-  </div>
-</div>
-<div class="row justify-content-center mt-5">
-  <div class="col-md-8">
-    <h1>Connection Requests</h1>
-  </div>
-</div>
-<!-- start of pending requests table -->
-<div class="row justify-content-center pt-2" id = 'dashboard'>
-  <div class="col-md-8">
-    <div class="card">
-    <table class="table table-striped">
-      {% if requests|length > 0 %}
-      <thead>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <tr>
-          <th scope = 'col'>Company Name</th>
-          <th scope = 'col'></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for r in requests %}
-        <tr>
-          <td>{{ r.from_user.profile.company_name }}</td>
-          <td>
-            <form action = 'accept_request' method = 'POST'>
-              {% csrf_token %}
-              <input type = 'number' name = 'request_id' value = {{r.id}} hidden = 'true'>
-              <button type = 'submit' class = 'btn btn-success'>Accept</button>
-              <button type = 'submit' formaction = 'deny_request' class = 'btn btn-danger'>Decline</button>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-      {% else %}
-      <thead>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <tr>
-          <th scope = 'col'></th>
-        </tr>
-      </thead>
-      <tbody>
-        <td align = "center"><h4><b>No Pending Connections</b></h4></td>
       </tbody>
       {% endif %}
     </table>

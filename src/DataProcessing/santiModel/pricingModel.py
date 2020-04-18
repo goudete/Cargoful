@@ -21,7 +21,7 @@ pickle_in = open(parent_dir + "/../DataProcurement/9_11_15_22.pickle","rb")
 tollDict = pickle.load(pickle_in)
 
 #get dictionary of state:[cities].
-with open(parent_dir + "/../DataProcurement/headless-chrome/state_city_vals.json", 'r') as f:
+with open(parent_dir + "/../DataProcurement/headless-chrome/state_city_vals.json", 'r', encoding = 'utf-8') as f:
     state_city_dict = json.load(f)
 
 #filenames for kml data (has coordinates of cities)

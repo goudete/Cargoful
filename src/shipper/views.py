@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from .forms import Order_Form
-from .models import order, shipper
+from .models import order, shipper, status_update
 from authorization.models import Profile
 from django.http import JsonResponse
 from django.core import serializers
@@ -47,6 +47,13 @@ Google_API = env("GMAPS_API_KEY")
 def post_order(request):
     #if the method is a POST, then a user is editing an order from the confirmation page
     if request.method == 'POST':
+        #for getting number of unread notifications
+        me = shipper.objects.get(user = request.user)
+        connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
+        status_updates = status_update.objects.filter(shipper = me).filter(read = False)
+        #query set for counter offers will go here
+        num_notifications = len(list(connect_requests)) + len(list(status_updates))
+        #end notification number
         jdp = json.dumps(request.data) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
         jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
@@ -102,12 +109,20 @@ def post_order(request):
             'price': price,
             'contents': contents,
             'instructions': instructions,
-            'g_api': Google_API
+            'g_api': Google_API,
+            'num_notifications': num_notifications
         })
     #if the method is a get then the user is posting a new order for the first time
     else:
         order_form = Order_Form()
-    return render(request, 'shipper/post_order.html', {'form': order_form, 'g_api': Google_API})
+        #for getting number of unread notifications
+        me = shipper.objects.get(user = request.user)
+        connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
+        status_updates = status_update.objects.filter(shipper = me).filter(read = False)
+        #query set for counter offers will go here
+        num_notifications = len(list(connect_requests)) + len(list(status_updates))
+        #end notification number
+    return render(request, 'shipper/post_order.html', {'form': order_form, 'g_api': Google_API, 'num_notifications': num_notifications})
 
 #display shipper dashboard
 @login_required
@@ -115,9 +130,16 @@ def post_order(request):
 def see_dashboard(request):
     #first check that request is a GET
     if request.method == "GET":
+        #for getting number of unread notifications
+        me = shipper.objects.get(user = request.user)
+        connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
+        status_updates = status_update.objects.filter(shipper = me).filter(read = False)
+        #query set for counter offers will go here
+        num_notifications = len(list(connect_requests)) + len(list(status_updates))
+        #end notification number
         company = shipper.objects.filter(user = request.user).first() #this query gets the shipper
         set = order.objects.filter(shipping_company = company).order_by('status') #this query gets all jobs posted by the user in order from status 0 -> status 4
-        return render(request, 'shipper/dashboard.html', {'set': set, 'company' : company})
+        return render(request, 'shipper/dashboard.html', {'set': set, 'company' : company, 'num_notifications': num_notifications})
 
 #intermediate confirmation step, once a shipper submits an order, they are sent here to confirm
 @login_required
@@ -125,6 +147,13 @@ def see_dashboard(request):
 @api_view(['POST'])
 def confirm(request):
     if request.method == "POST":
+        #for getting number of unread notifications
+        me = shipper.objects.get(user = request.user)
+        connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
+        status_updates = status_update.objects.filter(shipper = me).filter(read = False)
+        #query set for counter offers will go here
+        num_notifications = len(list(connect_requests)) + len(list(status_updates))
+        #end notification number
         """stuff for handling json inside request"""
         jdp = json.dumps(request.data) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
@@ -197,6 +226,7 @@ def confirm(request):
         'cargo': cargo,
         'instruct': instructions,
         'price': price,
+        'num_notifications': num_notifications
     })
 
 #if the order is confirmed, then this page is rendered, it saves the order to db
@@ -243,6 +273,13 @@ def order_success(request):
 @api_view(['POST', 'GET'])
 def show_truckers(request):
     if request.method == "POST":
+        #for getting number of unread notifications
+        me = shipper.objects.get(user = request.user)
+        connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
+        status_updates = status_update.objects.filter(shipper = me).filter(read = False)
+        #query set for counter offers will go here
+        num_notifications = len(list(connect_requests)) + len(list(status_updates))
+        #end notification number
         jdp = json.dumps(request.data) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
         query = jsn['query'] #what was queried in searchbar
@@ -265,8 +302,15 @@ def show_truckers(request):
             truckers = Profile.objects.filter(user_type = "Trucker").filter(company_name__icontains = word).distinct() #get truckers that have any of the words in company name
             for trucker in truckers:
                 query_set.append(trucker)
-        return render(request, 'shipper/search_connections.html', {'truckers': set(query_set), 'connects': connection_list, 'pending': pending})
+        return render(request, 'shipper/search_connections.html', {'truckers': set(query_set), 'connects': connection_list, 'pending': pending, 'num_notifications': num_notifications})
     else:
+        #for getting number of unread notifications
+        me = shipper.objects.get(user = request.user)
+        connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
+        status_updates = status_update.objects.filter(shipper = me).filter(read = False)
+        #query set for counter offers will go here
+        num_notifications = len(list(connect_requests)) + len(list(status_updates))
+        #end notification number
         connection_list = Friend.objects.friends(request.user) #list of ppl user already connected with
         pending_connects = Friend.objects.sent_requests(user=request.user)  #list of connections you have sent
         pending = [] #the list of recipients of the connects in pending_connects
@@ -279,7 +323,7 @@ def show_truckers(request):
             else:
                 pending.append(p.to_user)
         truckers = Profile.objects.filter(user_type = "Trucker")
-        return render(request, 'shipper/search_connections.html', {'truckers': set(truckers), 'connects': connection_list, 'pending': pending})
+        return render(request, 'shipper/search_connections.html', {'truckers': set(truckers), 'connects': connection_list, 'pending': pending, 'num_notifications': num_notifications})
 
 def ajax_price_calculation(request):
 
@@ -362,9 +406,26 @@ def make_connection_request(request):
 @login_required
 @allowed_users(allowed_roles=['Shipper'])
 def show_connects(request):
+    #for getting number of unread notifications
+    me = shipper.objects.get(user = request.user)
     connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
-    connections = Friend.objects.friends(request.user) #query existing connections
-    return render(request, 'shipper/connects.html', {'requests': connect_requests, 'connections': connections})
+    status_updates = status_update.objects.filter(shipper = me).filter(read = False)
+    #query set for counter offers will go here
+    num_notifications = len(list(connect_requests)) + len(list(status_updates))
+    #end notification number
+    connections = list(Friend.objects.friends(request.user)) #query existing connections
+    sent_connects = Friend.objects.sent_requests(user=request.user)  #list of connections you have sent
+    pending = [] #the list of recipients of the connects in pending_connects
+    #get the recipients
+    for p in sent_connects:
+        if Friend.objects.are_friends(request.user, p.to_user):
+            continue #if users are already friends disregard
+        elif p in Friend.objects.rejected_requests(user=p.to_user):
+            continue #if user rejected connection disregard
+        else:
+            connections.append(p.to_user)
+            pending.append(p.to_user)
+    return render(request, 'shipper/connects.html', {'pending': pending, 'connections': connections, 'num_notifications': num_notifications})
 
 @login_required
 @allowed_users(allowed_roles=['Shipper'])
@@ -377,7 +438,7 @@ def accept_request(request):
         req.accept()
         Follow.objects.add_follower(request.user, req.from_user)
         messages.info(request, "Connection from " + str(req.from_user.profile.company_name) + " Accepted")
-        return HttpResponseRedirect('/shipper/connection_requests')
+        return HttpResponseRedirect('/shipper/notifications')
 
 @login_required
 @allowed_users(allowed_roles = ['Shipper'])
@@ -389,4 +450,31 @@ def deny_request(request):
         req = FriendshipRequest.objects.get(id = jsn['request_id'])
         req.reject()
         req.delete()
-        return HttpResponseRedirect('/shipper/connection_requests')
+        return HttpResponseRedirect('/shipper/notifications')
+
+@login_required
+@allowed_users(allowed_roles = ['Shipper'])
+@api_view(['GET'])
+def show_notifications(request):
+    if request.method == "GET":
+        me = shipper.objects.get(user = request.user)
+        #for getting number of unread notifications
+        connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
+        status_updates = status_update.objects.filter(shipper = me).filter(read = False)
+        #query set for counter offers will go here
+        num_notifications = len(list(connect_requests)) + len(list(status_updates))
+        #end notification number
+        #changes in order status will go here
+        return render(request, 'shipper/notifications.html', {'requests': connect_requests, 'status_updates': status_updates, 'num_notifications': num_notifications})
+
+@login_required
+@allowed_users(allowed_roles = ['Shipper'])
+@api_view(['POST'])
+def read_status_update(request):
+    if request.method == "POST":
+        jdp = json.dumps(request.data) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        s_u = status_update.objects.get(id = jsn['status_id']) #get status_update object
+        s_u.read = True
+        s_u.save()
+        return HttpResponseRedirect("/shipper/notifications")
