@@ -17,11 +17,11 @@ from django.contrib.auth.models import User
 @allowed_users(allowed_roles=['Trucker'])
 def Available_Orders(request):
     if request.method == 'GET':
+        me = truck_company.objects.filter(user=request.user).first()
         connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
         order_notifications = order_post_notification.objects.filter(truckers = request.user) #query all order notifications associated w/ the user
-        #counter offer query goes here (if they said yes or no I guess)
-        num_notifications = len(list(connect_requests)) + len(list(order_notifications))
-        me = truck_company.objects.filter(user=request.user).first()
+        counter_offers = counter_offer.objects.filter(trucker_user = me).exclude(status = 0).exclude(status = 3)
+        num_notifications = len(list(connect_requests)) + len(list(order_notifications)) + len(list(counter_offers))
         connections = Friend.objects.friends(request.user) #get the current shippers connected w/ this trucker
         avail = order.objects.filter(status__exact=1) #all available orders
         available = [] #list of orders posted by shippers connected with trucker
@@ -35,11 +35,11 @@ def Available_Orders(request):
 @allowed_users(allowed_roles=['Trucker'])
 def My_Orders(request):
     if request.method == 'GET':
+        me = truck_company.objects.filter(user=request.user).first()
         connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
         order_notifications = order_post_notification.objects.filter(truckers = request.user) #query all order notifications associated w/ the user
-        #counter offer query goes here (if they said yes or no I guess)
-        num_notifications = len(list(connect_requests)) + len(list(order_notifications))
-        me = truck_company.objects.filter(user=request.user).first()
+        counter_offers = counter_offer.objects.filter(trucker_user = me).exclude(status = 0).exclude(status = 3)
+        num_notifications = len(list(connect_requests)) + len(list(order_notifications)) + len(list(counter_offers))
         my_orders = order.objects.filter(truck_company=me)
     return render(request, 'trucker/my_orders.html', {'my_orders': my_orders, 'me' : me, 'num_notifications': num_notifications})
 
@@ -48,11 +48,11 @@ def My_Orders(request):
 @allowed_users(allowed_roles=['Trucker'])
 @api_view(['POST'])
 def Confirm_Order(request):
+    me = truck_company.objects.filter(user=request.user).first()
     connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
     order_notifications = order_post_notification.objects.filter(truckers = request.user) #query all order notifications associated w/ the user
-    #counter offer query goes here (if they said yes or no I guess)
-    num_notifications = len(list(connect_requests)) + len(list(order_notifications))
-    me = truck_company.objects.filter(user=request.user).first()
+    counter_offers = counter_offer.objects.filter(trucker_user = me).exclude(status = 0).exclude(status = 3)
+    num_notifications = len(list(connect_requests)) + len(list(order_notifications)) + len(list(counter_offers))
     jdp = json.dumps(request.data) #get request into json form
     jsn = json.loads(jdp) #get dictionary from json
     jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
@@ -136,11 +136,11 @@ def Update_Status(request):
 @login_required
 @allowed_users(allowed_roles=['Trucker'])
 def Show_Connects(request):
+    me = truck_company.objects.filter(user=request.user).first()
     connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
     order_notifications = order_post_notification.objects.filter(truckers = request.user) #query all order notifications associated w/ the user
-    #counter offer query goes here (if they said yes or no I guess)
-    num_notifications = len(list(connect_requests)) + len(list(order_notifications))
-    me = truck_company.objects.filter(user=request.user).first()
+    counter_offers = counter_offer.objects.filter(trucker_user = me).exclude(status = 0).exclude(status = 3)
+    num_notifications = len(list(connect_requests)) + len(list(order_notifications)) + len(list(counter_offers))
     connections = list(Friend.objects.friends(request.user)) #query existing connections
     pending_connects = Friend.objects.sent_requests(user=request.user)  #list of connections you have sent
     pending = [] #the list of recipients of the connects in pending_connects
@@ -190,8 +190,8 @@ def Search_Shippers(request):
     if request.method == 'POST':
         connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
         order_notifications = order_post_notification.objects.filter(truckers = request.user) #query all order notifications associated w/ the user
-        #counter offer query goes here (if they said yes or no I guess)
-        num_notifications = len(list(connect_requests)) + len(list(order_notifications))
+        counter_offers = counter_offer.objects.filter(trucker_user = me).exclude(status = 0).exclude(status = 3)
+        num_notifications = len(list(connect_requests)) + len(list(order_notifications)) + len(list(counter_offers))
         jdp = json.dumps(request.data) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
         query = jsn['query'] #what was queried in searchbar
@@ -219,8 +219,8 @@ def Search_Shippers(request):
     else:
         connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
         order_notifications = order_post_notification.objects.filter(truckers = request.user) #query all order notifications associated w/ the user
-        #counter offer query goes here (if they said yes or no I guess)
-        num_notifications = len(list(connect_requests)) + len(list(order_notifications))
+        counter_offers = counter_offer.objects.filter(trucker_user = me).exclude(status = 0).exclude(status = 3)
+        num_notifications = len(list(connect_requests)) + len(list(order_notifications)) + len(list(counter_offers))
         connection_list = Friend.objects.friends(request.user) #list of ppl user already connected with
         pending_connects = Friend.objects.sent_requests(user=request.user)  #list of connections you have sent
         pending = [] #the list of recipients of the connects in pending_connects
@@ -257,9 +257,9 @@ def show_notifications(request):
         me = truck_company.objects.filter(user=request.user).first()
         connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
         order_notifications = order_post_notification.objects.filter(truckers = request.user) #query all order notifications associated w/ the user
-        #counter offer query goes here (if they said yes or no I guess)
-        num_notifications = len(list(connect_requests)) + len(list(order_notifications))
-        return render(request, 'trucker/notifications.html', {'requests': connect_requests, 'order_notifications': order_notifications, 'me': me, 'num_notifications': num_notifications})
+        counter_offers = counter_offer.objects.filter(trucker_user = me).exclude(status = 0).exclude(status = 3)
+        num_notifications = len(list(connect_requests)) + len(list(order_notifications)) + len(list(counter_offers))
+        return render(request, 'trucker/notifications.html', {'requests': connect_requests, 'order_notifications': order_notifications, 'counter_offers': counter_offers, 'me': me, 'num_notifications': num_notifications})
 
 #this method is for when a trucker views an order from the notification page, so the order is shown, but the notification must also be removed from
 #the truckers set
@@ -271,8 +271,8 @@ def read_show_order_notification(request):
         me = truck_company.objects.filter(user=request.user).first()
         connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
         order_notifications = order_post_notification.objects.filter(truckers = request.user) #query all order notifications associated w/ the user
-        #counter offer query goes here (if they said yes or no I guess)
-        num_notifications = len(list(connect_requests)) + len(list(order_notifications))
+        counter_offers = counter_offer.objects.filter(trucker_user = me).exclude(status = 0).exclude(status = 3)
+        num_notifications = len(list(connect_requests)) + len(list(order_notifications)) + len(list(counter_offers))
         jdp = json.dumps(request.data) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
         #1st remove notification from trucker dash
@@ -315,6 +315,17 @@ def read_order_notification(request):
         notification.truckers.remove(request.user)
         return HttpResponseRedirect("/trucker/notifications")
 
+@login_required
+@allowed_users(allowed_roles = ['Trucker'])
+@api_view(['POST'])
+def read_counter_offer(request):
+    if request.method == "POST":
+        jdp = json.dumps(request.data) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        c_o_notification = counter_offer.objects.get(id = jsn['counter_offer_id'])
+        c_o_notification.status = 3
+        c_o_notification.save()
+        return HttpResponseRedirect("/trucker/notifications")
 #
 # @login_required
 # @allowed_users(allowed_roles = ['Trucker'])

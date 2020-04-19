@@ -62,7 +62,7 @@
         </tr>
       </thead>
       <tbody>
-        <td align = "center"><h4><b>No Pending Connections</b></h4></td>
+        <td align = "center"><h4><b>No Connection Requests</b></h4></td>
       </tbody>
       {% endif %}
     </table>
@@ -113,6 +113,62 @@
               {% csrf_token %}
               <input type = 'number' name = 'status_id' value = {{s.id}} hidden = 'true'>
               <button type = 'submit' class = 'btn btn-success'>Ok</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      {% else %}
+      <thead>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <tr>
+          <th scope = 'col'></th>
+        </tr>
+      </thead>
+      <tbody>
+        <td align = "center"><h4><b>No Order Updates</b></h4></td>
+      </tbody>
+      {% endif %}
+    </table>
+    </div>
+  </div>
+</div>
+
+<!-- start of counter offers table -->
+<div class="row justify-content-center mt-5">
+  <div class="col-md-8">
+    <h1>Counter Offers</h1>
+  </div>
+</div>
+<div class="row justify-content-center pt-2" id = 'dashboard'>
+  <div class="col-md-8">
+    <div class="card">
+    <table class="table table-striped">
+      {% if counter_offers|length > 0 %}
+      <thead>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <tr>
+          <th scope = 'col'>Order Number</th>
+          <th scope = 'col'>Original Price</th>
+          <th scope = 'col'>Company</th>
+          <th scope = 'col'>Counter Offer</th>
+          <th scope = 'col'></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in counter_offers %}
+        <tr>
+          <td>{{ c.order.customer_order_no }}</td>
+          <td>{{ c.order.price }}</td>
+          <td>{{ c.trucker_user.user.profile.company_name }}</td>
+          <td>{{ c.counter_price }}</td>
+          <td>
+            <form action = 'accept_counter_offer' method = 'POST'>
+              {% csrf_token %}
+              <input type = 'number' name = 'counter_offer_id' value = {{c.id}} hidden = 'true'>
+              <button type = 'submit' class = 'btn btn-success'>Accept</button>
+              <button type = 'submit' class = 'btn btn-danger' formaction = 'deny_counter_offer'>Deny</button>
           </td>
         </tr>
         {% endfor %}

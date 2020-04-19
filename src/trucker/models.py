@@ -72,7 +72,7 @@ class driver(models.Model):
 
 class counter_offer(models.Model):
     # shipper_user = models.ForeignKey('shipper.shipper', on_delete = models.PROTECT)
-    trucker_user = models.ForeignKey('truck_company', on_delete = models.PROTECT)
+    trucker_user = models.ForeignKey(truck_company, on_delete = models.PROTECT)
     order = models.ForeignKey('shipper.order', on_delete = models.PROTECT)
     counter_price = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)

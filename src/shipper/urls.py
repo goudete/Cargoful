@@ -14,4 +14,6 @@ urlpatterns = [
     path('send_connection_request', views.make_connection_request, name = 'request'), #this url is for making a new connection request between a shipper and trucker
     path('notifications', views.show_notifications), #this url is for showing the notification dashboard
     path('read_status_update', views.read_status_update), #this url is for reading a status update notification to make it go away
+    path('accept_counter_offer', views.accept_counter_offer), #this url is for accepting a counter offer from trucker
+    path('deny_counter_offer', views.deny_counter_offer), #this url is for denying a counter offer
 ]

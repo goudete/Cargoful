@@ -26,6 +26,7 @@ import os
 from friendship.models import Friend, Follow, Block, FriendshipRequest
 from django.contrib.auth.models import User
 from DataProcessing.santiModel import pricingModel
+from trucker.models import counter_offer
 # Create your views here.
 
 #for getting sensitive info
@@ -51,8 +52,8 @@ def post_order(request):
         me = shipper.objects.get(user = request.user)
         connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
         status_updates = status_update.objects.filter(shipper = me).filter(read = False)
-        #query set for counter offers will go here
-        num_notifications = len(list(connect_requests)) + len(list(status_updates))
+        counter_offers = counter_offer.objects.filter(order__shipping_company__user = request.user).filter(status = 0)
+        num_notifications = len(list(connect_requests)) + len(list(status_updates)) + len(list(counter_offers))
         #end notification number
         jdp = json.dumps(request.data) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
@@ -119,8 +120,8 @@ def post_order(request):
         me = shipper.objects.get(user = request.user)
         connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
         status_updates = status_update.objects.filter(shipper = me).filter(read = False)
-        #query set for counter offers will go here
-        num_notifications = len(list(connect_requests)) + len(list(status_updates))
+        counter_offers = counter_offer.objects.filter(order__shipping_company__user = request.user).filter(status = 0)
+        num_notifications = len(list(connect_requests)) + len(list(status_updates)) + len(list(counter_offers))
         #end notification number
     return render(request, 'shipper/post_order.html', {'form': order_form, 'g_api': Google_API, 'num_notifications': num_notifications})
 
@@ -134,8 +135,8 @@ def see_dashboard(request):
         me = shipper.objects.get(user = request.user)
         connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
         status_updates = status_update.objects.filter(shipper = me).filter(read = False)
-        #query set for counter offers will go here
-        num_notifications = len(list(connect_requests)) + len(list(status_updates))
+        counter_offers = counter_offer.objects.filter(order__shipping_company__user = request.user).filter(status = 0)
+        num_notifications = len(list(connect_requests)) + len(list(status_updates)) + len(list(counter_offers))
         #end notification number
         company = shipper.objects.filter(user = request.user).first() #this query gets the shipper
         set = order.objects.filter(shipping_company = company).order_by('status') #this query gets all jobs posted by the user in order from status 0 -> status 4
@@ -151,8 +152,8 @@ def confirm(request):
         me = shipper.objects.get(user = request.user)
         connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
         status_updates = status_update.objects.filter(shipper = me).filter(read = False)
-        #query set for counter offers will go here
-        num_notifications = len(list(connect_requests)) + len(list(status_updates))
+        counter_offers = counter_offer.objects.filter(order__shipping_company__user = request.user).filter(status = 0)
+        num_notifications = len(list(connect_requests)) + len(list(status_updates)) + len(list(counter_offers))
         #end notification number
         """stuff for handling json inside request"""
         jdp = json.dumps(request.data) #get request into json form
@@ -277,8 +278,8 @@ def show_truckers(request):
         me = shipper.objects.get(user = request.user)
         connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
         status_updates = status_update.objects.filter(shipper = me).filter(read = False)
-        #query set for counter offers will go here
-        num_notifications = len(list(connect_requests)) + len(list(status_updates))
+        counter_offers = counter_offer.objects.filter(order__shipping_company__user = request.user).filter(status = 0)
+        num_notifications = len(list(connect_requests)) + len(list(status_updates)) + len(list(counter_offers))
         #end notification number
         jdp = json.dumps(request.data) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
@@ -308,8 +309,8 @@ def show_truckers(request):
         me = shipper.objects.get(user = request.user)
         connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
         status_updates = status_update.objects.filter(shipper = me).filter(read = False)
-        #query set for counter offers will go here
-        num_notifications = len(list(connect_requests)) + len(list(status_updates))
+        counter_offers = counter_offer.objects.filter(order__shipping_company__user = request.user).filter(status = 0)
+        num_notifications = len(list(connect_requests)) + len(list(status_updates)) + len(list(counter_offers))
         #end notification number
         connection_list = Friend.objects.friends(request.user) #list of ppl user already connected with
         pending_connects = Friend.objects.sent_requests(user=request.user)  #list of connections you have sent
@@ -410,8 +411,8 @@ def show_connects(request):
     me = shipper.objects.get(user = request.user)
     connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
     status_updates = status_update.objects.filter(shipper = me).filter(read = False)
-    #query set for counter offers will go here
-    num_notifications = len(list(connect_requests)) + len(list(status_updates))
+    counter_offers = counter_offer.objects.filter(order__shipping_company__user = request.user).filter(status = 0)
+    num_notifications = len(list(connect_requests)) + len(list(status_updates)) + len(list(counter_offers))
     #end notification number
     connections = list(Friend.objects.friends(request.user)) #query existing connections
     sent_connects = Friend.objects.sent_requests(user=request.user)  #list of connections you have sent
@@ -461,11 +462,11 @@ def show_notifications(request):
         #for getting number of unread notifications
         connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
         status_updates = status_update.objects.filter(shipper = me).filter(read = False)
-        #query set for counter offers will go here
-        num_notifications = len(list(connect_requests)) + len(list(status_updates))
+        counter_offers = counter_offer.objects.filter(order__shipping_company__user = request.user).filter(status = 0)
+        num_notifications = len(list(connect_requests)) + len(list(status_updates)) + len(list(counter_offers))
         #end notification number
         #changes in order status will go here
-        return render(request, 'shipper/notifications.html', {'requests': connect_requests, 'status_updates': status_updates, 'num_notifications': num_notifications})
+        return render(request, 'shipper/notifications.html', {'requests': connect_requests, 'status_updates': status_updates, 'counter_offers': counter_offers, 'num_notifications': num_notifications})
 
 @login_required
 @allowed_users(allowed_roles = ['Shipper'])
@@ -477,4 +478,39 @@ def read_status_update(request):
         s_u = status_update.objects.get(id = jsn['status_id']) #get status_update object
         s_u.read = True
         s_u.save()
+        return HttpResponseRedirect("/shipper/notifications")
+
+@login_required
+@allowed_users(allowed_roles = ['Shipper'])
+@api_view(['POST'])
+def accept_counter_offer(request):
+    if request.method == "POST":
+        jdp = json.dumps(request.data) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        c_offer = counter_offer.objects.get(id = jsn['counter_offer_id'])
+        trucker = c_offer.trucker_user
+        cur_order = c_offer.order
+        #assign trucker to order
+        cur_order.truck_company = trucker
+        cur_order.status = 2
+        cur_order.price = c_offer.counter_price
+        cur_order.save()
+        #update notification status
+        c_offer.status = 2
+        c_offer.save()
+        #redirect
+        return HttpResponseRedirect("/shipper/notifications")
+
+@login_required
+@allowed_users(allowed_roles = ['Shipper'])
+@api_view(['POST'])
+def deny_counter_offer(request):
+    if request.method == "POST":
+        jdp = json.dumps(request.data) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        c_offer = counter_offer.objects.get(id = jsn['counter_offer_id'])
+        #update notification status
+        c_offer.status = 1
+        c_offer.save()
+        #redirect
         return HttpResponseRedirect("/shipper/notifications")
