@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from shipper.models import order, shipper, status_update, order_post_notification
-from trucker.models import truck_company, trucks, driver
+from trucker.models import truck_company, trucks, driver, counter_offer
 from authorization.decorators import allowed_users
 from rest_framework.decorators import api_view
 import json
@@ -87,19 +87,32 @@ def Confirm_Order(request):
 @api_view(['POST'])
 def Accept_Order(request):
     if request.method == 'POST':
+        print(request.POST)
         me = truck_company.objects.filter(user=request.user).first()
-        jdp = json.dumps(request.data) #get request into json form
-        jsn = json.loads(jdp) #get dictionary from json
-        jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
-        cur_order = order.objects.filter(id = jsn['order_id']).first()
-        cur_order.truck_company = me
-        cur_order.status = 2
-        cur_order.save()
-        #create new status update notification for shipper
-        s_u = status_update.objects.create(trucker = me, shipper = cur_order.shipping_company, old_status = 1, new_status = 2, order = cur_order, read = False)
-        s_u.save()
-        messages.info(request, "Order " + str(cur_order.customer_order_no) + " Accepted")
-        return HttpResponseRedirect('/trucker')
+        if 'counter_submit' in request.POST:
+            print('True')
+            jdp = json.dumps(request.data) #get request into json form
+            jsn = json.loads(jdp) #get dictionary from json
+            jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
+            cur_order = order.objects.get(id=jsn['order_id'])
+            offer = counter_offer(trucker_user = me, order = cur_order, counter_price = jsn['counter_price'])
+            offer.save()
+            return HttpResponseRedirect('/trucker')
+
+        elif 'big_submit' in request.POST:
+            print('BIG SUBMIT')
+            jdp = json.dumps(request.data) #get request into json form
+            jsn = json.loads(jdp) #get dictionary from json
+            jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
+            cur_order = order.objects.filter(id = jsn['order_id']).first()
+            cur_order.truck_company = me
+            cur_order.status = 2
+            cur_order.save()
+            #create new status update notification for shipper
+            s_u = status_update.objects.create(trucker = me, shipper = cur_order.shipping_company, old_status = 1, new_status = 2, order = cur_order, read = False)
+            s_u.save()
+            messages.info(request, "Order " + str(cur_order.customer_order_no) + " Accepted")
+            return HttpResponseRedirect('/trucker')
 
 @login_required
 @allowed_users(allowed_roles = ['Trucker'])
@@ -301,3 +314,20 @@ def read_order_notification(request):
         notification = order_post_notification.objects.get(id = jsn['notification_id'])
         notification.truckers.remove(request.user)
         return HttpResponseRedirect("/trucker/notifications")
+
+#
+# @login_required
+# @allowed_users(allowed_roles = ['Trucker'])
+# @api_view(['POST'])
+# def get_counter_offer(request):
+#     me = truck_company.objects.filter(user=request.user).first()
+#     if request.method == 'POST':
+#         jdp = json.dumps(request.data) #get request into json form
+#         jsn = json.loads(jdp) #get dictionary from json
+#         jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
+#         print('jsn_price: ', jsn['counter_price'])
+#
+#         offer = counter_offer(trucker_user = me, order = jsn['order_id'], counter_price = jsn['counter_price'])
+#         offer.save()
+#
+#         return HttpResponseRedirect('/trucker')

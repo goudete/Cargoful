@@ -34,7 +34,6 @@ def Approve_User(request):
         jsn = json.loads(jdp) #get dictionary from json
         jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
         user_profile = Profile.objects.get(id=jsn['profile_id'])
-        print('User Profile', user_profile)
         user_profile.is_approved = True
         user_profile.save()
         messages.info(request, str(user_profile.company_name) + " successfully approved")

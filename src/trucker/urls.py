@@ -15,4 +15,5 @@ urlpatterns = [
     path('notifications', views.show_notifications),
     path('read_show_order_notification', views.read_show_order_notification), #this url is for viewing an order from notification tab
     path('read_order_notification', views.read_order_notification), #this url is for just reading the notification (making it go away)
+    #path('get_counter_offer', views.get_counter_offer, name='get_counter_offer'),
 ]
