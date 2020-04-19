@@ -40,7 +40,7 @@ def My_Orders(request):
         order_notifications = order_post_notification.objects.filter(truckers = request.user) #query all order notifications associated w/ the user
         counter_offers = counter_offer.objects.filter(trucker_user = me).exclude(status = 0).exclude(status = 3)
         num_notifications = len(list(connect_requests)) + len(list(order_notifications)) + len(list(counter_offers))
-        my_orders = order.objects.filter(truck_company=me)
+        my_orders = order.objects.filter(truck_company=me).exclude(status = 4).exclude(status = 5) #exclude delivered/cancelled orders
     return render(request, 'trucker/my_orders.html', {'my_orders': my_orders, 'me' : me, 'num_notifications': num_notifications})
 
 

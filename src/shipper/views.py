@@ -139,7 +139,7 @@ def see_dashboard(request):
         num_notifications = len(list(connect_requests)) + len(list(status_updates)) + len(list(counter_offers))
         #end notification number
         company = shipper.objects.filter(user = request.user).first() #this query gets the shipper
-        set = order.objects.filter(shipping_company = company).order_by('status') #this query gets all jobs posted by the user in order from status 0 -> status 4
+        set = order.objects.filter(shipping_company = company).exclude(status = 4).exclude(status = 5).order_by('status') #this query gets all jobs posted by the user in order from status 2, 3 (excludes delivered and cancelled)
         return render(request, 'shipper/dashboard.html', {'set': set, 'company' : company, 'num_notifications': num_notifications})
 
 #intermediate confirmation step, once a shipper submits an order, they are sent here to confirm
