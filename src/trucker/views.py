@@ -326,6 +326,20 @@ def read_counter_offer(request):
         c_o_notification.status = 3
         c_o_notification.save()
         return HttpResponseRedirect("/trucker/notifications")
+
+@login_required
+@allowed_users(allowed_roles = ['Trucker'])
+@api_view(['GET'])
+def past_orders(request):
+    if request.method == "GET":
+        me = truck_company.objects.filter(user=request.user).first()
+        connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
+        order_notifications = order_post_notification.objects.filter(truckers = request.user) #query all order notifications associated w/ the user
+        counter_offers = counter_offer.objects.filter(trucker_user = me).exclude(status = 0).exclude(status = 3)
+        num_notifications = len(list(connect_requests)) + len(list(order_notifications)) + len(list(counter_offers))
+        #end notification number
+        past_orders = order.objects.filter(truck_company = me).filter(status = 4)
+        return render(request, 'trucker/past_orders.html', {'set': past_orders})
 #
 # @login_required
 # @allowed_users(allowed_roles = ['Trucker'])
