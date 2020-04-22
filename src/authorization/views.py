@@ -18,7 +18,6 @@ def register_view(request):
 
             profile = profile_form.save(commit=False)
             profile.user = user
-
             profile.save()
 
             username = form.cleaned_data.get('username')

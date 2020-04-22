@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from .forms import Order_Form
 from .models import order, shipper, status_update
-from authorization.models import Profile
+from authorization.models import Profile, User_Feedback
 from django.http import JsonResponse
 from django.core import serializers
 from django.urls import reverse
@@ -569,3 +569,18 @@ def show_past_orders(request):
         #end notification number
         past_orders = order.objects.filter(shipping_company = me).filter(status = 4)
         return render(request, 'shipper/past_orders.html', {'set': past_orders})
+
+@login_required
+@allowed_users(allowed_roles = ['Shipper'])
+@api_view(['POST'])
+def get_feedback(request):
+    if request.method == "POST":
+        jdp = json.dumps(request.data) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
+        user = request.user
+        feedback = User_Feedback(user = user, feedback = jsn['feedback'])
+        feedback.save()
+        messages.info(request, "Thank you for your feedback!")
+
+        return HttpResponseRedirect('/shipper')

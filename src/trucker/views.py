@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view
 import json
 import math
 from django.contrib import messages
-from authorization.models import Profile
+from authorization.models import Profile, User_Feedback
 from friendship.models import FriendshipRequest, Friend, Follow
 from django.contrib.auth.models import User
 # Create your views here.
@@ -340,19 +340,19 @@ def past_orders(request):
         #end notification number
         past_orders = order.objects.filter(truck_company = me).filter(status = 4)
         return render(request, 'trucker/past_orders.html', {'set': past_orders})
-#
-# @login_required
-# @allowed_users(allowed_roles = ['Trucker'])
-# @api_view(['POST'])
-# def get_counter_offer(request):
-#     me = truck_company.objects.filter(user=request.user).first()
-#     if request.method == 'POST':
-#         jdp = json.dumps(request.data) #get request into json form
-#         jsn = json.loads(jdp) #get dictionary from json
-#         jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
-#         print('jsn_price: ', jsn['counter_price'])
-#
-#         offer = counter_offer(trucker_user = me, order = jsn['order_id'], counter_price = jsn['counter_price'])
-#         offer.save()
-#
-#         return HttpResponseRedirect('/trucker')
+
+
+@login_required
+@allowed_users(allowed_roles = ['Trucker'])
+@api_view(['POST'])
+def get_feedback(request):
+    if request.method == "POST":
+        jdp = json.dumps(request.data) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
+        user = request.user
+        feedback = User_Feedback(user = user, feedback = jsn['feedback'])
+        feedback.save()
+        messages.info(request, "Thank you for your feedback!")
+
+        return HttpResponseRedirect('/trucker')
