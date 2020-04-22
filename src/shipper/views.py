@@ -514,3 +514,58 @@ def deny_counter_offer(request):
         c_offer.save()
         #redirect
         return HttpResponseRedirect("/shipper/notifications")
+
+@login_required
+@allowed_users(allowed_roles = ['Shipper'])
+@api_view(['POST'])
+def review_counter_offer(request):
+    if request.method == "POST":
+        me = shipper.objects.get(user = request.user)
+        #for getting number of unread notifications
+        connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
+        status_updates = status_update.objects.filter(shipper = me).filter(read = False)
+        counter_offers = counter_offer.objects.filter(order__shipping_company__user = request.user).filter(status = 0)
+        num_notifications = len(list(connect_requests)) + len(list(status_updates)) + len(list(counter_offers))
+        #end notification number
+        jdp = json.dumps(request.data) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        #get counter offer and order objects
+        c_offer = counter_offer.objects.get(id = jsn['counter_offer_id'])
+        c_offer_order = order.objects.get(id = jsn['counter_offer_order_id'])
+        #get stuff about order to show shipper
+        """lines 537 - 555 are for getting mdpt of two lat/lng coordinates"""
+        x,y,z = 0,0,0
+        lat1,long1 = math.radians(c_offer_order.pickup_latitude), math.radians(c_offer_order.pickup_longitude)
+        x += (math.cos(lat1)*math.cos(long1))
+        y += (math.cos(lat1)*math.sin(long1))
+        z += math.sin(lat1)
+        #
+        lat2,long2 = math.radians(c_offer_order.delivery_latitude), math.radians(c_offer_order.delivery_longitude)
+        x += (math.cos(lat2)*math.cos(long2))
+        y += (math.cos(lat2)*math.sin(long2))
+        z += math.sin(lat2)
+        #avg
+        x /= 2
+        y/= 2
+        z/= 2
+        #get mdpts in radians
+        mdpt_long = math.degrees(math.atan2(y,x))
+        mdpt_sqrt = math.sqrt(x*x + y*y)
+        mdpt_lat = math.degrees(math.atan2(z, mdpt_sqrt))
+        """end mdpt calculation"""
+        return render(request, 'shipper/review_counter_offer.html', {"counter":c_offer, "order": c_offer_order, "mdpt_long": mdpt_long, "mdpt_lat": mdpt_lat})
+
+@login_required
+@allowed_users(allowed_roles = ['Shipper'])
+@api_view(['GET'])
+def show_past_orders(request):
+    if request.method == "GET":
+        me = shipper.objects.get(user = request.user)
+        #for getting number of unread notifications
+        connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
+        status_updates = status_update.objects.filter(shipper = me).filter(read = False)
+        counter_offers = counter_offer.objects.filter(order__shipping_company__user = request.user).filter(status = 0)
+        num_notifications = len(list(connect_requests)) + len(list(status_updates)) + len(list(counter_offers))
+        #end notification number
+        past_orders = order.objects.filter(shipping_company = me).filter(status = 4)
+        return render(request, 'shipper/past_orders.html', {'set': past_orders})

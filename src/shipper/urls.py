@@ -15,5 +15,7 @@ urlpatterns = [
     path('notifications', views.show_notifications), #this url is for showing the notification dashboard
     path('read_status_update', views.read_status_update), #this url is for reading a status update notification to make it go away
     path('accept_counter_offer', views.accept_counter_offer), #this url is for accepting a counter offer from trucker
+    path('review_counter_offer', views.review_counter_offer), #this url is for seeing an order from the counter offer notification
     path('deny_counter_offer', views.deny_counter_offer), #this url is for denying a counter offer
+    path('past_orders', views.show_past_orders), #this url is for showing past orders (already delivered)
 ]
