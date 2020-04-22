@@ -8,14 +8,7 @@ class Profile(models.Model):
     company_name = models.CharField(max_length=30)
     is_approved = models.BooleanField(default = False)
 
-# class Feedback(models.Model):
-#     user = models.ForeignKey(User,on_delete=models.CASCADE)
-#     user_profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-#     feedback = models.TextField()
-#     created_at = models.DateTimeField(auto_now_add=True)
-
 class User_Feedback(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
-    # user_profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     feedback = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
