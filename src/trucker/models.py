@@ -23,6 +23,7 @@ class trucks(models.Model):
     truck_company = models.ForeignKey(truck_company, on_delete=models.CASCADE)
     driver = models.ForeignKey('driver', on_delete=models.CASCADE)
     licence_plate = models.CharField(max_length=15)
+
     #truck_type is an option field, the user can pick one of the following
     TRUCK_TYPES = [
         ('Low Boy', 'Low Boy'),
@@ -54,6 +55,7 @@ class trucks(models.Model):
         )
     year = models.PositiveIntegerField(default=0)
     available_capacity = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def _str_(self):
         return self.licence_plate

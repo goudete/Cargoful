@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'storages',
     'friendship',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
@@ -136,13 +137,16 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Mexico_City'
 
 USE_I18N = True
 
 USE_L10N = True
 
 USE_TZ = True
+
+#Phone Number Field Settings
+PHONENUMBER_DB_FORMAT = 'E164'
 
 
 # Static files (CSS, JavaScript, Images)

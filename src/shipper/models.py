@@ -59,6 +59,7 @@ class order(models.Model):
     delivery_time = models.TimeField(default = timezone.now, auto_now_add = False)
     contents = models.TextField(default = '')
     instructions = models.TextField(default = '')
+    created_at = models.DateTimeField(auto_now_add=True)
     #truck_type is an option field, the user can pick one of the following options
     TRUCK_TYPES = [
         ('Low Boy', 'Low Boy'),

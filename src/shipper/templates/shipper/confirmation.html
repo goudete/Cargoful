@@ -6,11 +6,11 @@
 
   <div class="row justify-content-center mt-5">
     <div class="col-md-8">
-      <h1>Confirm Order</h1>
+      <h2>Confirm Order</h2>
     </div>
   </div>
 
-  <div class="row justify-content-center mt-5">
+  <div class="row justify-content-center mt-3">
     <div id='map'></div>
     <div id = 'mark1' style='background-image: url("{% static "imgs/CargoFulLogo-12.png" %}");'></div>
     <div id = 'mark2' style='background-image: url("{% static "imgs/CargoFulLogo-12.png" %}");'></div>
@@ -19,21 +19,21 @@
   <form action = 'order_placed' method = "post">
     {% csrf_token %}
 
-    <div class="row justify-content-center">
+    <div class="row justify-content-center mt-4">
       <div class="col-8">
         <h5>Pickup Address</h5>
         <input class = 'form-control' id = 'addy' name = 'pickup_address' type = 'text' value = '{{pu_addy}}' size = '60' readonly>
       </div>
     </div>
 
-    <div class="row justify-content-center">
+    <div class="row justify-content-center mt-3">
       <div class="col-8">
         <h5>Delivery Address</h5>
         <input class = 'form-control' id = 'addy' name = 'delivery_address' type = 'text' value = '{{del_addy}}' size = '60' readonly>
       </div>
     </div>
 
-    <div class="row justify-content-center mt-4">
+    <div class="row justify-content-center mt-3">
       <div class="col-4">
         <h5>Pickup Date</h5>
         <input class = 'form-control' id = 'date' name="pickup_date"  value = {{date}} size = '60' readonly/>
@@ -44,7 +44,7 @@
       </div>
     </div>
 
-    <div class="row justify-content-center mt-4">
+    <div class="row justify-content-center mt-3">
       <div class="col-4">
         <h5>Truck Type</h5>
         <input class = 'form-control' id = 'truck_type' name="truck_type" type="text" value = "{{truck}}" size = '60' readonly/>
@@ -55,7 +55,7 @@
       </div>
     </div>
 
-    <div class="row justify-content-center mt-4">
+    <div class="row justify-content-center mt-3">
       <div class="col-4">
         <h5>Contents</h5>
         <input class = 'form-control' id = 'contents' name="contents" type="text" value = "{{cargo}}" size = '60' readonly/>
