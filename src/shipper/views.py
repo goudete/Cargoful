@@ -62,11 +62,11 @@ def post_order(request):
         pu_addy, del_addy = jsn['pickup_address'], jsn['delivery_address']
         date, time = jsn['pickup_date'], jsn['pickup_time']
         #format time
-        if int(time.split(":")[0]) == 12:
+        if time != "" and int(time.split(":")[0]) == 12:
             time = str(time) + " PM"
-        elif int(time.split(":")[0]) > 12:
+        elif time != "" and int(time.split(":")[0]) > 12:
             time = str(int(time.split(":")[0]) -12) + ":" +str(time.split(":")[1]) + " PM"
-        else:
+        elif time != "":
             time = str(time) + " AM"
         #other specs
         truck, price = jsn['truck_type'], jsn['price']
@@ -193,15 +193,22 @@ def confirm(request):
         """end mdpt calculation"""
         #get the distance btwn pickup and delivery
         distance = round(haversine((pu_lat,pu_long), (del_lat,del_long)), 4)
-        #other regular metrics
-        date = jsn['pickup_date']
-        time = jsn['pickup_time']
-        #account for time being in PM
-        if time.split(" ")[1] == "PM":
-            hour = int(time.split(" ")[0].split(":")[0])
-            if hour < 12:
-                hour += 12
-            time = str(hour) + ":" + time.split(" ")[0].split(":")[1]+" PM"
+        #check if date included
+        if 'include_date' in jsn.keys():
+            date = jsn['pickup_date']
+        else:
+            date = ""
+        #check if time included
+        if 'include_time' in jsn.keys():
+            time = jsn['pickup_time']
+            #account for time being in PM
+            if time.split(" ")[1] == "PM":
+                hour = int(time.split(" ")[0].split(":")[0])
+                if hour < 12:
+                    hour += 12
+                time = str(hour) + ":" + time.split(" ")[0].split(":")[1]+" PM"
+        else:
+            time = ""
         #other specs
         truck = jsn['truck_type']
         cargo = jsn['contents']
@@ -268,6 +275,8 @@ def order_success(request):
             new_order.save()
             messages.info(request, "Order "+ str(customer_order_no) + " Placed Successfully")
             return HttpResponseRedirect('/shipper')
+        else:
+            print('invalid!')
 
 @login_required
 @allowed_users(allowed_roles=['Shipper'])

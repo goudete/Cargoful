@@ -11,6 +11,7 @@ from django.contrib import messages
 from authorization.models import Profile, User_Feedback
 from friendship.models import FriendshipRequest, Friend, Follow
 from django.contrib.auth.models import User
+from CargoFul import settings
 # Create your views here.
 
 @login_required
@@ -268,6 +269,7 @@ def show_notifications(request):
 @api_view(['POST'])
 def read_show_order_notification(request):
     if request.method == "POST":
+        print('read_show_order_notification called')
         me = truck_company.objects.filter(user=request.user).first()
         connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
         order_notifications = order_post_notification.objects.filter(truckers = request.user) #query all order notifications associated w/ the user

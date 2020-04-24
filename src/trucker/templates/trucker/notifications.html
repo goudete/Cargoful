@@ -51,6 +51,7 @@
               {% csrf_token %}
               <input type = 'number' name = 'counter_offer_id' value = {{c.id}} hidden = 'true'>
               <button type = 'submit' class = 'btn btn-success'>Ok</button> <!-- this button is for when you just want the notification to go away -->
+            </form>
           </td>
         </tr>
         {% endfor %}

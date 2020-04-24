@@ -36,11 +36,11 @@
     <div class="row justify-content-center mt-4">
       <div class="col-4">
         <h5>Pickup Date</h5>
-        <input class = 'form-control' id = 'date'  type="text" value = "{{order.pickup_date}}" size = '60' readonly/>
+        <input class = 'form-control' id = 'date'  type="text" {% if order.pickup_date is none %} value = "Negotiable" {% else %}value = "{{order.pickup_date}}" {% endif %} size = '60' readonly/>
       </div>
       <div class="col-4">
         <h5>Pickup Time</h5>
-        <input class = 'form-control' id = 'time'  type="text" value = "{{order.pickup_time}}" size = '60' readonly/>
+        <input class = 'form-control' id = 'time'  type="text" {% if order.pickup_time is none %} value = "Negotiable" {% else %}value = "{{order.pickup_time}}" {% endif %} size = '60' readonly/>
       </div>
     </div>
 
@@ -84,7 +84,7 @@
       </div>
     </div>
   </form>
-  
+
   <!-- CounterOfferForm -->
 <div class="row justify-content-center mb-5 mt-5">
   <div class="col-4">

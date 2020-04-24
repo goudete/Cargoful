@@ -21,6 +21,14 @@
   .loader_text{
     text-indent: 1.5em;
   }
+
+  input[type=checkbox] ~ div.reveal_after_check{
+  display: none;
+  }
+
+  input[type=checkbox]:checked ~ div.reveal_after_check{
+  display: block;
+  }
 </style>
 
 <div class="container">
@@ -64,6 +72,7 @@
         </div>
       </div>
 
+      <!--hidden stuff -->
       <table id="address">
         <tr>
           <td class="label"></td>
@@ -86,7 +95,6 @@
         </tr>
       </table>
 
-
       <table id="address2">
         <tr>
           <td class="label"></td>
@@ -108,19 +116,32 @@
           <td class="wideField" colspan="3"><input class="field" id="country2" name = 'delivery_country' hidden = 'true' disabled="true"/></td>
         </tr>
       </table>
+      <!-- end of hidden stuff -->
 
-      <!-- Form -->
+      <!-- rest of form -->
       <div class="row justify-content-center">
-        <div class="col-4">
-          {{ form.pickup_date|as_crispy_field }}
-          <div class = "invalid-feedback">
-            Please Choose a Pickup Date
+        <!-- checkbox to include date -->
+        <div class = "col-4">
+          <label for = "include_date">Include Pickup Date</label>
+          <input type = "checkbox" name = "include_date" value = "include_date" id = "include_date">
+          <!--what pops down if you check the box -->
+          <div class="reveal_after_check">
+            {{ form.pickup_date|as_crispy_field }}
+            <div class = "invalid-feedback">
+              Please Choose a Pickup Date
+            </div>
           </div>
         </div>
-        <div class="col-4">
-          {{ form.pickup_time|as_crispy_field }}
-          <div class = "invalid-feedback">
-            Please Choose a Pickup Time
+        <!--checkbox to include a time -->
+        <div class = "col-4">
+          <label for = "include_time">Include Pickup Time</label>
+          <input type = "checkbox" id = "include_time" name = "include_time" value = "include time">
+          <!-- what comes down if you check the box -->
+          <div class="reveal_after_check">
+            {{ form.pickup_time|as_crispy_field }}
+            <div class = "invalid-feedback">
+              Please Choose a Pickup Time
+            </div>
           </div>
         </div>
       </div>
@@ -432,6 +453,38 @@ function geolocate() {
           fillInPrice()
       }
       });
+  </script>
+  <!-- for making values only required of box checked -->
+  <script>
+    var FormStuff = {
+
+  init: function() {
+    this.applyConditionalRequired();
+    this.bindUIActions();
+  },
+
+  bindUIActions: function() {
+    $("input[type='radio'], input[type='checkbox']").bind("change", this.applyConditionalRequired);
+  },
+
+  applyConditionalRequired: function() {
+
+    $(".require-if-active").each(function() {
+      var el = $(this);
+      if ($(el.data("require-pair")).is(":checked")) {
+        el.attr("required", true);
+      } else {
+        el.attr("required", false);
+        el.value = "sherm stick";
+        console.log(el.value);
+      }
+    });
+
+  }
+
+};
+
+FormStuff.init();
   </script>
 
 {% endblock %}

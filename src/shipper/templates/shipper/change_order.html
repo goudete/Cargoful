@@ -1,9 +1,16 @@
 {% extends 'shipper/base.html'%}
 
 
-
 {% block content %}
+<style>
+  input[type=checkbox] + .reveal_after_check{
+  display: none;
+  }
 
+  input[type=checkbox]:checked + .reveal_after_check{
+  display: block;
+  }
+</style>
 <div class="container">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <div class="row justify-content-center mt-5">
@@ -94,18 +101,41 @@
 
       <!-- Form -->
       <div class="row justify-content-center">
-        <div class="col-4">
-          <h5>Pickup Date</h5>
-          <input class = 'form-control' id = 'datepicker' name="pickup_date" value = "{{ date }}" size = '60' required/>
-          <div class = "invalid-feedback">
-            Please Choose a Pickup Date
+        <!-- determine if box should be checked or not -->
+        <div class = "col-4">
+          {% if date == "" %}
+          <label for = "include_date">Include Pickup Date</label>
+          <input type = "checkbox" name = "include_date" value = "include_date" id = "include_date">
+          {% else %}
+          <label for = "include_date">Include Pickup Date</label>
+          <input type = "checkbox" name = "include_date" value = "include_date" id = "include_date" checked>
+          {% endif %}
+          <!-- form for date -->
+          <div class="reveal_after_check">
+            <h5>Pickup Date</h5>
+            <input class = 'form-control require-if-active' id = 'datepicker' name="pickup_date" value = "{{ date }}" size = '60' required/>
+            <div class = "invalid-feedback">
+              Please Choose a Pickup Date
+            </div>
           </div>
         </div>
-        <div class="col-4">
-          <h5>Pickup Time</h5>
-          <input class = "form-control" id = "timepicker" name = "pickup_time" value = "{{ time }}" size = '60' required/>
-          <div class = "invalid-feedback">
-            Please Choose a Pickup Time
+
+        <div class = "col-4">
+          <!-- determine if box should be checked or not -->
+          {% if time == "" %}
+          <label for = "include_date">Include Pickup Time</label>
+          <input class = "col-4" type = "checkbox" name = "include_time" value = "include_time" id = "include_time">
+          {% else %}
+          <label for = "include_date">Include Pickup Time</label>
+          <input class = "col-4" type = "checkbox" name = "include_time" value = "include_time" id = "include_time" checked>
+          {% endif %}
+          <!-- form for time -->
+          <div class="reveal_after_check">
+            <h5>Pickup Time</h5>
+            <input class = "form-control require-if-active" id = "timepicker" name = "pickup_time" value = "{{ time }}" size = '60' required/>
+            <div class = "invalid-feedback">
+              Please Choose a Pickup Time
+            </div>
           </div>
         </div>
       </div>
@@ -329,6 +359,38 @@ function geolocate() {
       });
     }, false);
   })();
+  </script>
+
+  <script>
+    var FormStuff = {
+
+  init: function() {
+    this.applyConditionalRequired();
+    this.bindUIActions();
+  },
+
+  bindUIActions: function() {
+    $("input[type='radio'], input[type='checkbox']").bind("change", this.applyConditionalRequired);
+  },
+
+  applyConditionalRequired: function() {
+
+    $(".require-if-active").each(function() {
+      var el = $(this);
+      if ($(el.data("require-pair")).is(":checked")) {
+        el.attr("required", true);
+      } else {
+        el.attr("required", false);
+        el.value = "sherm stick";
+        console.log(el.value);
+      }
+    });
+
+  }
+
+};
+
+FormStuff.init();
   </script>
 
 {% endblock %}

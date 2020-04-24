@@ -56,8 +56,8 @@
           <td>{{ av.shipping_company.user.profile.company_name }}</td>
           <td>{{ av.pickup_address }}</td>
           <td>{{ av.delivery_address }}</td>
-          <td>{{ av.pickup_date }}</td>
-          <td>{{ av.pickup_time }}</td>
+          {% if av.pickup_date is none %}<td>Negotiable</td>{% else %}<td>{{ av.pickup_date }}</td>{% endif %}
+          {% if av.pickup_time is none %}<td>Negotiable</td>{% else %}<td>{{ av.pickup_time }}</td>{% endif %}
           <td>{{ av.distance }} KM</td>
           <td>{{ av.price }}</td>
           <td>

@@ -94,8 +94,8 @@
           <td>{{ my.pickup_address }}</td>
           <td>{{ my.delivery_address }}</td>
           <td>{{ my.distance }} KM</td>
-          <td>{{ my.pickup_date }}</td>
-          <td>{{ my.pickup_time }}</td>
+          {% if my.pickup_date is none %}<td>Negotiable</td>{% else %}<td>{{ my.pickup_date }}</td>{% endif %}
+          {% if my.pickup_time is none %}<td>Negotiable</td>{% else %}<td>{{ my.pickup_time }}</td>{% endif %}
           <td>
             {% if my.status == 2 %}
             <form action = 'update_status' method = 'post'>{% csrf_token %}

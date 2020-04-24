@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from shipper.models import shipper
 from .decorators import allowed_users
+from friendship.models import FriendshipRequest, Friend, Follow
 
 def register_view(request):
     if request.method == 'POST':
@@ -19,6 +20,15 @@ def register_view(request):
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
+
+            # making all truckers automatically connected w/ cargoful
+            if profile.user_type == 'Trucker':
+                cargoful_shipper = Profile.objects.filter(company_name = "Cargoful").filter(user_type = "Shipper").first().user #get the user associated w/ cargoful shipper
+                Friend.objects.add_friend(cargoful_shipper, user) #send a freind request form cargoful to the trucker
+                req = FriendshipRequest.objects.get(to_user = user) #get the request again to accept it
+                req.accept() #accept it
+                Follow.objects.add_follower(user, req.from_user) #make it so that they are connected both ways
+            #end cargoful connect block
 
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')

@@ -16,8 +16,8 @@ class Order_Form(forms.ModelForm):
             'instructions'
             ]
         widgets = {
-            'pickup_date': forms.DateInput(attrs={'id':'datepicker'}),
-            'pickup_time': forms.TimeInput(attrs = {'id': 'timepicker'})
+            'pickup_date': forms.DateInput(attrs={'id':'datepicker', 'class': 'require-if-active', 'data-require-pair': '#include_date'}),
+            'pickup_time': forms.TimeInput(attrs = {'id': 'timepicker', 'class': 'require-if-active', 'data-require-pair': '#include_time'})
         }
     def __init__(self, *args, **kwargs):
         super(Order_Form, self).__init__(*args, **kwargs)

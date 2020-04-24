@@ -45,7 +45,7 @@ class order(models.Model):
     pickup_address = models.TextField(default = "")
     delivery_address = models.TextField(default = "")
     #date info
-    pickup_date = models.DateField(default = date.today, auto_now_add = False)
+    pickup_date = models.DateField(default = date.today, auto_now_add = False, blank = True, null = True)
     delivery_date = models.DateField(default = date.today, auto_now_add = False)
     #other specs
     price = models.DecimalField(default = 0.0, max_digits = 9, decimal_places = 2, validators=[MinValueValidator(0.0)])
@@ -55,7 +55,7 @@ class order(models.Model):
     shipment_number = models.PositiveIntegerField(default = 0)
     numero_de_pedido = models.PositiveIntegerField(default = 0)
     numero_de_abaran = models.PositiveIntegerField(default = 0)
-    pickup_time = models.TimeField(default = timezone.now, auto_now_add = False)
+    pickup_time = models.TimeField(default = timezone.now, auto_now_add = False, blank = True, null = True)
     delivery_time = models.TimeField(default = timezone.now, auto_now_add = False)
     contents = models.TextField(default = '')
     instructions = models.TextField(default = '')
