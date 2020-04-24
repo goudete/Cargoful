@@ -30,6 +30,11 @@ class CreateUserForm(UserCreationForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('user_type', 'company_name')
+        fields = ('user_type', 'company_name', 'phone',)
         USER_TYPES = (("Shipper", "Shipper"),("Trucker", "Trucker"))
         widgets = {'user_type': forms.Select(choices=USER_TYPES)}
+        error_messages = {
+            'phone': {
+                'unique': 'This number is already registered, please enter a new one'
+            }
+        }

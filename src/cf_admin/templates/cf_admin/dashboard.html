@@ -63,6 +63,7 @@
       <th scope = 'col'>User Type</th>
       <th scope = 'col'>Company Name</th>
       <th scope = 'col'>Email</th>
+      <th scope = 'col'>Created At</th>
     </tr>
   </thead>
 
@@ -72,6 +73,8 @@
       <td>{{ u.user_type }}</td>
       <td>{{ u.company_name }}</td>
       <td>{{ u.user.email}}</td>
+      <td>{{ u.created_at}}</td>
+
       <td>
         <form action = "/cf_admin/approve_user" method = "post"> {% csrf_token %}
           <input id="profile_id" name="profile_id" type="number" value="{{u.id}}" hidden = "true"/>
@@ -117,6 +120,7 @@
       <th scope = 'col'>Delivery Address</th>
       <th scope = 'col'>Contents</th>
       <th scope="col">Price</th>
+      <th scope = 'col'>Created At</th>
       <th scope = "col"></th>
       <th scope = "col"></th>
     </tr>
@@ -133,6 +137,7 @@
       <td>{{ o.delivery_address }}</td>
       <td>{{ o.contents }}</td>
       <td>{{ o.price }}</td>
+      <td>{{ o.created_at}}</td>
       <td>
         <form action = "/cf_admin/approve_order" method = "post"> {% csrf_token %}
           <input id = "order_id" name = "order_id" type = "number" value = {{o.id}} hidden = "true"/>
