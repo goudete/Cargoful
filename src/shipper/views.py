@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from .forms import Order_Form
+from .forms import Order_Form, WeeklyRecurrenceForm
 from .models import order, shipper, status_update
 from authorization.models import Profile, User_Feedback
 from django.http import JsonResponse
@@ -27,6 +27,7 @@ from friendship.models import Friend, Follow, Block, FriendshipRequest
 from django.contrib.auth.models import User
 from DataProcessing.santiModel import pricingModel
 from trucker.models import counter_offer
+from .recurrence_handlers import getRecurrenceVars, getRecurrenceEndVars, getRecurrenceVarsFromConfirmation, getRecurrenceEndVarsFromConfirmation, saveWeeklyRecurringOrder
 # Create your views here.
 
 #for getting sensitive info
