@@ -193,49 +193,60 @@ def confirm(request):
         """end mdpt calculation"""
         #get the distance btwn pickup and delivery
         distance = round(haversine((pu_lat,pu_long), (del_lat,del_long)), 4)
-        #check if date included
-        if 'include_date' in jsn.keys():
-            date = jsn['pickup_date']
-        else:
-            date = ""
-        #check if time included
-        if 'include_time' in jsn.keys():
-            time = jsn['pickup_time']
-            #account for time being in PM
-            if time.split(" ")[1] == "PM":
-                hour = int(time.split(" ")[0].split(":")[0])
-                if hour < 12:
-                    hour += 12
-                time = str(hour) + ":" + time.split(" ")[0].split(":")[1]+" PM"
-        else:
-            time = ""
+        #other regular metrics
+        date = jsn['pickup_date']
+        time = jsn['pickup_time']
+        #account for time being in PM
+        if time.split(" ")[1] == "PM":
+            hour = int(time.split(" ")[0].split(":")[0])
+            if hour < 12:
+                hour += 12
+            time = str(hour) + ":" + time.split(" ")[0].split(":")[1]+" PM"
         #other specs
         truck = jsn['truck_type']
         cargo = jsn['contents']
         instructions = jsn['instructions']
         price = jsn['price']
+
+        #get recurrence type: Daily, Weekly, Monthly or Yearly. Based on this we get the necessary variables to pass
+        recurrence_type = request.POST.get("recurrence_types", None)
+        recurrence_vars = getRecurrenceVars(recurrence_type,request,jsn)
+        recurrence_end_vars = getRecurrenceEndVars(recurrence_type,request,jsn)
+        print("RECURRENCE END VARS")
+        print(recurrence_end_vars)
+        print("JSON")
+        print(jsn)
+        renderDict = {
+            'pu_addy': pu_address_full,
+            'del_addy': del_address_full,
+            'pu_lat': pu_lat,
+            'pu_long': pu_long,
+            'del_lat': del_lat,
+            'del_long': del_long,
+            'mid_lat': mdpt_lat,
+            'mid_long': mdpt_long,
+            'distance': distance,
+            'date':date,
+            'time': time,
+            'truck': truck,
+            'cargo': cargo,
+            'instruct': instructions,
+            'price': price,
+            'num_notifications': num_notifications,
+            'recurrence_type': recurrence_type
+        }
+        for key in recurrence_vars:
+            renderDict[key] = recurrence_vars[key]
+        for key in recurrence_end_vars:
+            renderDict[key] = recurrence_end_vars[key]
+        if "recurrence_indicator" in jsn:
+            renderDict["recurrence_indicator"] = '1'
+        else:
+            renderDict["recurrence_indicator"] = '0'
     else:
         pass
     #long list of variables is for the html page, all of these will be displayed in the confirmation page
-    return render(request, 'shipper/confirmation.html',
-    {
-        'pu_addy': pu_address_full,
-        'del_addy': del_address_full,
-        'pu_lat': pu_lat,
-        'pu_long': pu_long,
-        'del_lat': del_lat,
-        'del_long': del_long,
-        'mid_lat': mdpt_lat,
-        'mid_long': mdpt_long,
-        'distance': distance,
-        'date':date,
-        'time': time,
-        'truck': truck,
-        'cargo': cargo,
-        'instruct': instructions,
-        'price': price,
-        'num_notifications': num_notifications
-    })
+    return render(request, 'shipper/confirmation.html',renderDict)
 
 #if the order is confirmed, then this page is rendered, it saves the order to db
 @login_required
@@ -258,25 +269,37 @@ def order_success(request):
         ship = shipper.objects.filter(user = request.user).first()
         num_orders = len(order.objects.filter(shipping_company = ship))+1
         customer_order_no = 'CF'+str(id)+"-"+str(num_orders)
+
+        recurrence_type = jsn['recurrence_type']
+        recurrence_vars = getRecurrenceVarsFromConfirmation(recurrence_type,jsn)
+        recurrence_end_vars = getRecurrenceEndVarsFromConfirmation(recurrence_type,jsn)
+        print("RECURRENCE_VARS CONFIRMATION")
+        print(recurrence_vars)
+        print("RECURRENCE_END_VARS CONFIRMATION")
+        print(recurrence_end_vars)
+
         #create order
-        n_order = Order_Form(request.POST)
-        if n_order.is_valid():
-            new_order = n_order.save(commit = False)
-            company = shipper.objects.filter(user = request.user).first()
-            new_order.customer_order_no = customer_order_no
-            new_order.shipping_company = company
-            new_order.pickup_latitude = pu_lat
-            new_order.pickup_longitude = pu_long
-            new_order.delivery_latitude = del_lat
-            new_order.delivery_longitude = del_long
-            new_order.pickup_address = pu_address
-            new_order.delivery_address = del_address
-            new_order.distance = round(dist,2)
-            new_order.save()
-            messages.info(request, "Order "+ str(customer_order_no) + " Placed Successfully")
-            return HttpResponseRedirect('/shipper')
+        if recurrence_vars['recurrence_indicator'] == '0': #no recurrence selected
+            n_order = Order_Form(request.POST)
+            if n_order.is_valid():
+                new_order = n_order.save(commit = False)
+                company = shipper.objects.filter(user = request.user).first()
+                new_order.customer_order_no = customer_order_no
+                new_order.shipping_company = company
+                new_order.pickup_latitude = pu_lat
+                new_order.pickup_longitude = pu_long
+                new_order.delivery_latitude = del_lat
+                new_order.delivery_longitude = del_long
+                new_order.pickup_address = pu_address
+                new_order.delivery_address = del_address
+                new_order.distance = round(dist,2)
+                new_order.save()
+                messages.info(request, "Order "+ str(customer_order_no) + " Placed Successfully")
+                return HttpResponseRedirect('/shipper')
+            else:
+                print('invalid!')
         else:
-            print('invalid!')
+                return saveWeeklyRecurringOrder(recurrence_vars,recurrence_end_vars,request)
 
 @login_required
 @allowed_users(allowed_roles=['Shipper'])

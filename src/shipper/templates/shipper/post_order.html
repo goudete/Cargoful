@@ -195,6 +195,266 @@
           </div>
         </div>
       </div>
+      <!-- recurrence and discount menus -->
+      <div class="card">
+                <h6 class="card-header text-center">
+                Recurrence
+                </h6>
+                <div class="card-body px-lg-5 pt-0">
+                  <div>
+                    <div class="form-group row">
+                      <div class="col-sm-4">Enable Recurrence?</div>
+                      <div class="col-sm-8">
+                        <div class="form-check">
+                          <input name = "recurrence_indicator" class="form-check-input" type="checkbox" id="gridCheck1">
+                          <label class="form-check-label" for="gridCheck1">
+                            (check box to enable)
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body px-lg-5 pt-0" id = "recurrence_div" style = "display : none;">
+                  <div id = "recurrence_form">
+                    <div class="form-group row" style = " text-align: center;">
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="recurrence_types" id="daily_recurrence" value="Daily">
+                          <label class="form-check-label" for="daily_recurrence">Daily</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="recurrence_types" id="weekly_recurrence" value="Weekly" checked>
+                          <label class="form-check-label" for="weekly_recurrence">Weekly</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="recurrence_types" id="monthly_recurrence" value="Monthly">
+                          <label class="form-check-label" for="monthly_recurrence">Monthly</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="recurrence_types" id="yearly_recurrence" value="Yearly">
+                          <label class="form-check-label" for="yearly_recurrence">Yearly</label>
+                        </div>
+                    </div>
+                  </div>
+                  <hr/>
+                  <div id = "weeks_form">
+                    <div class="col-sm-6">Recur every <input type = "number" name = "number_of_weeks" style = "width : 35px;"></input><span style="margin-left:10px;">week(s) on: </span></div>
+                    <br>
+                    <div class="form-group row">
+                        <div class="form-check">
+                          <input class="form-check-input" name = "mondayCheck" type="checkbox" id="dayCheck1">
+                          <label class="form-check-label" for="dayCheck1">
+                            Monday &emsp;
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" name = "tuesdayCheck" type="checkbox" id="dayCheck2">
+                          <label class="form-check-label" for="dayCheck2">
+                            Tuesday &emsp;
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" name = "wednesdayCheck" type="checkbox" id="dayCheck3">
+                          <label class="form-check-label" for="dayCheck3">
+                            Wednesday &emsp;
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" name = "thursdayCheck" type="checkbox" id="dayCheck4">
+                          <label class="form-check-label" for="dayCheck4">
+                            Thursday &emsp;
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" name = "fridayCheck" type="checkbox" id="dayCheck5">
+                          <label class="form-check-label" for="dayCheck5">
+                            Friday &emsp;
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" name = "saturdayCheck" type="checkbox" id="dayCheck6">
+                          <label class="form-check-label" for="dayCheck6">
+                            Saturday &emsp;
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" name = "sundayCheck" type="checkbox" id="dayCheck7">
+                          <label class="form-check-label" for="dayCheck7">
+                            Sunday &emsp;
+                          </label>
+                        </div>
+                    </div>
+                  </div>
+                  <div id = "days_form" style = "display : none;">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="day_type_opts" id="day_type_opt1" value="option1" checked>
+                      <label class="form-check-label" for="day_type_opt1">
+                        Every
+                      </label>
+                      <input type = "number" name = "number_of_days" style = "width : 35px;"></input><span style="margin-left:10px;"> days </span>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="day_type_opts" id="day_type_opt2" value="option2">
+                      <label class="form-check-label" for="day_type_opt2">
+                        Every Workday
+                      </label>
+                    </div>
+                  </div>
+                  <div id = "months_form" style = "display : none;">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="month_opts" id="month_opt1" value="option1" checked>
+                      <label class="form-check-label" for="month_opt1">
+                        Repeat Every
+                      </label>
+                      <input type = "number" name = "number_of_months" style = "width : 35px;"></input><span style="margin-left:10px;"> month(s) </span> on day <input type = "number" name ="day_of_month" style = "width : 35px;"></input>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="month_opts" id="month_opt2" value="option2" checked>
+                      <label class="form-check-label" for="month_opt2">
+                        Repeat On the
+                      </label>
+                      <select id="exampleFormControlSelect1" name = "day_select_month" style = "width : 70px">
+                        <option>1st</option>
+                        <option>2nd</option>
+                        <option>3rd</option>
+                        <option>4th</option>
+                      </select>
+                      <select id="exampleFormControlSelect1" name = "weekday_select_month" style = "width : 110px">
+                        <option>Monday</option>
+                        <option>Tuesday</option>
+                        <option>Wednesday</option>
+                        <option>Thursday</option>
+                        <option>Friday</option>
+                        <option>Saturday</option>
+                        <option>Sunday</option>
+                      </select>
+                      Every
+                      <input type = "number" name = "number_of_months2" style = "width : 35px;"></input><span style="margin-left:10px;"> month(s) </span>
+                    </div>
+                  </div>
+                  <div id = "years_form" style = "display : none">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="year_opts" id="year_opt1" value="option1" checked>
+                      <label class="form-check-label" for="year_opt1">
+                        Repeat Every
+                      </label>
+                      <input type = "number" name = "day_of_month_year" style = "width : 35px;"></input><span style="margin-left:10px;"> day of </span>
+                      <select name = "month_select" id="exampleFormControlSelect1" style = "width : 110px">
+                        <option>January</option>
+                        <option>February</option>
+                        <option>March</option>
+                        <option>April</option>
+                        <option>May</option>
+                        <option>June</option>
+                        <option>July</option>
+                        <option>August</option>
+                        <option>September</option>
+                        <option>October</option>
+                        <option>November</option>
+                        <option>December</option>
+                      </select>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="year_opts" id="year_opt2" value="option2" checked>
+                      <label class="form-check-label" for="year_opt2">
+                        Repeat On the
+                      </label>
+                      <select name = "day_select_year" id="exampleFormControlSelect1" style = "width : 70px">
+                        <option>1st</option>
+                        <option>2nd</option>
+                        <option>3rd</option>
+                        <option>4th</option>
+                      </select>
+                      <select name = "weekday_select_year" id="exampleFormControlSelect1" style = "width : 110px">
+                        <option>Monday</option>
+                        <option>Tuesday</option>
+                        <option>Wednesday</option>
+                        <option>Thursday</option>
+                        <option>Friday</option>
+                        <option>Saturday</option>
+                        <option>Sunday</option>
+                      </select>
+                      Of
+                      <select name = "month_select2" id="exampleFormControlSelect1" style = "width : 110px">
+                        <option>January</option>
+                        <option>February</option>
+                        <option>March</option>
+                        <option>April</option>
+                        <option>May</option>
+                        <option>June</option>
+                        <option>July</option>
+                        <option>August</option>
+                        <option>September</option>
+                        <option>October</option>
+                        <option>November</option>
+                        <option>December</option>
+                      </select>
+                    </div>
+                  </div>
+                  <hr/>
+                  <div id = "recurrence_range">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="inputEmail4">Start Day</label>
+                          <input name = "start_day" class="form-control" id="reccurence_range_start_day">
+                        </div>
+                        <div class="form-group col-md-6">
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="end_opts" id="end_opt1" value="option1" checked>
+                            <label class="form-check-label" for="end_opt1">
+                              End by:
+                            </label>
+                            <input name = "end_by_day" class="form-control" id="reccurence_range_start_day" placeholder="End Day">
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="end_opts" id="end_opt2" value="option2">
+                            <label class="form-check-label" for="end_opt2">
+                              End after:
+                            </label>
+                            <input name = "occurrences" type = "number" style = "width : 35px;"></input><span style="margin-left:10px;">Occurrences</span>
+                          </div>
+                          <div class="form-check disabled">
+                            <input class="form-check-input" type="radio" name="end_opts" id="end_opt3" value="option3">
+                            <label class="form-check-label" for="end_opt3">
+                              No end date
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+
+            <div class="card">
+              <h6 class="card-header text-center">
+                Bulk Discount
+              </h6>
+              <div class="card-body px-lg-5 pt-0">
+                  <div class="form-group row">
+                    <div class="col-sm-4">Add A Bulk Discount?</div>
+                    <div class="col-sm-8">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="discountCheck">
+                        <label class="form-check-label" for="discountCheck">
+                          (check box to enable)
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              <div class="card-body px-lg-5 pt-0" id = "discount_div" style = "display : none;">
+                <div id = "discount_form">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="discount_opts" id="discount_opt1" value="option1" checked>
+                    <label class="form-check-label" for="discount_opt1">
+                      Add A Discount Of
+                    </label>
+                    <input type = "number" style = "width : 35px;"></input><span style="margin-left:10px;">% </span>
+                  </div>
+                </div>
+              </div>
+            </div>
 
       <!-- Buttons -->
       <div class="row justify-content-center mb-5">
