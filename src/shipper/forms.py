@@ -1,5 +1,5 @@
 from django import forms
-from .models import order
+from .models import order, WeeklyRecurringOrder
 from crispy_forms.helper import FormHelper
 from datetime import datetime
 from django.contrib.admin.widgets import AdminDateWidget
@@ -25,3 +25,11 @@ class Order_Form(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(Order_Form, self).__init__(*args, **kwargs)
         self.fields['price'].widget.attrs['min'] = 0
+
+class WeeklyRecurrenceForm(Order_Form):
+    class Meta(Order_Form.Meta):
+        model = WeeklyRecurringOrder
+        fields = Order_Form.Meta.fields + ['number_of_weeks','weekdays','end_opt','start_day','end_by_day']#,'occurrences']
+    def __init__(self, *args, **kwargs):
+        super(WeeklyRecurrenceForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()

@@ -104,7 +104,15 @@ class order(models.Model):
     4 -> delivered
     5 -> cancelled
     """
-
+class WeeklyRecurringOrder(order):
+    weekdays = models.CharField(max_length = 40, default = '0000000') #binary representation
+    number_of_weeks = models.CharField(max_length = 40, default = "# weeks")
+    end_opt = models.CharField(max_length = 40, default = 'option0')
+    start_day = models.CharField(max_length = 40, default = 'start')
+    end_by_day = models.CharField(max_length = 40, default = 'end')
+    indefinite = models.BooleanField(default = False)
+    occurrences =  models.CharField(max_length = 40, default = "occs")
+    
 #this model is only for when a trucker updates the status of an order
 class status_update(models.Model):
     trucker = models.ForeignKey(truck_company, on_delete = models.CASCADE) #the trucker that updated the order
