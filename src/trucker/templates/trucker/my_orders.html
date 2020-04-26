@@ -35,6 +35,9 @@
         <p class="card-text">
           Reach out if you have any questions: help@cargoful.org
         </p>
+        {% if me.docs_uploaded == False %}
+        <a href = "/trucker/upload_docs" class = "btn btn-secondary">Upload Your Documents</a>
+        {% endif %}
       </div>
     </div>
   </div>

@@ -7,12 +7,15 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from rest_framework.decorators import api_view
 from authorization.decorators import allowed_users
-
+from CargoFul import settings
+import botocore
+import boto3
 from itertools import chain
 import json
 import math
 from django.contrib import messages
 from friendship.models import FriendshipRequest, Friend, Follow
+import os
 
 
 # Create your views here.
@@ -24,6 +27,32 @@ def See_Dashboard(request):
         new_users = Profile.objects.filter(is_approved = False)
         new_orders = order.objects.filter(is_approved = False)
         return render(request, 'cf_admin/dashboard.html', {'users' : new_users, 'orders': new_orders})
+
+@login_required
+@allowed_users(allowed_roles=['Cf_admin'])
+@api_view(['POST'])
+def Download_Docs(request):
+    s3 = boto3.client('s3') #setup to get from AWS
+    jdp = json.dumps(request.data) #get request into json form
+    jsn = json.loads(jdp) #get dictionary from json
+    jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
+    user_profile = Profile.objects.get(id=jsn['profile_id'])
+    docs_user = user_profile.user #this refers to the user whose docs we are viewing
+    #setup to download off AWS
+    #create folder to store files
+    aws_dir = os.path.join('docs/CF'+str(docs_user.id))
+    local_dir = os.path.join('Trucker_Documents', 'CF'+str(docs_user.id))
+    if not os.path.exists(local_dir):
+        os.makedirs(local_dir)
+    #download files
+    bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+    s3.download_file(bucket_name, aws_dir+"/Acta_Constitutiva", os.path.join(local_dir, "Acta_Constitutiva.pdf"))
+    s3.download_file(bucket_name, aws_dir+"/Comprobante_Domicilio", os.path.join(local_dir, "Comprobante_Domicilio.pdf"))
+    s3.download_file(bucket_name, aws_dir+"/Constancia_SHCP", os.path.join(local_dir, "Constancia_SHCP.pdf"))
+    s3.download_file(bucket_name, aws_dir+"/Estado_Bancaria", os.path.join(local_dir, "Estado_Bancaria.pdf"))
+    s3.download_file(bucket_name, aws_dir+"/INE", os.path.join(local_dir, "INE"))
+    return HttpResponseRedirect("/cf_admin")
+
 
 @login_required
 @allowed_users(allowed_roles=['Cf_admin'])

@@ -75,6 +75,14 @@
       <td>{{ u.user.email}}</td>
       <td>{{ u.created_at}}</td>
 
+      {% if u.user_type == "Trucker" %}
+      <td>
+        <form action = "/cf_admin/download" method = "post"> {% csrf_token %}
+          <input id="profile_id" name="profile_id" type="number" value="{{u.id}}" hidden = "true"/>
+          <button type = "submit" class = "btn btn-secondary">View Docs</button>
+        </form>
+      </td>
+      {% endif %}
       <td>
         <form action = "/cf_admin/approve_user" method = "post"> {% csrf_token %}
           <input id="profile_id" name="profile_id" type="number" value="{{u.id}}" hidden = "true"/>

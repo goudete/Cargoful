@@ -12,6 +12,8 @@ from authorization.models import Profile, User_Feedback
 from friendship.models import FriendshipRequest, Friend, Follow
 from django.contrib.auth.models import User
 from CargoFul import settings
+from trucker.file_storage import FileStorage
+import os
 # Create your views here.
 
 @login_required
@@ -356,5 +358,24 @@ def get_feedback(request):
         feedback = User_Feedback(user = user, feedback = jsn['feedback'])
         feedback.save()
         messages.info(request, "Thank you for your feedback!")
-
         return HttpResponseRedirect('/trucker')
+
+@login_required
+@allowed_users(allowed_roles = ['Trucker'])
+@api_view(['GET', 'POST'])
+def upload_docs(request):
+    if request.method == 'GET':
+        return render(request, 'trucker/upload_docs.html')
+    else:
+        print(request.FILES)
+        files_dir = 'docs/{user}'.format(user = "CF" + str(request.user.id))
+        file_storage = FileStorage()
+        for file in request.FILES: #loop through files in request
+            doc = request.FILES[file] #get file
+            doc_path = os.path.join(files_dir, file) #set path for file to be stored in
+            file_storage.save(doc_path, doc)
+        me = truck_company.objects.filter(user=request.user).first()
+        me.docs_uploaded = True
+        me.save()
+        messages.info(request, "Gracias por Subir sus Documentos")
+        return HttpResponseRedirect("/trucker")

@@ -17,5 +17,6 @@ urlpatterns = [
     path('read_order_notification', views.read_order_notification), #this url is for just reading the notification (making it go away)
     path('read_counter_offer_notification', views.read_counter_offer), #this url is for making a counter offer notification go away
     path('past_orders', views.past_orders), #this is for showing past orders
-    path('get_feedback', views.get_feedback, name='get_feedback')
+    path('get_feedback', views.get_feedback, name='get_feedback'),
+    path('upload_docs', views.upload_docs), #for uploading a document
 ]
