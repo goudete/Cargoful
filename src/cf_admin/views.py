@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from rest_framework.decorators import api_view
 from authorization.decorators import allowed_users
+from django.core.mail import send_mail
 
 from itertools import chain
 import json
@@ -37,6 +38,16 @@ def Approve_User(request):
         user_profile.is_approved = True
         user_profile.save()
         messages.info(request, str(user_profile.company_name) + " successfully approved")
+        #send them an email to let them know they're approved
+        user = User.objects.get(id=jsn['profile_id'])
+        email = user.email
+        send_mail(
+        'Cargoful Account Approval', #email subject
+        'Your Cargoful account has been approved! Log on now at http://34.216.209.104:8000/accounts/login/', #email content
+        'hellofromcargoful@gmail.com',
+        [email],
+        fail_silently = False,
+        )
         return HttpResponseRedirect('/cf_admin')
 
 

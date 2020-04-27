@@ -10,6 +10,13 @@ from shipper.models import shipper
 from .decorators import allowed_users
 from friendship.models import FriendshipRequest, Friend, Follow
 
+from django.core.mail import send_mail
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template.loader import render_to_string
+from .tokens import account_activation_token
+
 def register_view(request):
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
@@ -32,6 +39,7 @@ def register_view(request):
 
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
+            email = form.cleaned_data.get('email')
             # messages.success(request, 'Account was created for ' + username)
 
             user = authenticate(request, username=username, password=password)
@@ -39,6 +47,21 @@ def register_view(request):
                 login(request, user)
                 # return settings.LOGIN_REDIRECT_URL
                 messages.success(request, "Welcome to CargoFul " + str(username) + "!")
+                #send email for email verification
+                current_site = get_current_site(request)
+                message = render_to_string('registration/confirm_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+                'token':account_activation_token.make_token(user),
+                })
+                send_mail(
+                'Welcome To Cargoful - Please Confirm your Email', #email subject
+                message, #email content
+                'hellofromcargoful@gmail.com',
+                [email],
+                fail_silently = False,
+                )
                 return redirect('/login_success')
     else:
         form = CreateUserForm()
@@ -85,3 +108,28 @@ def logout_view(request):
 
 def home_view(request):
     return render(request, 'registration/home.html')
+
+def activate(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+        print("username is")
+        print(user.username)
+        print("company_name is")
+        print(user.profile.company_name)
+        #profile = user.get_profile()
+        #user_profile = Profile.objects.get(id=jsn['profile_id'])
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        print("here")
+        #user.email_confirmed = True
+        user.profile.email_confirmed = True
+        print(user.profile.email_confirmed)
+        print("here2")
+        user.profile.save()
+        login(request, user)
+        # return redirect('home')
+        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+    else:
+        return HttpResponse('Activation link is invalid!')

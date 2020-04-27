@@ -10,6 +10,7 @@ class Profile(models.Model):
     phone = PhoneNumberField(unique=True)
     is_approved = models.BooleanField(default = False)
     created_at = models.DateTimeField(auto_now_add=True)
+    email_confirmed = models.BooleanField(default = False)
 
 class User_Feedback(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)

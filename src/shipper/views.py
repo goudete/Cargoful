@@ -28,6 +28,9 @@ from django.contrib.auth.models import User
 from DataProcessing.santiModel import pricingModel
 from trucker.models import counter_offer
 from .recurrence_handlers import getRecurrenceVars, getRecurrenceEndVars, getRecurrenceVarsFromConfirmation, getRecurrenceEndVarsFromConfirmation, saveWeeklyRecurringOrder
+from django.core.mail import send_mail
+from django.contrib.auth.models import User
+
 # Create your views here.
 
 #for getting sensitive info
@@ -296,6 +299,18 @@ def order_success(request):
                 new_order.distance = round(dist,2)
                 new_order.save()
                 messages.info(request, "Order "+ str(customer_order_no) + " Placed Successfully")
+                #notify truckers per email
+                users = User.objects.filter(groups__name='Trucker') #get truckers, needs to be User objects cos that's where the email is
+                for user in users:
+                    email = user.email
+                    username = user.username
+                    send_mail(
+                    'New Order Posted!', #email subject
+                    'Hello, ' + username + '. A new order is up for grabs! Log on now at http://34.216.209.104:8000/accounts/login/ to view details and secure the job', #email content
+                    'hellofromcargoful@gmail.com',
+                    [email],
+                    fail_silently = False,
+                    )
                 return HttpResponseRedirect('/shipper')
             else:
                 print('invalid!')
@@ -531,6 +546,17 @@ def accept_counter_offer(request):
         #update notification status
         c_offer.status = 2
         c_offer.save()
+
+        #send trucker an email to let them know offer has been accepted
+        email = trucker.user.email
+        username = trucker.user.username
+        send_mail(
+        'Counter Offer Accepted!', #email subject
+        'Congratulations, ' + username + '! Your counter-offer for a delivery has been accepted. Log on now at http://34.216.209.104:8000/accounts/login/', #email content
+        'hellofromcargoful@gmail.com',
+        [email],
+        fail_silently = False,
+        )
         #redirect
         return HttpResponseRedirect("/shipper/notifications")
 
