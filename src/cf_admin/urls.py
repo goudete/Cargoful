@@ -8,4 +8,5 @@ urlpatterns = [
     path('accept_order', views.Accept_Order, name = 'Accept_Order'),
     path('delete_user', views.Delete_User, name = 'Delete_User'),
     path('delete_order', views.Delete_Order, name = 'Delete_Order'),
+    path('download', views.Download_Docs), #for reviewing a trucker and looking at their docs
 ]

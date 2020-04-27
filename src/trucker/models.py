@@ -11,6 +11,7 @@ class truck_company(models.Model):
     completed_orders = models.PositiveIntegerField(default=0)
     incomplete_orders = models.PositiveIntegerField(default=0)
     rating = models.PositiveIntegerField(default=0, validators=[MaxValueValidator(5)])
+    docs_uploaded = models.BooleanField(default = False)
     def _str_(self):
         return self.company_name
 @receiver(post_save, sender=User)

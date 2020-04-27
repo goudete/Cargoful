@@ -1,0 +1,75 @@
+{% extends 'trucker/base.html'%}
+{% load static %}
+{% load i18n %}
+{% block content %}
+<!--styling to make table overflow scroll -->
+<style>
+  table tbody{
+    height: 300px;
+    overflow-y: auto;
+  }
+  table thead th{
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 5;
+    background-color: white;
+    color: black;
+  }
+  input{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+</style>
+<!-- messages end here -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<div class="row justify-content-center mt-5">
+  <div class="col-md-8">
+    <h1>{% trans "Post Your Documents" %}</h1>
+  </div>
+</div>
+
+<div class="container col-md-8">
+    <form method = "post" enctype = "multipart/form-data">
+        {% csrf_token %}
+        <!--acta constitutiva-->
+        <div class = "row justify-content-center mt-2 mb">
+          <label for = "Acta_Constitutiva"><b>Acta Constitutiva</b></label>
+          <input type = "file" id ="Acta_Constitutiva" name = "Acta_Constitutiva" required>
+        </div>
+          <!-- Constancia de Situación Fiscal de la SHCP -->
+        <div class = "row justify-content-center mt-2 mb-2">
+          <label for = "Constancia_SHCP"><b>Constancia de Situación Fiscal de la SHCP</b></label>
+          <input type = "file" id = "Constancia_SHCP" name = "Constancia_SHCP" required>
+        </div>
+
+        <!--Comprobante de Domicilio -->
+        <div class = "row justify-content-center mt-2 mb-2">
+          <label for = "Comprobante_Domicilio"><b>Comprobante de Domicilio</b></label>
+          <input type = "file" id = "Comprobante_Domicilio" name = "Comprobante_Domicilio" required>
+        </div>
+          <!--Estado de Cuenta Bancaria-->
+        <div class = "row justify-content-center mt-2 mb-2">
+          <label for = "Estado_Bancaria"><b>Estado de Cuenta Bancaria</b></label>
+          <input type = "file" id = "Estado_Bancaria" name = "Estado_Bancaria" required>
+        </div>
+
+        <div class = "row justify-content-center">
+          <!-- INE -->
+          <label for = "INE"><b>INE</b></label>
+          <input type = "file" id = "INE" name = "INE" required>
+        </div>
+
+        <div class = "row justify-content-center mt-2 mb-2">
+          <button type = "submit" class = "btn btn-secondary" id = "submit">{% trans "Upload Files" %}</button>
+        </div>
+        <!--end of form-->
+    </form>
+</div>
+{% endblock %}
