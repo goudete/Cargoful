@@ -130,6 +130,8 @@ def activate(request, uidb64, token):
         user.profile.save()
         login(request, user)
         # return redirect('home')
-        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+        return HttpResponse('authorization/email_confirmed')#HttpResponse('Thank you for your email confirmation. You can now ...')
     else:
         return HttpResponse('Activation link is invalid!')
+def email_confirmed(request):
+    return render(request, 'registration/email_confirmed.html')

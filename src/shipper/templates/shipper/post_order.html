@@ -196,7 +196,7 @@
         </div>
       </div>
       <!-- recurrence and discount menus -->
-      <div class="card">
+      <!-- <div class="card">
                 <h6 class="card-header text-center">
                 Recurrence
                 </h6>
@@ -454,7 +454,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
 
       <!-- Buttons -->
       <div class="row justify-content-center mb-5">
@@ -577,7 +577,7 @@ function fillInPrice(){
       document.getElementById('id_price').value = price;
       //$("#id_loader_block").hide();
       $("#loader_spinner").hide();
-      document.getElementById('spinner_text').innerText = "Recommended Price (pesos)"
+      document.getElementById('spinner_text').innerText = "Recommended Price (pesos): ".concat(String(price))
       $("#id_info_button").show();
     }
   });
@@ -713,6 +713,45 @@ function geolocate() {
           fillInPrice()
       }
       });
+  </script>
+  <!-- hide/show shit in recurrence menu--
+  <script>
+    $(function() {
+      $('#gridCheck1').click(function() {
+          if ($(this).is(':checked')) $('#recurrence_div').show();
+          else                        $('#recurrence_div').hide();
+      });
+  });
+  $(function() {
+    $('#discountCheck').click(function() {
+        if ($(this).is(':checked')) $('#discount_div').show();
+        else                        $('#discount_div').hide();
+    });
+  });
+  $(function() {
+    $('#daily_recurrence').click(function() {
+        if ($(this).is(':checked')) {$('#days_form').show(); $('#weeks_form').hide(); $('#months_form').hide(); $('#years_form').hide();}
+        else                        $('#daily_recurrence').hide();
+    });
+  });
+  $(function() {
+    $('#weekly_recurrence').click(function() {
+        if ($(this).is(':checked')) {$('#weeks_form').show(); $('#days_form').hide(); $('#months_form').hide(); $('#years_form').hide();}
+        else                        $('#weekly_recurrence').hide();
+    });
+  });
+  $(function() {
+    $('#monthly_recurrence').click(function() {
+        if ($(this).is(':checked')) {$('#months_form').show(); $('#days_form').hide(); $('#weeks_form').hide(); $('#years_form').hide();}
+        else                        $('#monthly_recurrence').hide();
+    });
+  });
+  $(function() {
+    $('#yearly_recurrence').click(function() {
+        if ($(this).is(':checked')) {$('#years_form').show(); $('#days_form').hide(); $('#weeks_form').hide(); $('#months_form').hide();}
+        else                        $('#yearly_recurrence').hide();
+    });
+  });
   </script>
   <!-- for making values only required of box checked -->
   <script>

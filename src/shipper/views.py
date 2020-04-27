@@ -213,13 +213,13 @@ def confirm(request):
         price = jsn['price']
 
         #get recurrence type: Daily, Weekly, Monthly or Yearly. Based on this we get the necessary variables to pass
-        recurrence_type = request.POST.get("recurrence_types", None)
-        recurrence_vars = getRecurrenceVars(recurrence_type,request,jsn)
-        recurrence_end_vars = getRecurrenceEndVars(recurrence_type,request,jsn)
-        print("RECURRENCE END VARS")
-        print(recurrence_end_vars)
-        print("JSON")
-        print(jsn)
+        # recurrence_type = request.POST.get("recurrence_types", None)
+        # recurrence_vars = getRecurrenceVars(recurrence_type,request,jsn)
+        # recurrence_end_vars = getRecurrenceEndVars(recurrence_type,request,jsn)
+        # print("RECURRENCE END VARS")
+        # print(recurrence_end_vars)
+        # print("JSON")
+        # print(jsn)
         renderDict = {
             'pu_addy': pu_address_full,
             'del_addy': del_address_full,
@@ -237,16 +237,16 @@ def confirm(request):
             'instruct': instructions,
             'price': price,
             'num_notifications': num_notifications,
-            'recurrence_type': recurrence_type
+        #    'recurrence_type': recurrence_type
         }
-        for key in recurrence_vars:
-            renderDict[key] = recurrence_vars[key]
-        for key in recurrence_end_vars:
-            renderDict[key] = recurrence_end_vars[key]
-        if "recurrence_indicator" in jsn:
-            renderDict["recurrence_indicator"] = '1'
-        else:
-            renderDict["recurrence_indicator"] = '0'
+        # for key in recurrence_vars:
+        #     renderDict[key] = recurrence_vars[key]
+        # for key in recurrence_end_vars:
+        #     renderDict[key] = recurrence_end_vars[key]
+        # if "recurrence_indicator" in jsn:
+        #     renderDict["recurrence_indicator"] = '1'
+        # else:
+        #     renderDict["recurrence_indicator"] = '0'
     else:
         pass
     #long list of variables is for the html page, all of these will be displayed in the confirmation page
@@ -274,16 +274,16 @@ def order_success(request):
         num_orders = len(order.objects.filter(shipping_company = ship))+1
         customer_order_no = 'CF'+str(id)+"-"+str(num_orders)
 
-        recurrence_type = jsn['recurrence_type']
-        recurrence_vars = getRecurrenceVarsFromConfirmation(recurrence_type,jsn)
-        recurrence_end_vars = getRecurrenceEndVarsFromConfirmation(recurrence_type,jsn)
-        print("RECURRENCE_VARS CONFIRMATION")
-        print(recurrence_vars)
-        print("RECURRENCE_END_VARS CONFIRMATION")
-        print(recurrence_end_vars)
+        # recurrence_type = jsn['recurrence_type']
+        # recurrence_vars = getRecurrenceVarsFromConfirmation(recurrence_type,jsn)
+        # recurrence_end_vars = getRecurrenceEndVarsFromConfirmation(recurrence_type,jsn)
+        # print("RECURRENCE_VARS CONFIRMATION")
+        # print(recurrence_vars)
+        # print("RECURRENCE_END_VARS CONFIRMATION")
+        # print(recurrence_end_vars)
 
         #create order
-        if recurrence_vars['recurrence_indicator'] == '0': #no recurrence selected
+        if True: #recurrence_vars['recurrence_indicator'] == '0': #no recurrence selected
             n_order = Order_Form(request.POST)
             if n_order.is_valid():
                 new_order = n_order.save(commit = False)
@@ -643,3 +643,33 @@ def get_feedback(request):
         messages.info(request, "Thank you for your feedback!")
 
         return HttpResponseRedirect('/shipper')
+
+def contact_form_view(request):
+    if request.method == "POST":
+        query_dict = request.POST #request.data doesnt work for some reason
+        print("testing accessing")
+        print(query_dict['name'])
+
+
+        customer_name = query_dict['name']
+        email = query_dict['email']
+        phone_number = query_dict['phone_number']
+        website = query_dict['website']
+        message = query_dict['message']
+
+        out_message = "Hi, " + customer_name + " has contacted the team with the following message: \n \n"
+        out_message += message + "\n \n"
+        out_message += "Get back to him at " + email + "."
+
+        send_mail(
+        customer_name + ' has Contacted the Team!', #email subject
+        out_message, #email content
+        'hellofromcargoful@gmail.com',
+        ['hellofromcargoful@gmail.com'],
+        fail_silently = False,
+        )
+        messages.info(request, "Thanks "+ str(customer_name)
+        + "! We have received your message and will get back to you shortly at " + email)
+        return HttpResponseRedirect('/shipper')
+    else:
+        return render(request, 'shipper/contact_form.html')

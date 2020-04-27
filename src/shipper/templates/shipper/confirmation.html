@@ -66,7 +66,7 @@
       </div>
     </div>
 
-    <div class="row justify-content-center mt-4">
+    <!-- <div class="row justify-content-center mt-4">
       <div class="col-4">
         <h5>Recurrence Type</h5>
         <input class = 'form-control' id = 'recurrence_type' name="recurrence_type" type="text" value = "{{recurrence_type}}" size = '60' readonly/>
@@ -75,7 +75,7 @@
         <h5>Add rec info?</h5>
         <input class = 'form-control' id = 'instructions' name="instructions" type="text" value = "{{instruct}}" size = '60' readonly/>
       </div>
-    </div>
+    </div> -->
 
     <!-- distance of order + lat and lng for pickup and delivery (hidden from user) -->
     <!-- distance of order + lat and lng for pickup and delivery (hidden from user) -->
@@ -86,29 +86,29 @@
         <td class = 'widefield'><input class = 'field' id = 'del_long' name = 'delivery_longitude' type = 'number' value = {{del_long}} hidden = 'true' readonly></td>
         <td class = 'widefield'><input class = 'field' id = 'distance' name = 'distance' type = 'number' value = {{distance}} hidden = 'true' readonly></td>
         <!-- recurrence option and indicator (1 if recurrence was checked else 0) -->
-        <td class = 'widefield'><input class = 'field' id = 'distance' name = 'recurrence_indicator' type = 'text' value = {{recurrence_indicator}} hidden = 'true'  style = "display : none" readonly></td>
-        <td class = 'widefield'><input class = 'field' id = 'distance' name = 'option' type = 'text' value = {{option}} hidden = 'true'  style = "display : none" readonly></td>
+        <!-- <td class = 'widefield'><input class = 'field' id = 'distance' name = 'recurrence_indicator' type = 'text' value = {{recurrence_indicator}} hidden = 'true'  style = "display : none" readonly></td>
+        <td class = 'widefield'><input class = 'field' id = 'distance' name = 'option' type = 'text' value = {{option}} hidden = 'true'  style = "display : none" readonly></td> -->
         <!-- recurrence end variables -->
-        <td class = 'widefield'><input class = 'field' id = 'rand' name = 'end_opt' type = 'text' value = {{end_opt}} hidden = 'true' style = "display : none;" readonly></td>
+        <!-- <td class = 'widefield'><input class = 'field' id = 'rand' name = 'end_opt' type = 'text' value = {{end_opt}} hidden = 'true' style = "display : none;" readonly></td>
         <td class = 'widefield'><input class = 'field' id = 'rand' name = 'start_day' type = 'text' value = {{start_day}} hidden = 'true' style = "display : none;" readonly></td>
         <td class = 'widefield'><input class = 'field' id = 'rand' name = 'end_by_day' type = 'text' value = {{end_by_day}} hidden = 'true' style = "display : none;" readonly></td>
-        <td class = 'widefield'><input class = 'field' id = 'rand' name = 'occurrences' type = 'text' value = {{occurrences}} hidden = 'true' style = "display : none;" readonly></td>
+        <td class = 'widefield'><input class = 'field' id = 'rand' name = 'occurrences' type = 'text' value = {{occurrences}} hidden = 'true' style = "display : none;" readonly></td> -->
         <!-- daily variables -->
-        <td class = 'widefield'><input class = 'field' id = 'rand' name = 'every_x_days' type = 'text' value = {{every_x_days}} hidden = 'true' style = "display : none;" readonly></td>
+        <!-- <td class = 'widefield'><input class = 'field' id = 'rand' name = 'every_x_days' type = 'text' value = {{every_x_days}} hidden = 'true' style = "display : none;" readonly></td> -->
         <!-- weekly variables -->
-        <td class = 'widefield'><input class = 'field' id = 'rand' name = 'number_of_weeks' type = 'number' value = {{number_of_weeks}} hidden = 'true' style = "display : none;" readonly></td>
-        <td class = 'widefield'><input class = 'field' id = 'rand' name = 'weekdays' type = 'number' value = {{weekdays}} hidden = 'true' style = "display : none;" readonly></td>
+        <!-- <td class = 'widefield'><input class = 'field' id = 'rand' name = 'number_of_weeks' type = 'number' value = {{number_of_weeks}} hidden = 'true' style = "display : none;" readonly></td>
+        <td class = 'widefield'><input class = 'field' id = 'rand' name = 'weekdays' type = 'number' value = {{weekdays}} hidden = 'true' style = "display : none;" readonly></td> -->
         <!-- monthly variables -->
-        <td class = 'widefield'><input class = 'field' id = 'rand' name = 'every_x_months' type = 'text' value = {{every_x_months}} hidden = 'true' style = "display : none;" readonly></td>
+        <!-- <td class = 'widefield'><input class = 'field' id = 'rand' name = 'every_x_months' type = 'text' value = {{every_x_months}} hidden = 'true' style = "display : none;" readonly></td>
         <td class = 'widefield'><input class = 'field' id = 'rand' name = 'day_of_month' type = 'text' value = {{day_of_month}} hidden = 'true' style = "display : none;" readonly></td>
         <td class = 'widefield'><input class = 'field' id = 'rand' name = 'day_select_month' type = 'text' value = {{day_select_month}} hidden = 'true' style = "display : none;" readonly></td>
-        <td class = 'widefield'><input class = 'field' id = 'rand' name = 'weekday_select_month' type = 'text' value = {{weekday_select_month}} hidden = 'true' style = "display : none;" readonly></td>
+        <td class = 'widefield'><input class = 'field' id = 'rand' name = 'weekday_select_month' type = 'text' value = {{weekday_select_month}} hidden = 'true' style = "display : none;" readonly></td> -->
         <!-- yearly variables -->
-        <td class = 'widefield'><input class = 'field' id = 'rand' name = 'day_of_month_year' type = 'text' value = {{day_of_month_year}} hidden = 'true' style = "display : none;" readonly></td>
+        <!-- <td class = 'widefield'><input class = 'field' id = 'rand' name = 'day_of_month_year' type = 'text' value = {{day_of_month_year}} hidden = 'true' style = "display : none;" readonly></td>
         <td class = 'widefield'><input class = 'field' id = 'rand' name = 'month_select' type = 'text' value = {{month_select}} hidden = 'true' style = "display : none;" readonly></td>
         <td class = 'widefield'><input class = 'field' id = 'rand' name = 'day_select_year' type = 'text' value = {{day_select_year}} hidden = 'true' style = "display : none;" readonly></td>
         <td class = 'widefield'><input class = 'field' id = 'rand' name = 'month_select2' type = 'text' value = {{month_select2}} hidden = 'true' style = "display : none;" readonly></td>
-        <td class = 'widefield'><input class = 'field' id = 'rand' name = 'weekday_select_year' type = 'text' value = {{weekday_select_year}} hidden = 'true' style = "display : none;" readonly></td>
+        <td class = 'widefield'><input class = 'field' id = 'rand' name = 'weekday_select_year' type = 'text' value = {{weekday_select_year}} hidden = 'true' style = "display : none;" readonly></td> -->
       </tr>
 
       <!-- <input type="submit" value="Confirm Order"> -->
