@@ -1,6 +1,6 @@
 {% extends 'shipper/base.html'%}
 
-
+{% load i18n %}
 {% block content %}
 <style>
   input[type=checkbox] + .reveal_after_check{
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <div class="row justify-content-center mt-5">
     <div class="col-md-8">
-      <h1>Edit Order</h1>
+      <h1>{% trans "Edit Order" %}</h1>
     </div>
   </div>
 
@@ -24,7 +24,7 @@
 
       <div class="row justify-content-center mt-3">
         <div class="col-md-4">
-          <h5>Pick Up Address</h5>
+          <h5>{% trans "Pick Up Address" %}</h5>
             <input class="form-control"
                    id="autocomplete"
                    name = "pu_addy"
@@ -34,12 +34,12 @@
                    value = "{{pu_addy}}"
                    required/>
             <div class = "invalid-feedback">
-                  Please Choose a Pickup Address
+                  {% trans "Please Choose a Pickup Address" %}
             </div>
         </div>
 
         <div class="col-md-4">
-          <h5>Delivery Address</h5>
+          <h5>{% trans "Delivery Address" %}</h5>
                 <input class="form-control"
                        id="autocomplete2"
                        name = "del_addy"
@@ -49,7 +49,7 @@
                        value = "{{del_addy}}"
                        required/>
                 <div class = "invalid-feedback">
-                  Please Choose a Delivery Address
+                  {% trans "Please Choose a Delivery Address" %}
                 </div>
         </div>
       </div>
@@ -104,18 +104,18 @@
         <!-- determine if box should be checked or not -->
         <div class = "col-4">
           {% if date == "" %}
-          <label for = "include_date">Include Pickup Date</label>
+          <label for = "include_date">{% trans "Include Pickup Date" %}</label>
           <input type = "checkbox" name = "include_date" value = "include_date" id = "include_date">
           {% else %}
-          <label for = "include_date">Include Pickup Date</label>
+          <label for = "include_date">{% trans "Include Pickup Date" %}</label>
           <input type = "checkbox" name = "include_date" value = "include_date" id = "include_date" checked>
           {% endif %}
           <!-- form for date -->
           <div class="reveal_after_check">
-            <h5>Pickup Date</h5>
+            <h5>{% trans "Pickup Date" %}</h5>
             <input class = 'form-control require-if-active' id = 'datepicker' name="pickup_date" value = "{{ date }}" size = '60' required/>
             <div class = "invalid-feedback">
-              Please Choose a Pickup Date
+              {% trans "Please Choose a Pickup Date" %}
             </div>
           </div>
         </div>
@@ -123,18 +123,18 @@
         <div class = "col-4">
           <!-- determine if box should be checked or not -->
           {% if time == "" %}
-          <label for = "include_date">Include Pickup Time</label>
+          <label for = "include_date">{% trans "Include Pickup Time" %}</label>
           <input class = "col-4" type = "checkbox" name = "include_time" value = "include_time" id = "include_time">
           {% else %}
-          <label for = "include_date">Include Pickup Time</label>
+          <label for = "include_date">{% trans "Include Pickup Time" %}</label>
           <input class = "col-4" type = "checkbox" name = "include_time" value = "include_time" id = "include_time" checked>
           {% endif %}
           <!-- form for time -->
           <div class="reveal_after_check">
-            <h5>Pickup Time</h5>
+            <h5>{% trans "Pickup Time" %}</h5>
             <input class = "form-control require-if-active" id = "timepicker" name = "pickup_time" value = "{{ time }}" size = '60' required/>
             <div class = "invalid-feedback">
-              Please Choose a Pickup Time
+              {% trans "Please Choose a Pickup Time" %}
             </div>
           </div>
         </div>
@@ -142,7 +142,7 @@
 
       <div class="row justify-content-center mt-4">
         <div class="col-4">
-          <h5>Truck Type</h5>
+          <h5>{% trans "Truck Type" %}</h5>
           <select id = 'truck_type' name="truck_type"  class = 'form-control' required>
               {% for key, value in truck_dict %}
                 {% if value == truck %}
@@ -154,21 +154,21 @@
           </select>
         </div>
         <div class="col-4">
-          <h5>Price</h5>
+          <h5>{% trans "Price" %}</h5>
           <input class = 'form-control' id = 'price' name="price" type="number" step="0.01" value = {{price}} size = '60' required/>
         </div>
       </div>
 
       <div class="row justify-content-center mt-3">
         <div class="col-8">
-          <h5>Contents</h5>
+          <h5>{% trans "Contents" %}</h5>
           <input class = 'form-control' id = 'contents' name="contents" type="text" value = "{{contents}}" size = '60' required/>
         </div>
       </div>
 
       <div class = "row justify-content-center mt-3">
         <div class="col-8">
-          <h5>Instructions</h5>
+          <h5>{% trans "Instructions" %}</h5>
           <input class = 'form-control' id = 'instructions' name="instructions" type="text" value = "{{instructions}}" size = '60' required/>
         </div>
       </div>
@@ -178,10 +178,10 @@
       <div class="row justify-content-center mb-5">
         <div class="btn-group">
           <div class="col-5">
-            <a href="/shipper" type="button" class="btn btn-danger mt-3" aria-pressed="true">Cancel</a>
+            <a href="/shipper" type="button" class="btn btn-danger mt-3" aria-pressed="true">{% trans "Cancel" %}</a>
           </div>
           <div class="col-5">
-            <button type="submit" class="btn btn-success mt-3">Confirm</button>
+            <button type="submit" class="btn btn-success mt-3">{% trans "Confirm" %}</button>
           </div>
         </div>
       </div>

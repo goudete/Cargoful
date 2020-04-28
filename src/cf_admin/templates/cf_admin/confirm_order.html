@@ -1,13 +1,14 @@
 {% extends 'cf_admin/base.html'%}
-{% load static %}
 
+{% load static %}
+{% load i18n %}
 {% block content %}
 <div class="container">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
   <div class="row justify-content-center mt-5">
     <div class="col-md-8">
-      <h1>Confirm Order</h1>
+      <h1>{% trans "Confirm Order" %}</h1>
     </div>
   </div>
 
@@ -22,47 +23,47 @@
 
     <div class="row justify-content-center">
       <div class="col-8">
-        <h5>Pickup Address</h5>
+        <h5>{% trans "Pickup Address" %}</h5>
         <input class = 'form-control' id = 'addy'  type = 'text' value = '{{order.pickup_address}}' size = '60' readonly>
       </div>
     </div>
 
     <div class="row justify-content-center">
       <div class="col-8">
-        <h5>Delivery Address</h5>
+        <h5>{% trans "Delivery Address" %}</h5>
         <input class = 'form-control' id = 'addy'  type = 'text' value = '{{order.delivery_address}}' size = '60' readonly>
       </div>
     </div>
 
     <div class="row justify-content-center mt-4">
       <div class="col-4">
-        <h5>Pickup Date</h5>
+        <h5>{% trans "Pickup Date" %}</h5>
         <input class = 'form-control' id = 'date'  type="text" value = "{{order.pickup_date}}" size = '60' readonly/>
       </div>
       <div class="col-4">
-        <h5>Pickup Time</h5>
+        <h5>{% trans "Pickup Time" %}</h5>
         <input class = 'form-control' id = 'time'  type="text" value = "{{order.pickup_time}}" size = '60' readonly/>
       </div>
     </div>
 
     <div class="row justify-content-center mt-4">
       <div class="col-4">
-        <h5>Truck Type</h5>
+        <h5>{% trans "Truck Type" %}</h5>
         <input class = 'form-control' id = 'truck_type'  type="text" value = "{{order.truck_type}}" size = '60' readonly/>
       </div>
       <div class="col-4">
-        <h5>Price</h5>
+        <h5>{% trans "Price" %}</h5>
         <input class = 'form-control' id = 'price'  type="number" step="0.01" value = {{order.price}} size = '60' readonly/>
       </div>
     </div>
 
     <div class="row justify-content-center mt-4">
       <div class="col-4">
-        <h5>Contents</h5>
+        <h5>{% trans "Contents" %}</h5>
         <input class = 'form-control' id = 'contents' type="text" value = "{{order.contents}}" size = '60' readonly/>
       </div>
       <div class="col-4">
-        <h5>Instructions</h5>
+        <h5>{% trans "Instructions" %}</h5>
         <input class = 'form-control' id = 'instructions' type="text" value = "{{order.instructions}}" size = '60' readonly/>
       </div>
     </div>
@@ -75,11 +76,11 @@
       <div class="btn-group">
         <!-- cancel button -->
         <div class="col-5">
-          <a href="/cf_admin" type="button" class="btn btn-danger" aria-pressed="true">Cancel</a>
+          <a href="/cf_admin" type="button" class="btn btn-danger" aria-pressed="true">{% trans "Cancel" %}</a>
         </div>
         <!-- confirm order button-->
         <div class="col-5">
-          <button type="submit" class="btn btn-success">Approve</button>
+          <button type="submit" class="btn btn-success">{% trans "Approve" %}</button>
         </div>
       </div>
     </div>

@@ -30,6 +30,7 @@ from trucker.models import counter_offer
 from .recurrence_handlers import getRecurrenceVars, getRecurrenceEndVars, getRecurrenceVarsFromConfirmation, getRecurrenceEndVarsFromConfirmation, saveWeeklyRecurringOrder
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
+from django.utils.translation import gettext as _
 
 # Create your views here.
 
@@ -305,7 +306,7 @@ def order_success(request):
                 new_order.delivery_address = del_address
                 new_order.distance = round(dist,2)
                 new_order.save()
-                messages.info(request, "Order "+ str(customer_order_no) + " Placed Successfully")
+                messages.info(request, _("Order ") + str(customer_order_no) + _(" Placed Successfully"))
                 #notify truckers per email
                 users = User.objects.filter(groups__name='Trucker') #get truckers, needs to be User objects cos that's where the email is
                 for user in users:
@@ -461,7 +462,7 @@ def make_connection_request(request):
     receiver = User.objects.filter(id = jsn['trucker_id']).first() #get recipient of request
     sender = request.user
     Friend.objects.add_friend(sender, receiver) #send 'friend request' which in this case is a connection request
-    messages.info(request, "Requested Connection With "+ str(receiver.profile.company_name))
+    messages.info(request, _("Requested Connection With ")+ str(receiver.profile.company_name))
     return HttpResponseRedirect('/shipper')
 
 @login_required
@@ -498,7 +499,7 @@ def accept_request(request):
         req = FriendshipRequest.objects.get(id = jsn['request_id'])
         req.accept()
         Follow.objects.add_follower(request.user, req.from_user)
-        messages.info(request, "Connection from " + str(req.from_user.profile.company_name) + " Accepted")
+        messages.info(request, _("Connection from ") + str(req.from_user.profile.company_name) + _(" Accepted"))
         return HttpResponseRedirect('/shipper/notifications')
 
 @login_required
@@ -652,7 +653,7 @@ def get_feedback(request):
         user = request.user
         feedback = User_Feedback(user = user, feedback = jsn['feedback'])
         feedback.save()
-        messages.info(request, "Thank you for your feedback!")
+        messages.info(request, _("Thank you for your feedback!"))
 
         return HttpResponseRedirect('/shipper')
 

@@ -15,8 +15,11 @@ from CargoFul import settings
 from trucker.file_storage import FileStorage
 import os
 from django.core.mail import send_mail
+from django.utils.translation import gettext as _
+
 # Create your views here.
 
+# Create your views here.
 @login_required
 @allowed_users(allowed_roles=['Trucker'])
 def Available_Orders(request):
@@ -115,7 +118,7 @@ def Accept_Order(request):
             #create new status update notification for shipper
             s_u = status_update.objects.create(trucker = me, shipper = cur_order.shipping_company, old_status = 1, new_status = 2, order = cur_order, read = False)
             s_u.save()
-            messages.info(request, "Order " + str(cur_order.customer_order_no) + " Accepted")
+            messages.info(request, _("Order ") + str(cur_order.customer_order_no) + _(" Accepted"))
             return HttpResponseRedirect('/trucker')
 
 @login_required
@@ -170,7 +173,7 @@ def Accept_Connect(request):
         req = FriendshipRequest.objects.get(id = jsn['request_id'])
         req.accept()
         Follow.objects.add_follower(request.user, req.from_user)
-        messages.info(request, "Connection from " + str(req.from_user.profile.company_name) + " Accepted")
+        messages.info(request, _("Connection from ") + str(req.from_user.profile.company_name) + _(" Accepted"))
         return HttpResponseRedirect('/trucker/connection_requests')
 
 @login_required
@@ -250,7 +253,7 @@ def Send_Connection_Request(request):
         receiver = User.objects.filter(id = jsn['shipper_id']).first() #get recipient of request
         sender = request.user
         Friend.objects.add_friend(sender, receiver) #send 'friend request' which in this case is a connection request
-        messages.info(request, "Requested Connection With "+ str(receiver.profile.company_name))
+        messages.info(request, _("Requested Connection With ")+ str(receiver.profile.company_name))
         return HttpResponseRedirect('/trucker')
 
 @login_required

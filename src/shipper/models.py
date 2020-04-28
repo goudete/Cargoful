@@ -6,6 +6,8 @@ from datetime import date
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
+
 
 """this is the shipper model, a shipper has cargo that they need delivered"""
 class shipper(models.Model):
@@ -45,20 +47,20 @@ class order(models.Model):
     pickup_address = models.TextField(default = "")
     delivery_address = models.TextField(default = "")
     #date info
-    pickup_date = models.DateField(default = date.today, auto_now_add = False, blank = True, null = True)
+    pickup_date = models.DateField(_('Pickup Date'), default = date.today, auto_now_add = False, blank = True, null = True)
     delivery_date = models.DateField(default = date.today, auto_now_add = False)
     #other specs
-    price = models.DecimalField(default = 0.0, max_digits = 9, decimal_places = 2, validators=[MinValueValidator(0.0)])
+    price = models.DecimalField(_('Price'), default = 0.0, max_digits = 9, decimal_places = 2, validators=[MinValueValidator(0.0)])
     distance = models.DecimalField(default = 0.0, max_digits = 15, decimal_places = 2)
     carta_porte = models.ImageField(upload_to = get_carta_porte_path, blank = True, null = True)
     orden_de_embarco = models.ImageField(upload_to = get_orden_de_embarco, blank = True, null = True)
     shipment_number = models.PositiveIntegerField(default = 0)
     numero_de_pedido = models.PositiveIntegerField(default = 0)
     numero_de_abaran = models.PositiveIntegerField(default = 0)
-    pickup_time = models.TimeField(default = timezone.now, auto_now_add = False, blank = True, null = True)
+    pickup_time = models.TimeField(_('Pickup Time'), default = timezone.now, auto_now_add = False, blank = True, null = True)
     delivery_time = models.TimeField(default = timezone.now, auto_now_add = False)
-    contents = models.TextField(default = '')
-    instructions = models.TextField(default = '')
+    contents = models.TextField(_('Contents'), default = '')
+    instructions = models.TextField(_('Instructions'), default = '')
     created_at = models.DateTimeField(auto_now_add=True)
     #truck_type is an option field, the user can pick one of the following options
     TRUCK_TYPES = [
@@ -90,6 +92,7 @@ class order(models.Model):
     ]
     #create actual field
     truck_type = models.CharField(
+        _('Truck Type'),
         max_length = 40,
         choices = TRUCK_TYPES, #references above list object
         default = 'LB'
@@ -112,7 +115,7 @@ class WeeklyRecurringOrder(order):
     end_by_day = models.CharField(max_length = 40, default = 'end')
     indefinite = models.BooleanField(default = False)
     occurrences =  models.CharField(max_length = 40, default = "occs")
-    
+
 #this model is only for when a trucker updates the status of an order
 class status_update(models.Model):
     trucker = models.ForeignKey(truck_company, on_delete = models.CASCADE) #the trucker that updated the order

@@ -1,7 +1,7 @@
 {% extends 'shipper/base.html'%}
 
 {% load crispy_forms_tags %}
-
+{% load i18n %}
 {% block content %}
 <!-- this is for bootstrap popover as well as the information icon -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <div class="row justify-content-center mt-5">
     <div class="col-md-8">
-      <h1>New Order</h1>
+      <h1>{% trans "New Order" %}</h1>
     </div>
   </div>
 
@@ -44,7 +44,7 @@
 
       <div class="row justify-content-center mt-3">
         <div class="col-md-4">
-          <h5>Pick Up Address</h5>
+          <h5>{% trans "Pick Up Address" %}</h5>
             <input class="form-control"
                    id="autocomplete"
                    name = "pu_addy"
@@ -53,12 +53,12 @@
                    size = '40'
                    required/>
             <div class = "invalid-feedback">
-                  Please Choose a Pickup Address
+                  {% trans "Please Choose a Pickup Address" %}
             </div>
         </div>
 
         <div class="col-md-4">
-          <h5>Delivery Address</h5>
+          <h5>{% trans "Delivery Address" %}</h5>
                 <input class="form-control"
                        id="autocomplete2"
                        name = "del_addy"
@@ -67,7 +67,7 @@
                        size = '40'
                        required/>
                 <div class = "invalid-feedback">
-                  Please Choose a Delivery Address
+                  {% trans "Please Choose a Delivery Address" %}
                 </div>
         </div>
       </div>
@@ -122,25 +122,25 @@
       <div class="row justify-content-center">
         <!-- checkbox to include date -->
         <div class = "col-4">
-          <label for = "include_date">Include Pickup Date</label>
+          <label for = "include_date">{% trans "Include Pickup Date" %}</label>
           <input type = "checkbox" name = "include_date" value = "include_date" id = "include_date">
           <!--what pops down if you check the box -->
           <div class="reveal_after_check">
             {{ form.pickup_date|as_crispy_field }}
             <div class = "invalid-feedback">
-              Please Choose a Pickup Date
+              {% trans "Please Choose a Pickup Date" %}
             </div>
           </div>
         </div>
         <!--checkbox to include a time -->
         <div class = "col-4">
-          <label for = "include_time">Include Pickup Time</label>
+          <label for = "include_time">{% trans "Include Pickup Time" %}</label>
           <input type = "checkbox" id = "include_time" name = "include_time" value = "include time">
           <!-- what comes down if you check the box -->
           <div class="reveal_after_check">
             {{ form.pickup_time|as_crispy_field }}
             <div class = "invalid-feedback">
-              Please Choose a Pickup Time
+              {% trans "Please Choose a Pickup Time" %}
             </div>
           </div>
         </div>
@@ -150,26 +150,26 @@
         <div class="col-4">
           {{ form.truck_type|as_crispy_field }}
           <div class = "invalid-feedback">
-            Please Choose a Truck Type
+            {% trans "Please Choose a Truck Type" %}
           </div>
         </div>
         <div class="col-4">
           {{form.price|as_crispy_field }}
           <div class = "invalid-feedback">
-            Please Enter a Price
+            {% trans "Please Enter a Price" %}
           </div>
           <!-- loading spinner and info icon-->
           <div class="row">
             <div class="col">
               <div class="loader-block" id = id_loader_block>
                 <div class="loader" id = "loader_spinner"></div>
-                <div class="loader_text" id = "spinner_text" onclick = "popupToggle()">Calculating Recommended Price...
+                <div class="loader_text" id = "spinner_text" onclick = "popupToggle()">{% trans "Calculating Recommended Price..." %}
                 </div>
               </div>
             </div>
             <div class="col-md-auto">
               <a tabindex="0" class="btn btn-sm btn-outline-primary py-0" role="button" data-toggle="popover" data-trigger="focus" style="font-size: 0.8em;"
-              id = "id_info_button" title="CargoFul Price Recommendation" data-content="Based on the truck type you selected as well as the distance of the trip, CargoFul suggests setting this price.">
+              id = "id_info_button" title="{% trans 'CargoFul Price Recommendation' %}" data-content="{% trans 'Based on the truck type you selected as well as the distance of the trip, CargoFul suggests setting this price.' %}">
               <i class="fas fa-info-circle"></i>
             </a>
             </div>
@@ -182,7 +182,7 @@
         <div class="col-4">
           {{ form.contents|as_crispy_field }}
           <div class = "invalid-feedback">
-            Please Specify Contents
+            {% trans "Please Specify Contents" %}
           </div>
         </div>
       <!-- </div> -->
@@ -191,7 +191,7 @@
         <div class="col-4">
           {{ form.instructions|as_crispy_field }}
           <div class = "invalid-feedback">
-            If You Have No Specific Instructions, Put N/A
+            {% trans "If You Have No Specific Instructions, Put N/A" %}
           </div>
         </div>
       </div>
@@ -460,10 +460,10 @@
       <div class="row justify-content-center mb-5">
         <div class="btn-group">
           <div class="col-5">
-            <a href="/shipper" type="button" class="btn btn-danger" aria-pressed="true">Cancel</a>
+            <a href="/shipper" type="button" class="btn btn-danger" aria-pressed="true">{% trans "Cancel" %}</a>
           </div>
           <div class="col-5">
-            <button type="submit" class="btn btn-success">Post</button>
+            <button type="submit" class="btn btn-success">{% trans "Post" %}</button>
           </div>
         </div>
       </div>
@@ -577,7 +577,7 @@ function fillInPrice(){
       document.getElementById('id_price').value = price;
       //$("#id_loader_block").hide();
       $("#loader_spinner").hide();
-      document.getElementById('spinner_text').innerText = "Recommended Price (pesos): ".concat(String(price))
+      document.getElementById('spinner_text').innerText = "{% trans 'Recommended Price (pesos)' %}".concat(String(price))
       $("#id_info_button").show();
     }
   });

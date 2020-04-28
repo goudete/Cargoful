@@ -1,5 +1,6 @@
 {% extends 'shipper/base.html'%}
 
+{% load i18n %}
 {% block content %}
 
 <!-- Welcome and Successful order messages -->
@@ -30,20 +31,20 @@
 <!-- messages end here -->
 
 <!-- Pending Account Acceptance Message -->
-{% if company.user.profile.is_approved == False %}
+<!-- {% if company.user.profile.is_approved == False %}
 <div class="row justify-content-center mt-3">
   <div class="col-md-8">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title">Your Account is Pending Approval</h5>
+        <h5 class="card-title">{% trans "Your Account is Pending Approval</h5>
         <p class="card-text">
-          Reach out if you have any questions: help@cargoful.org
+          {% trans "Reach out if you have any questions: help@cargoful.org
         </p>
       </div>
     </div>
   </div>
 </div>
-{% endif %}
+{% endif %} -->
 <!-- Pending Account Acceptance Message Ends -->
 
 
@@ -64,13 +65,13 @@
 
 <div class="row justify-content-center mt-5">
   <div class="col-md-10">
-    <h1>Past Orders</h1>
+    <h1>{% trans "Past Orders" %}</h1>
   </div>
 </div>
 
 <div class="row justify-content-center pt-2">
   <div class="col-md-10">
-    <p><b>Total: {{set.count}}</b></p>
+    <p><b>{% trans "Total" %}: {{set.count}}</b></p>
   </div>
 </div>
 
@@ -83,14 +84,14 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <tr>
-      <th scope = 'col'>Order Number</th>
-      <th scope = 'col'>Pickup Address</th>
-      <th scope = 'col'>Delivery Address</th>
-      <th scope = 'col'>Pickup Date</th>
-      <th scope = 'col'>Distance</th>
-      <th scope = 'col'>Contents</th>
-      <th scope = "col">Trucking Company</th>
-      <th scope="col">Price</th>
+      <th scope = 'col'>{% trans "Order Number" %}</th>
+      <th scope = 'col'>{% trans "Pickup Address" %}</th>
+      <th scope = 'col'>{% trans "Delivery Address" %}</th>
+      <th scope = 'col'>{% trans "Pickup Date" %}</th>
+      <th scope = 'col'>{% trans "Distance" %}</th>
+      <th scope = 'col'>{% trans "Contents" %}</th>
+      <th scope = "col">{% trans "Trucking Company" %}</th>
+      <th scope="col">{% trans "Price" %}</th>
     </tr>
   </thead>
 
@@ -117,7 +118,7 @@
     </tr>
   </thead>
   <tbody>
-    <td align="center"><h4><b>No Past Orders</b></h4></td>
+    <td align="center"><h4><b>{% trans "No Past Orders" %}</b></h4></td>
   </tbody>
   {% endif %}
 </table>

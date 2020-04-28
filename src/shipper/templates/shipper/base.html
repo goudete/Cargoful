@@ -1,4 +1,6 @@
 {% load static %}
+{% load i18n %}
+
 
 <!doctype html>
 <html lang="en">
@@ -9,7 +11,7 @@
 
    <!-- CoreUI CSS -->
    <link rel="stylesheet" href="https://unpkg.com/@coreui/coreui@3.0.0-rc.0/dist/css/coreui.min.css" crossorigin="anonymous">
-   <title>CargoFul</title>
+   <title>Cargoful</title>
 
    <!-- Loading static files -->
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -74,33 +76,33 @@
          <form class="form-inline" action = "search_truckers" method = "POST">
            {% csrf_token %}
            <div class="form-group col-xs-5 col-lg-1">
-             <input class="form-control mr-sm-2" type="search" name = "query" placeholder="Search Truckers" aria-label="Search">
+             <input class="form-control mr-sm-2" type="search" name = "query" placeholder="{% trans 'Search Truckers' %}" aria-label="Search">
            </div>
            <input type = 'submit' style="display: none;">
          </form>
          <!-- End SearchBar -->
-
      </div>
+
      <div class="d-flex">
        <ul class="nav">
          <li class="nav-item">
-         <a class="nav-link disabled" href="#" style = "color: white;">Hello, {{ request.user }}</a>
+         <a class="nav-link disabled" href="#" style = "color: white;">{% trans "Hello" %}, {{ request.user }}</a>
          </li>
          <!-- other buttons -->
          <li class="nav-item mr-3">
-             <a href="/shipper/" class="btn btn-secondary">My Orders</a>
+             <a href="/shipper/" class="btn btn-secondary">{% trans "My Orders" %}</a>
          </li>
          <li class="nav-item mr-3">
-             <a href="/shipper/past_orders" class="btn btn-secondary">Past Orders</a>
+             <a href="/shipper/past_orders" class="btn btn-secondary">{% trans "Past Orders" %}</a>
          </li>
          <li class = "nav-item mr-3">
-           <a href = "/shipper/notifications" class = "btn btn-secondary">Notifications{% if num_notifications > 0 %} ({{ num_notifications }}){% endif %}</a>
+           <a href = "/shipper/notifications" class = "btn btn-secondary">{% trans "Notifications" %}{% if num_notifications > 0 %} ({{ num_notifications }}){% endif %}</a>
          </li>
          <li class = 'nav-item mr-3'>
-           <a href = "/shipper/connection_requests" class = "btn btn-secondary">My Truckers</a>
+           <a href = "/shipper/connection_requests" class = "btn btn-secondary">{% trans "My Truckers" %}</a>
          </li>
          <li class="nav-item mr-5">
-             <a href="{% url 'logout' %}" class="btn btn-secondary">Logout</a>
+             <a href="{% url 'logout' %}" class="btn btn-secondary">{% trans "Logout" %}</a>
          </li>
       </ul>
      </div>
@@ -126,29 +128,32 @@
 
           <!-- Grid column -->
           <div class="col-md-2 mxr-auto mt-3">
-            <h6 class="text-uppercase mb-4 font-weight-bold text-white">CargoFul</h6>
-            <p class="text-white">Disrupting Mexican Logistics</p>
+            <h6 class="text-uppercase mb-4 font-weight-bold text-white">Cargoful</h6>
+            <p class="text-white">{% trans "Disrupting Mexican Logistics" %}</p>
           </div>
 
           <!-- Grid column -->
           <hr class="w-100 clearfix d-md-none">
 
           <!-- Start Feedback form -->
-          <form class="form-inline" action = "get_feedback" method = "POST">
+          <!-- <form class="form-inline" action = "get_feedback" method = "POST">
             {% csrf_token %}
             <div class="form-group col-xs-5 col-lg-1">
-              <input type="text" class="form-control mr-sm-2"  name = "feedback" id="feedback" placeholder="Feedback?" aria-label="Search">
+              <input type="text" class="form-control mr-sm-2"  name = "feedback" id="feedback" placeholder="Feedback?" aria-label="Search"> -->
               <!-- <input type="text" name="user_id" value={{ request.user }} hidden='True'> -->
-            </div>
+            <!-- </div>
             <input type = 'submit' style="display: none;">
-          </form>
+          </form> -->
           <!-- End Feedback Form -->
 
           <!-- Grid column -->
           <div class="col-md-2 ml-auto mt-3 text-white">
             <a class="btn btn-secondary" href = "/shipper/contact" class="text-uppercase mb-4 font-weight-bold">
               <!--<a href = "/shipper/contact" />-->
-              Contact Us</a>
+              {% trans "Contact Us" %}</a>
+
+              <!-- <h6 class="text-uppercase mb-4 font-weight-bold">{% trans "Contact" %}</h6> -->
+
             <!-- <p class="text-white">
               <i class="fas fa-home mr-3"></i> Mexico City, Mexico</p> -->
             <!-- <p class="text-white">

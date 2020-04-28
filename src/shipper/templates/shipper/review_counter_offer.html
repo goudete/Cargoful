@@ -1,12 +1,13 @@
 {% extends 'shipper/base.html'%}
-{% load static %}
 
+{% load static %}
+{% load i18n %}
 {% block content %}
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
   <div class="row justify-content-center mt-5">
     <div class="col-md-8">
-      <h1>Review Order</h1>
+      <h1>{% trans "Review Order" %}</h1>
     </div>
   </div>
 
@@ -21,47 +22,47 @@
 
     <div class="row justify-content-center">
       <div class="col-8">
-        <h5>Pickup Address</h5>
+        <h5>{% trans "Pickup Address" %}</h5>
         <input class = 'form-control' id = 'addy' type = 'text' value = '{{order.pickup_address}}' size = '60' readonly>
       </div>
     </div>
 
     <div class="row justify-content-center">
       <div class="col-8">
-        <h5>Delivery Address</h5>
+        <h5>{% trans "Delivery Address" %}</h5>
         <input class = 'form-control' id = 'addy' type = 'text' value = '{{order.delivery_address}}' size = '60' readonly>
       </div>
     </div>
 
     <div class="row justify-content-center mt-4">
       <div class="col-4">
-        <h5>Pickup Date</h5>
+        <h5>{% trans "Pickup Date" %}</h5>
         <input class = 'form-control' id = 'date' value = "{{order.pickup_date}}" size = '60' readonly/>
       </div>
       <div class="col-4">
-        <h5>Pickup Time</h5>
+        <h5>{% trans "Pickup Time" %}</h5>
         <input class = 'form-control' id = 'time' type="text" value = "{{order.pickup_time}}" size = '60' readonly/>
       </div>
     </div>
 
     <div class="row justify-content-center mt-4">
       <div class="col-4">
-        <h5>Truck Type</h5>
+        <h5>{% trans "Truck Type" %}</h5>
         <input class = 'form-control' id = 'truck_type' type="text" value = "{{order.truck_type}}" size = '60' readonly/>
       </div>
       <div class="col-4">
-        <h5>Contents</h5>
+        <h5>{% trans "Contents" %}</h5>
         <input class = 'form-control' id = 'contents' type="text" value = "{{order.contents}}" size = '60' readonly/>
       </div>
     </div>
 
     <div class="row justify-content-center mt-4">
       <div class="col-4">
-        <h5>Your Price</h5>
+        <h5>{% trans "Your Price" %}</h5>
         <input class = 'form-control' id = 'price' type="number" step="0.01" value = {{order.price}} size = '60' readonly/>
       </div>
       <div class="col-4">
-        <h5 style = "color:red">Counter Price</h5>
+        <h5 style = "color:red">{% trans "Counter Price" %}</h5>
         <input class = 'form-control' id = 'price' type="number" step="0.01" style = "color:red" value = {{counter.counter_price}} size = '60' readonly/>
       </div>
     </div>
@@ -77,11 +78,11 @@
       <div class="btn-group">
         <!-- deny counter offer button -->
         <div class="col-5">
-          <button type = "submit" class="btn btn-danger" formaction = "deny_counter_offer" aria-pressed="true">Deny</button>
+          <button type = "submit" class="btn btn-danger" formaction = "deny_counter_offer" aria-pressed="true">{% trans "Deny" %}</button>
         </div>
         <!-- accept counter offer button-->
         <div class="col-5">
-          <button type="submit" class="btn btn-success">Accept</button>
+          <button type="submit" class="btn btn-success">{% trans "Accept" %}</button>
           <!-- id="confirm_button" data-toggle="modal" data-target="#order_successModal" -->
         </div>
       </div>

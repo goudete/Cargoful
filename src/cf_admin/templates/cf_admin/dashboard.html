@@ -1,5 +1,6 @@
 {% extends 'cf_admin/base.html'%}
 
+{% load i18n %}
 {% block content %}
 
 <!-- Welcome and Successful order messages -->
@@ -41,14 +42,14 @@
 
 <div class="row justify-content-center mt-5">
   <div class="col-md-10">
-    <h2>CargoFul Admin</h2>
+    <h2>Cargoful Admin</h2>
   </div>
 </div>
 
 <!-- New Users Dashboard Starts-->
 <div class="row justify-content-center mt-5">
   <div class="col-md-10">
-    <h4>New Users</h4>
+    <h4>{% trans "New Users" %}</h4>
   </div>
 </div>
 
@@ -60,10 +61,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <tr>
-      <th scope = 'col'>User Type</th>
-      <th scope = 'col'>Company Name</th>
-      <th scope = 'col'>Email</th>
-      <th scope = 'col'>Created At</th>
+      <th scope = 'col'>{% trans "User Type" %}</th>
+      <th scope = 'col'>{% trans "Company Name" %}</th>
+      <th scope = 'col'>{% trans "Email" %}</th>
+      <th scope = 'col'>{% trans "Created At" %}</th>
     </tr>
   </thead>
 
@@ -86,13 +87,13 @@
       <td>
         <form action = "/cf_admin/approve_user" method = "post"> {% csrf_token %}
           <input id="profile_id" name="profile_id" type="number" value="{{u.id}}" hidden = "true"/>
-          <button type = "submit" class = "btn btn-secondary">Approve</button>
+          <button type = "submit" class = "btn btn-secondary">{% trans "Approve" %}</button>
         </form>
       </td>
       <td>
         <form action = "/cf_admin/delete_user" method = "post"> {% csrf_token %}
           <input id="profile_id" name="profile_id" type="number" value="{{u.id}}" hidden="true"/>
-          <button type = "submit" class = "btn btn-secondary">Delete</button>
+          <button type = "submit" class = "btn btn-secondary">{% trans "Delete" %}</button>
         </form>
       </td>
     </tr>
@@ -108,7 +109,7 @@
 <!-- New Orders Dashboard Starts -->
 <div class="row justify-content-center mt-5">
   <div class="col-md-10">
-    <h4>New Orders</h4>
+    <h4>{% trans "New Orders" %}</h4>
   </div>
 </div>
 
@@ -120,15 +121,15 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <tr>
-      <th scope = 'col'>Order Number</th>
-      <th scope = 'col'>Company Name</th>
-      <th scope = 'col'>Email</th>
-      <th scope = 'col'>Pickup Date</th>
-      <th scope = 'col'>Pickup Address</th>
-      <th scope = 'col'>Delivery Address</th>
-      <th scope = 'col'>Contents</th>
-      <th scope="col">Price</th>
-      <th scope = 'col'>Created At</th>
+      <th scope = 'col'>{% trans "Order Number" %}</th>
+      <th scope = 'col'>{% trans "Company Name" %}</th>
+      <th scope = 'col'>{% trans "Email" %}</th>
+      <th scope = 'col'>{% trans "Pickup Date" %}</th>
+      <th scope = 'col'>{% trans "Pickup Address" %}</th>
+      <th scope = 'col'>{% trans "Delivery Address" %}</th>
+      <th scope = 'col'>{% trans "Contents" %}</th>
+      <th scope="col">{% trans "Price" %}</th>
+      <th scope = 'col'>{% trans "Created At" %}</th>
       <th scope = "col"></th>
       <th scope = "col"></th>
     </tr>
@@ -149,13 +150,13 @@
       <td>
         <form action = "/cf_admin/approve_order" method = "post"> {% csrf_token %}
           <input id = "order_id" name = "order_id" type = "number" value = {{o.id}} hidden = "true"/>
-          <button type = "submit" class = "btn btn-secondary">Review</button>
+          <button type = "submit" class = "btn btn-secondary">{% trans "Review" %}</button>
         </form>
       </td>
       <td>
         <form action = "/cf_admin/delete_order" method = "post"> {% csrf_token %}
           <input id="order_id" name="order_id" type="number" value="{{o.id}}" hidden="true"/>
-          <button type = "submit" class = "btn btn-secondary">Delete</button>
+          <button type = "submit" class = "btn btn-secondary">{% trans "Delete" %}</button>
         </form>
       </td>
     </tr>

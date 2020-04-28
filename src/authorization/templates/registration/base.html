@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 
 <!doctype html>
 <html lang="en">
@@ -9,7 +10,7 @@
 
  <!-- CoreUI CSS -->
  <link rel="stylesheet" href="https://unpkg.com/@coreui/coreui@3.0.0-rc.0/dist/css/coreui.min.css" crossorigin="anonymous">
- <title>CargoFul</title>
+ <title>Cargoful</title>
 
  <!-- Loading static files -->
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -30,6 +31,21 @@
                    <span class="navbar-toggler-icon"></span>
                </button>
            </div>
+       </div>
+       <div class="d-flex">
+         <ul class="nav">
+           <li class="nav-item">
+             <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {% trans "Language" %}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="/set_language_es">Español</a>
+                  <a class="dropdown-item" href="/set_language_en">English</a>
+                </div>
+            </div>
+           </li>
+         </ul>
        </div>
    </nav>
 

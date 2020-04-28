@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from shipper.models import shipper
 from .models import Profile
+from django.utils.translation import gettext_lazy as _
 
 
 class CreateUserForm(UserCreationForm):
@@ -31,7 +32,7 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('user_type', 'company_name', 'phone',)
-        USER_TYPES = (("Shipper", "Shipper"),("Trucker", "Trucker"))
+        USER_TYPES = (("Shipper", _("Shipper")), ("Trucker", _("Trucker")))
         widgets = {'user_type': forms.Select(choices=USER_TYPES)}
         error_messages = {
             'phone': {

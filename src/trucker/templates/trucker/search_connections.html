@@ -1,8 +1,9 @@
 {% extends 'trucker/base.html'%}
-
 {% load static %}
+{% load i18n %}
 
 {% block content %}
+
 <!-- Welcome and Successful order messages -->
 <style>
   table tbody{
@@ -21,10 +22,10 @@
 
 <div class="row justify-content-center mt-5">
   <div class="col-md-8">
-    <h1>Shippers Matching Your Search</h1>
+    <h1>{% trans "Shippers Matching Your Search" %}</h1>
   </div>
   <div class = "col-md-8">
-    <a href="/trucker/search_shippers" class="btn btn-secondary">See All</a>
+    <a href="/trucker/search_shippers" class="btn btn-secondary">{% trans "See All" %}</a>
   </div>
 </div>
 
@@ -37,8 +38,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <tr>
-      <th scope = 'col'>Company Name</th>
-      <th scope = 'col'>Connection</th> <!-- this is an empty column to have a button for sending a connection request -->
+      <th scope = 'col'>{% trans "Company Name" %}</th>
+      <th scope = 'col'>{% trans "Connection" %}</th> <!-- this is an empty column to have a button for sending a connection request -->
     </tr>
   </thead>
   <tbody>
@@ -46,15 +47,15 @@
     <tr>
       <td>{{ shipper.company_name }}</td>
       {% if shipper.user in connects %}
-      <td style = "color:green;">Connected <img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></td>
+      <td style = "color:green;">{% trans "Connected" %} <img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></td>
       {% elif shipper.user in pending %}
-      <td style = "color: orange;">Pending <img src="{% static 'imgs/orange_arrow_2.png' %}" alt="" border=3 height=15 width=15></img></td>
+      <td style = "color: orange;">{% trans "Pending" %} <img src="{% static 'imgs/orange_arrow_2.png' %}" alt="" border=3 height=15 width=15></img></td>
       {% else %}
       <td>
         <form action = 'send_connection_request_tr' method = 'post'>
           {% csrf_token %}
           <input type = "number" name = "shipper_id" value = {{shipper.user.id}} hidden = 'true'>
-          <button class="btn btn-secondary" type = "submit">Connect</button>
+          <button class="btn btn-secondary" type = "submit">{% trans "Connect" %}</button>
         </form>
       </td>
       {% endif %}
@@ -70,7 +71,7 @@
     </tr>
   </thead>
   <tbody>
-    <td align = "center"><h4><b>No Shippers Match Your Search</b></h4></td>
+    <td align = "center"><h4><b>{% trans "No Shippers Match Your Search" %}</b></h4></td>
   </tbody>
   {% endif %}
 </table>

@@ -1,5 +1,7 @@
 {% extends 'trucker/base.html'%}
 {% load static %}
+{% load i18n %}
+
 {% block content %}
 <!--styling to make table overflow scroll -->
 <style>
@@ -21,7 +23,7 @@
 <!-- dash of connections -->
 <div class="row justify-content-center mt-5">
   <div class="col-md-8">
-    <h1>My Shippers</h1>
+    <h1>{% trans "My Shippers" %}</h1>
   </div>
 </div>
 
@@ -35,8 +37,8 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <tr>
-          <th scope = 'col'>Company Name</th>
-          <th scope = 'col'>Status</th>
+          <th scope = 'col'>{% trans "Company Name" %}</th>
+          <th scope = 'col'>{% trans "Status" %}</th>
         </tr>
       </thead>
       <tbody>
@@ -44,9 +46,9 @@
         <tr>
           <td>{{ c.profile.company_name }}</td>
           {% if c not in pending %}
-          <td color = "green">Connected <img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></td>
+          <td color = "green">{% trans "Connected" %} <img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></td>
           {% else %}
-          <td color = "orange">Pending <img src="{% static 'imgs/orange_arrow_2.png' %}" alt="" border=3 height=15 width=15></img></td>
+          <td color = "orange">{% trans "Pending" %} <img src="{% static 'imgs/orange_arrow_2.png' %}" alt="" border=3 height=15 width=15></img></td>
           {% endif %}
         </tr>
         {% endfor %}
@@ -60,7 +62,7 @@
         </tr>
       </thead>
       <tbody>
-        <td align = "center"><h4><b>No Connections Yet</b></h4></td>
+        <td align = "center"><h4><b>{% trans "No Connections Yet" %}</b></h4></td>
       </tbody>
       {% endif %}
     </table>

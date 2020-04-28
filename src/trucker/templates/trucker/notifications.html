@@ -1,5 +1,7 @@
 {% extends 'trucker/base.html'%}
 {% load static %}
+{% load i18n %}
+
 {% block content %}
 <!--styling to make table overflow scroll -->
 <style>
@@ -21,7 +23,7 @@
 <!--start of counter offer table -->
 <div class="row justify-content-center mt-5">
   <div class="col-md-8">
-    <h1>Counter Offer Updates</h1>
+    <h1>{% trans "Counter Offer Updates" %}</h1>
   </div>
 </div>
 
@@ -42,9 +44,9 @@
         {% for c in counter_offers %}
         <tr>
           {% if c.status == 1 %}
-          <td>{{ c.order.shipping_company.user.profile.company_name }} has <b style = "color: red">denied</b> your counter offer on order <b>{{ c.order.customer_order_no }}</b></td>
+          <td>{{ c.order.shipping_company.user.profile.company_name }} {% trans "has" %} <b style = "color: red">{% trans "denied" %}</b> {% trans "your counter offer on order" %} <b>{{ c.order.customer_order_no }}</b></td>
           {% else %}
-          <td>{{ c.order.shipping_company.user.profile.company_name }} has <b style = "color: green">accepted</b> your counter offer on order <b>{{ c.order.customer_order_no }}</b></td>
+          <td>{{ c.order.shipping_company.user.profile.company_name }} {% trans "has" %} <b style = "color: green">{% trans "accepted" %}</b> {% trans "your counter offer on order" %} <b>{{ c.order.customer_order_no }}</b></td>
           {% endif %}
           <td>
             <form action = 'read_counter_offer_notification' method = 'POST'>
@@ -65,7 +67,7 @@
         </tr>
       </thead>
       <tbody>
-        <td align = "center"><h4><b>No Updates</b></h4></td>
+        <td align = "center"><h4><b>{% trans "No Updates" %}</b></h4></td>
       </tbody>
       {% endif %}
     </table>
@@ -76,7 +78,7 @@
 <!-- start of new order notifications -->
 <div class="row justify-content-center mt-5">
   <div class="col-md-8">
-    <h1>New Orders Posted</h1>
+    <h1>{% trans "New Orders Posted" %}</h1>
   </div>
 </div>
 
@@ -97,13 +99,13 @@
       <tbody>
         {% for o in order_notifications %}
         <tr>
-          <td>{{ o.order.shipping_company.user.profile.company_name }} has posted a new order</td>
+          <td>{{ o.order.shipping_company.user.profile.company_name }} {% trans "has posted a new order" %}</td>
           <td>
             <form action = 'read_show_order_notification' method = 'POST'>
               {% csrf_token %}
               <input type = 'number' name = 'notification_id' value = {{o.id}} hidden = 'true'>
               <input type = 'number' name = 'order_id' value = {{o.order.id}} hidden = 'true'>
-              <button type = 'submit' class = 'btn btn-secondary'>View Order</button> <!-- this is for viewing the order -->
+              <button type = 'submit' class = 'btn btn-secondary'>{% trans "View Order" %}</button> <!-- this is for viewing the order -->
               <button type = 'submit' formaction = 'read_order_notification' class = 'btn btn-success'>Ok</button> <!-- this button is for when you just want the notification to go away -->
           </td>
         </tr>
@@ -118,7 +120,7 @@
         </tr>
       </thead>
       <tbody>
-        <td align = "center"><h4><b>No New Orders Posted</b></h4></td>
+        <td align = "center"><h4><b>{% trans "No New Orders Posted" %}</b></h4></td>
       </tbody>
       {% endif %}
     </table>
@@ -129,7 +131,7 @@
 <!-- dash of connections -->
 <div class="row justify-content-center mt-5">
   <div class="col-md-8">
-    <h1>Connection Requests</h1>
+    <h1>{% trans "Connection Requests" %}</h1>
   </div>
 </div>
 
@@ -143,7 +145,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <tr>
-          <th scope = 'col'>Company Name</th>
+          <th scope = 'col'>{% trans "Company Name" %}</th>
           <th scope = 'col'></th>
         </tr>
       </thead>
@@ -155,8 +157,8 @@
             <form action = 'accept_request' method = 'POST'>
               {% csrf_token %}
               <input type = 'number' name = 'request_id' value = {{r.id}} hidden = 'true'>
-              <button type = 'submit' class = 'btn btn-success'>Accept</button>
-              <button type = 'submit' formaction = 'deny_request' class = 'btn btn-danger'>Decline</button>
+              <button type = 'submit' class = 'btn btn-success'>{% trans "Accept" %}</button>
+              <button type = 'submit' formaction = 'deny_request' class = 'btn btn-danger'>{% trans "Decline" %}</button>
           </td>
         </tr>
         {% endfor %}
@@ -170,7 +172,7 @@
         </tr>
       </thead>
       <tbody>
-        <td align = "center"><h4><b>No Connection Requests</b></h4></td>
+        <td align = "center"><h4><b>{% trans "No Connection Requests" %}</b></h4></td>
       </tbody>
       {% endif %}
     </table>

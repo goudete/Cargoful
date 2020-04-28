@@ -9,13 +9,15 @@ from django.contrib.auth import login, authenticate, logout
 from shipper.models import shipper
 from .decorators import allowed_users
 from friendship.models import FriendshipRequest, Friend, Follow
-
 from django.core.mail import send_mail
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
+from django.utils.translation import gettext as _
+from django.utils import translation
+from django.conf import settings
 
 def register_view(request):
     if request.method == 'POST':
@@ -46,7 +48,7 @@ def register_view(request):
             if user is not None:
                 login(request, user)
                 # return settings.LOGIN_REDIRECT_URL
-                messages.success(request, "Welcome to CargoFul " + str(username) + "!")
+                messages.success(request, _("Welcome to CargoFul ") + str(username) + "!")
                 #send email for email verification
                 current_site = get_current_site(request)
                 message = render_to_string('registration/confirm_email.html', {
@@ -82,7 +84,7 @@ def login_view(request):
             return settings.LOGIN_REDIRECT_URL
 
         else:
-            messages.info(request, 'Username or Password is incorrect')
+            messages.info(request, _('Username or Password is incorrect'))
             return redirect('/accounts/login')
 
     context = {}
@@ -133,5 +135,21 @@ def activate(request, uidb64, token):
         return HttpResponseRedirect('/../../email_confirmed')#HttpResponse('Thank you for your email confirmation. You can now ...')
     else:
         return HttpResponse('Activation link is invalid!')
+
 def email_confirmed(request):
     return render(request, 'registration/email_confirmed.html')
+
+def set_language_en(request):
+    user_language = 'en-us'
+    translation.activate(user_language)
+    response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/accounts/login'))
+    response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_language)
+    return response
+
+
+def set_language_es(request):
+    user_language = 'es-mx'
+    translation.activate(user_language)
+    response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/accounts/login'))
+    response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_language)
+    return response
