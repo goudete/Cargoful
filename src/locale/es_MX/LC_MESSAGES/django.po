@@ -84,7 +84,7 @@ msgstr "Registrarse"
 
 #: authorization/views.py:34
 msgid "Welcome to CargoFul "
-msgstr "Bienvenido a Cargoful"
+msgstr "Bienvenido a Cargoful "
 
 #: authorization/views.py:55
 msgid "Username or Password is incorrect"
