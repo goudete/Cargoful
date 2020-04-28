@@ -198,10 +198,17 @@ def confirm(request):
         #get the distance btwn pickup and delivery
         distance = round(haversine((pu_lat,pu_long), (del_lat,del_long)), 4)
         #other regular metrics
-        date = jsn['pickup_date']
-        time = jsn['pickup_time']
+        """THIS IS FOR INCLUDING DATE AND TIME, DO NOT DELETE!!!!!!!"""
+        if 'include_date' in jsn.keys():
+            date = jsn['pickup_date']
+        else:
+            date = ""
+        if 'include_time' in jsn.keys():
+            time = jsn['pickup_time']
+        else:
+            time = ""
         #account for time being in PM
-        if time.split(" ")[1] == "PM":
+        if time != "" and time.split(" ")[1] == "PM":
             hour = int(time.split(" ")[0].split(":")[0])
             if hour < 12:
                 hour += 12
