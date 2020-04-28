@@ -14,6 +14,7 @@ from django.contrib.auth.models import User
 from CargoFul import settings
 from trucker.file_storage import FileStorage
 import os
+from django.core.mail import send_mail
 # Create your views here.
 
 @login_required
@@ -378,4 +379,27 @@ def upload_docs(request):
         me.docs_uploaded = True
         me.save()
         messages.info(request, "Gracias por Subir sus Documentos")
+        #send trucker an email with some info
+        current_user = request.user
+        username = current_user.username
+        email = current_user.email
+
+        out_message = """Dear """ +  str(username) + """,
+Thank you for uploading your documents to the platform!
+
+Our team is reviewing them, you will be notified once your account is approved!
+Please check your email frequently, as we may reach out for clarifications.
+
+Relax now that you can - you will not have anymore idle times with Cargoful!
+Your Cargoful team
+
+Any questions? Don't hesitate to contact us at help@cargoful.org"""
+
+        send_mail(
+        'Thank you for uploading your documents! ', #email subject
+        out_message, #email content
+        'help@cargoful.org',
+        [email],
+        fail_silently = False,
+        )
         return HttpResponseRedirect("/trucker")

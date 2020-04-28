@@ -70,10 +70,17 @@ def Approve_User(request):
         #send them an email to let them know they're approved
         user = User.objects.get(id=jsn['profile_id'])
         email = user.email
+        username = user.username
         send_mail(
-        'Cargoful Account Approval', #email subject
-        'Your Cargoful account has been approved! Log on now at http://34.216.209.104:8000/accounts/login/', #email content
-        'hellofromcargoful@gmail.com',
+        'Welcome to Cargoful!', #email subject, next arg is content
+('Dear ' + str(username) + """, \n
+Your account has been approved - Welcome to Cargoful!  \n  \n
+Please login at the link below to get access to the latest shipments on the platform!  \n  \n
+http://34.216.209.104:8000/accounts/login/ \n \n
+Looking forward to many kms together!
+Your Carfogul team  \n  \n  \n  \n
+Any questions? Don't hesitate to contact us at help@cargoful.org"""),
+        'help@cargoful.org',
         [email],
         fail_silently = False,
         )

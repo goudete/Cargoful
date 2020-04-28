@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .forms import CreateUserForm, ProfileForm
@@ -56,7 +56,7 @@ def register_view(request):
                 'token':account_activation_token.make_token(user),
                 })
                 send_mail(
-                'Welcome To Cargoful - Please Confirm your Email', #email subject
+                'Please verify your Cargoful account email!', #email subject
                 message, #email content
                 'hellofromcargoful@gmail.com',
                 [email],
@@ -130,7 +130,7 @@ def activate(request, uidb64, token):
         user.profile.save()
         login(request, user)
         # return redirect('home')
-        return HttpResponse('authorization/email_confirmed')#HttpResponse('Thank you for your email confirmation. You can now ...')
+        return HttpResponseRedirect('/../../email_confirmed')#HttpResponse('Thank you for your email confirmation. You can now ...')
     else:
         return HttpResponse('Activation link is invalid!')
 def email_confirmed(request):

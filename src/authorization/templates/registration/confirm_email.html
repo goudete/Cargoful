@@ -1,5 +1,12 @@
 {% autoescape off %}
-Hi {{ user.username }},
-Please click on the link to confirm your email,
+Almost done, {{ user.username }}!
+Please click on following link to confirm your email:
+
 http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+Once you have uploaded your documents to the platform and we approve your account, you will enjoy access to the Cargoful platform. Looking forward to travel together - truck yeah!
+Your Cargoful team
+
+Any questions? Don't hesitate to contact us at help@cargoful.org
+
 {% endautoescape %}

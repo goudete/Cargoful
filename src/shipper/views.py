@@ -305,9 +305,14 @@ def order_success(request):
                     email = user.email
                     username = user.username
                     send_mail(
-                    'New Order Posted!', #email subject
-                    'Hello, ' + username + '. A new order is up for grabs! Log on now at http://34.216.209.104:8000/accounts/login/ to view details and secure the job', #email content
-                    'hellofromcargoful@gmail.com',
+                    'A new opportunity awaits you!', #email subject
+                    'Dear ' + username + """, \n \n
+a new opportunity has just been published on the Cargoful platform! \n \n
+Login at the link below and book it! \n \n
+http://34.216.209.104:8000/accounts/login/ \n \n
+Finding your next job has never been so easy! \n
+Your Cargoful team """,
+                    'help@cargoful.org',
                     [email],
                     fail_silently = False,
                     )
@@ -553,7 +558,7 @@ def accept_counter_offer(request):
         send_mail(
         'Counter Offer Accepted!', #email subject
         'Congratulations, ' + username + '! Your counter-offer for a delivery has been accepted. Log on now at http://34.216.209.104:8000/accounts/login/', #email content
-        'hellofromcargoful@gmail.com',
+        'help@cargoful.org',
         [email],
         fail_silently = False,
         )
@@ -659,13 +664,36 @@ def contact_form_view(request):
 
         out_message = "Hi, " + customer_name + " has contacted the team with the following message: \n \n"
         out_message += message + "\n \n"
-        out_message += "Get back to him at " + email + "."
+        out_message += "Get back to him at " + email + ". \n \n \n"
 
+        user = request.user
+        out_message += "Additional user info:  \n \n"
+        out_message += "username: " + str(user.username) + "\n"
+        out_message += "user type: " + str(user.profile.user_type) + "\n"
+        out_message += "registered email: " + str(user.profile.user.email) + "\n"
+        if len(website) > 0:
+            out_message += "given website: " + website + "\n"
+        if len(phone_number) > 0:
+            out_message += "given phone number: " + phone_number + "\n"
         send_mail(
-        customer_name + ' has Contacted the Team!', #email subject
+        customer_name + ' HAS A NEW HELP REQUEST!', #email subject
         out_message, #email content
-        'hellofromcargoful@gmail.com',
-        ['hellofromcargoful@gmail.com'],
+        'help@cargoful.org',
+        ['help@cargoful.org'],
+        fail_silently = False,
+        )
+
+        #send another mail confirming help is on the way
+        send_mail(
+        'Help is on the way!', #email subject
+        """Dear """ + customer_name + """, \n
+Thank you for reaching out to the Cargoful team! \n
+We will review your message and get back to you soon. \n \n
+Never alone with Cargoful! \n
+Your Cargoful team \n \n
+Here your request: \n""" + message, #email content
+        'help@cargoful.org',
+        [email],
         fail_silently = False,
         )
         messages.info(request, "Thanks "+ str(customer_name)
