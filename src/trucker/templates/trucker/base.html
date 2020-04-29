@@ -98,13 +98,13 @@
              <li class="nav-item mr-3">
                  <a href="/trucker/" class="btn btn-secondary">{% trans "My Jobs" %}</a>
              </li>
-             {% if me.user.profile.is_approved == True %}
+             {% if me.user.profile.is_approved == True and me.user.profile.email_confirmed == True %}
              <li class="nav-item mr-3">
                  <a href="/trucker/available_orders" class="btn btn-secondary">{% trans "Find Jobs" %}</a>
              </li>
              {% endif %}
 
-             {% if me.user.profile.is_approved == True %}
+             {% if me.user.profile.is_approved == True and me.user.profile.email_confirmed == True %}
              <li class="nav-item mr-3">
                  <a href="/trucker/past_orders" class="btn btn-secondary">{% trans "Past Jobs" %}</a>
              </li>

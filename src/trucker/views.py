@@ -16,6 +16,7 @@ from trucker.file_storage import FileStorage
 import os
 from django.core.mail import send_mail
 from django.utils.translation import gettext as _
+import magic
 
 # Create your views here.
 
@@ -376,7 +377,8 @@ def upload_docs(request):
         file_storage = FileStorage()
         for file in request.FILES: #loop through files in request
             doc = request.FILES[file] #get file
-            doc_path = os.path.join(files_dir, file) #set path for file to be stored in
+            mime = magic.from_buffer(doc.read(), mime=True).split("/")[1]
+            doc_path = os.path.join(files_dir, file+"."+mime) #set path for file to be stored in
             file_storage.save(doc_path, doc)
         me = truck_company.objects.filter(user=request.user).first()
         me.docs_uploaded = True

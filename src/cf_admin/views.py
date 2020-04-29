@@ -18,6 +18,9 @@ from friendship.models import FriendshipRequest, Friend, Follow
 import os
 from django.core.mail import send_mail
 from django.utils.translation import gettext as _
+from io import BytesIO
+import zipfile
+
 
 
 # Create your views here.
@@ -34,7 +37,7 @@ def See_Dashboard(request):
 @allowed_users(allowed_roles=['Cf_admin'])
 @api_view(['POST'])
 def Download_Docs(request):
-    s3 = boto3.client('s3') #setup to get from AWS
+    s3 = boto3.resource('s3') #setup to get from AWS
     jdp = json.dumps(request.data) #get request into json form
     jsn = json.loads(jdp) #get dictionary from json
     jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
@@ -43,17 +46,31 @@ def Download_Docs(request):
     #setup to download off AWS
     #create folder to store files
     aws_dir = os.path.join('docs/CF'+str(docs_user.id))
-    local_dir = os.path.join('Trucker_Documents', 'CF'+str(docs_user.id))
-    if not os.path.exists(local_dir):
-        os.makedirs(local_dir)
+    #create zip file
+    byte = BytesIO()
+    zip = zipfile.ZipFile(byte, "w")
+    zip_file_name = "Trucker-"+str(docs_user.id)+".zip"
     #download files
-    bucket_name = settings.AWS_STORAGE_BUCKET_NAME
-    s3.download_file(bucket_name, aws_dir+"/Acta_Constitutiva", os.path.join(local_dir, "Acta_Constitutiva.pdf"))
-    s3.download_file(bucket_name, aws_dir+"/Comprobante_Domicilio", os.path.join(local_dir, "Comprobante_Domicilio.pdf"))
-    s3.download_file(bucket_name, aws_dir+"/Constancia_SHCP", os.path.join(local_dir, "Constancia_SHCP.pdf"))
-    s3.download_file(bucket_name, aws_dir+"/Estado_Bancaria", os.path.join(local_dir, "Estado_Bancaria.pdf"))
-    s3.download_file(bucket_name, aws_dir+"/INE", os.path.join(local_dir, "INE"))
-    return HttpResponseRedirect("/cf_admin")
+    bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
+    objs = bucket.objects.filter(Prefix=aws_dir) #get folder
+    for obj in objs: #iterate over file objects in folder
+        path, filename = os.path.split(obj.key)
+        data = obj.get()['Body'].read()
+        open(filename, 'wb').write(data)
+        zip.write(filename) #write file to zip folder
+        os.unlink(filename)
+    zip.close()
+    resp = HttpResponse(
+        byte.getvalue(),
+        content_type = "application/x-zip-compressed"
+    )
+    resp['Content-Disposition'] = 'attachment; filename = %s' % zip_file_name
+    return resp
+    # s3.download_file(bucket_name, aws_dir+"/Acta_Constitutiva", os.path.join(local_dir, "Acta_Constitutiva.pdf"))
+    # s3.download_file(bucket_name, aws_dir+"/Comprobante_Domicilio", os.path.join(local_dir, "Comprobante_Domicilio.pdf"))
+    # s3.download_file(bucket_name, aws_dir+"/Constancia_SHCP", os.path.join(local_dir, "Constancia_SHCP.pdf"))
+    # s3.download_file(bucket_name, aws_dir+"/Estado_Bancaria", os.path.join(local_dir, "Estado_Bancaria.pdf"))
+    # s3.download_file(bucket_name, aws_dir+"/INE", os.path.join(local_dir, "INE"))
 
 
 @login_required
