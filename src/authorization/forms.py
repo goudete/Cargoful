@@ -7,9 +7,15 @@ from django.utils.translation import gettext_lazy as _
 
 
 class CreateUserForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super(CreateUserForm, self).__init__(*args, **kwargs)
+        self.fields['email'].required = True
+        self.fields['first_name'].required = True
+        self.fields['last_name'].required = True
+
     class Meta():
         model = User
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ('username', 'email', 'first_name', 'last_name', 'password1', 'password2')
         help_texts = {
             'username': None,
             'password1': None,
@@ -21,11 +27,6 @@ class CreateUserForm(UserCreationForm):
             'password2': None,
         }
 
-        # def __init__(self, *args, **kwargs):
-        #     super(UserCreateForm, self).__init__(*args, **kwargs)
-        #     for fieldname in fields:
-        #         self.fields[fieldname].help_texts = None
-
 
 
 class ProfileForm(forms.ModelForm):
@@ -34,6 +35,9 @@ class ProfileForm(forms.ModelForm):
         fields = ('user_type', 'company_name', 'phone',)
         USER_TYPES = (("Shipper", _("Shipper")), ("Trucker", _("Trucker")))
         widgets = {'user_type': forms.Select(choices=USER_TYPES)}
+        help_texts = {
+            'phone': 'formato: +525566290550'
+        }
         error_messages = {
             'phone': {
                 'unique': 'This number is already registered, please enter a new one'

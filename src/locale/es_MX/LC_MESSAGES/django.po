@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-28 22:28-0500\n"
+"POT-Creation-Date: 2020-05-01 17:47-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,24 +26,31 @@ msgstr "Inglés"
 msgid "Spanish"
 msgstr "Español"
 
-#: authorization/forms.py:35
+#: authorization/forms.py:36
 msgid "Shipper"
 msgstr "Embarcador"
 
-#: authorization/forms.py:35
+#: authorization/forms.py:36
 msgid "Trucker"
 msgstr "Transportista"
 
-#: authorization/models.py:9
-msgid "user_type"
+#: authorization/models.py:9 cf_admin/templates/cf_admin/dashboard.html:64
+msgid "User Type"
 msgstr "Tipo de Usuario"
 
-#: authorization/models.py:10
-msgid "company_name"
+#: authorization/models.py:10 cf_admin/templates/cf_admin/dashboard.html:65
+#: cf_admin/templates/cf_admin/dashboard.html:125
+#: shipper/templates/shipper/connects.html:40
+#: shipper/templates/shipper/notifications.html:161
+#: shipper/templates/shipper/search_connections.html:41
+#: trucker/templates/trucker/connects.html:40
+#: trucker/templates/trucker/notifications.html:148
+#: trucker/templates/trucker/search_connections.html:41
+msgid "Company Name"
 msgstr "Nombre de Compañía"
 
 #: authorization/models.py:11
-msgid "phone"
+msgid "Phone"
 msgstr "Telefono"
 
 #: authorization/templates/registration/base.html:40
@@ -78,7 +85,7 @@ msgstr "Ya tienes una cuenta?"
 msgid "Sign in"
 msgstr "Iniciar sesión"
 
-#: authorization/templates/registration/register.html:72
+#: authorization/templates/registration/register.html:84
 msgid "Register"
 msgstr "Registrarse"
 
@@ -229,21 +236,6 @@ msgstr "Aprobar"
 msgid "New Users"
 msgstr "Nuevos Usuarios"
 
-#: cf_admin/templates/cf_admin/dashboard.html:64
-msgid "User Type"
-msgstr "Tipo de Usuario"
-
-#: cf_admin/templates/cf_admin/dashboard.html:65
-#: cf_admin/templates/cf_admin/dashboard.html:125
-#: shipper/templates/shipper/connects.html:40
-#: shipper/templates/shipper/notifications.html:161
-#: shipper/templates/shipper/search_connections.html:41
-#: trucker/templates/trucker/connects.html:40
-#: trucker/templates/trucker/notifications.html:148
-#: trucker/templates/trucker/search_connections.html:41
-msgid "Company Name"
-msgstr "Nombre de Compañía"
-
 #: cf_admin/templates/cf_admin/dashboard.html:66
 #: cf_admin/templates/cf_admin/dashboard.html:126
 msgid "Email"
@@ -252,7 +244,7 @@ msgstr "Correo Electrónico"
 #: cf_admin/templates/cf_admin/dashboard.html:67
 #: cf_admin/templates/cf_admin/dashboard.html:132
 msgid "Created At"
-msgstr ""
+msgstr "Creado"
 
 #: cf_admin/templates/cf_admin/dashboard.html:96
 #: cf_admin/templates/cf_admin/dashboard.html:159
@@ -280,15 +272,15 @@ msgstr "Número de Embarque"
 msgid "Review"
 msgstr "Revisar"
 
-#: cf_admin/views.py:70 cf_admin/views.py:145
+#: cf_admin/views.py:87 cf_admin/views.py:162
 msgid " successfully approved"
 msgstr " Aprobado Exitosamente"
 
-#: cf_admin/views.py:145 shipper/views.py:309 trucker/views.py:121
+#: cf_admin/views.py:162 shipper/views.py:309 trucker/views.py:122
 msgid "Order "
 msgstr "Embarque "
 
-#: cf_admin/views.py:158 cf_admin/views.py:170
+#: cf_admin/views.py:175 cf_admin/views.py:187
 msgid " successfully deleted"
 msgstr " Eliminado Exitosamente"
 
@@ -346,10 +338,8 @@ msgstr "Por favor seleccione una Dirección de Destino"
 #: shipper/templates/shipper/change_order.html:107
 #: shipper/templates/shipper/change_order.html:110
 #: shipper/templates/shipper/post_order.html:125
-#, fuzzy
-#| msgid "Pickup Date"
 msgid "Include Pickup Date"
-msgstr "Fecha de Embarque"
+msgstr "Incluir Fecha de Embarque"
 
 #: shipper/templates/shipper/change_order.html:118
 #: shipper/templates/shipper/post_order.html:131
@@ -359,10 +349,8 @@ msgstr "Por favor seleccione una Fecha de Origen"
 #: shipper/templates/shipper/change_order.html:126
 #: shipper/templates/shipper/change_order.html:129
 #: shipper/templates/shipper/post_order.html:137
-#, fuzzy
-#| msgid "Pickup Time"
 msgid "Include Pickup Time"
-msgstr "Hora de Embarque"
+msgstr "Incluir hora de Embarque"
 
 #: shipper/templates/shipper/change_order.html:137
 #: shipper/templates/shipper/post_order.html:143
@@ -379,7 +367,7 @@ msgstr "Confirmar"
 #: trucker/templates/trucker/confirm_order.html:41
 #: trucker/templates/trucker/confirm_order.html:45
 msgid "Negotiable"
-msgstr ""
+msgstr "Negociable"
 
 #: shipper/templates/shipper/connects.html:41
 #: shipper/templates/shipper/dashboard.html:99
@@ -413,7 +401,6 @@ msgid "Your Account is Pending Approval"
 msgstr "Su cuenta aún no ha sido aprobada"
 
 #: shipper/templates/shipper/dashboard.html:41
-#: trucker/templates/trucker/my_orders.html:37
 msgid "Reach out if you have any questions: help@cargoful.org"
 msgstr "Contáctenos si tiene alguna duda: en help@cargoful.org"
 
@@ -557,7 +544,7 @@ msgid ""
 "CargoFul suggests setting this price."
 msgstr ""
 "En base al tipo de unidad, la distancia y la oferta y demanda actual en el "
-"mercado, Cargoful recomiendo ofrecer este precio"
+"mercado, Cargoful recomienda ofrecer este precio"
 
 #: shipper/templates/shipper/post_order.html:185
 msgid "Please Specify Contents"
@@ -573,7 +560,7 @@ msgstr "Publicar"
 
 #: shipper/templates/shipper/post_order.html:580
 msgid "Recommended Price (pesos)"
-msgstr "Precio Recomendado (Pesos Mexicanos)"
+msgstr "Precio Recomendado: $"
 
 #: shipper/templates/shipper/review_counter_offer.html:10
 msgid "Review Order"
@@ -612,17 +599,17 @@ msgstr "Ningún transportista cumple con los criterios de búsqueda"
 
 #: shipper/views.py:309
 msgid " Placed Successfully"
-msgstr " Asignado Exitosamente"
+msgstr " Registrado Exitosamente"
 
-#: shipper/views.py:465 trucker/views.py:256
+#: shipper/views.py:465 trucker/views.py:257
 msgid "Requested Connection With "
 msgstr "Conexión solicitada con "
 
-#: shipper/views.py:502 trucker/views.py:176
+#: shipper/views.py:502 trucker/views.py:177
 msgid "Connection from "
 msgstr "Conexión de "
 
-#: shipper/views.py:502 trucker/views.py:121 trucker/views.py:176
+#: shipper/views.py:502 trucker/views.py:122 trucker/views.py:177
 msgid " Accepted"
 msgstr " Aceptada"
 
@@ -674,6 +661,14 @@ msgstr "Comentarios"
 #: trucker/templates/trucker/confirm_order.html:100
 msgid "Bid"
 msgstr "Ofrecer"
+
+#: trucker/templates/trucker/my_orders.html:37
+msgid ""
+"Please confirm your email and upload all necessary documents. If you have "
+"any question, contact us at: help@cargoful.org"
+msgstr ""
+"Por favor confirme su correo electronico y envíenos los documentos "
+"necesarios. Cualquier duda contactenos: help@cargoful.org"
 
 #: trucker/templates/trucker/my_orders.html:40
 msgid "Upload Your Documents"
@@ -750,3 +745,15 @@ msgstr "Ingrese Sus Documentos"
 #: trucker/templates/trucker/upload_docs.html:70
 msgid "Upload Files"
 msgstr "Ingresar"
+
+#: trucker/views.py:386
+#, fuzzy
+#| msgid "Thank you for your feedback!"
+msgid "Thank you for uploading your documents"
+msgstr "Gracias por tus comentarios!"
+
+#~ msgid "user_type"
+#~ msgstr "Tipo de Usuario"
+
+#~ msgid "company_name"
+#~ msgstr "Nombre de Compañía"

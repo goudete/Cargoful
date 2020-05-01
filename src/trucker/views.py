@@ -383,7 +383,7 @@ def upload_docs(request):
         me = truck_company.objects.filter(user=request.user).first()
         me.docs_uploaded = True
         me.save()
-        messages.info(request, "Gracias por Subir sus Documentos")
+        messages.info(request, _("Thank you for uploading your documents"))
         #send trucker an email with some info
         current_user = request.user
         username = current_user.username

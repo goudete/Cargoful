@@ -93,7 +93,7 @@
          <div class="d-flex">
            <ul class="nav">
              <li class="nav-item">
-               <a class="nav-link disabled" href="#" style = "color: white;">{% trans "Hello" %}, {{ request.user }}</a>
+               <a class="nav-link disabled" href="#" style = "color: white;">{% trans "Hello" %}, {{ request.user.first_name }}</a>
              </li>
              <li class="nav-item mr-3">
                  <a href="/trucker/" class="btn btn-secondary">{% trans "My Jobs" %}</a>
