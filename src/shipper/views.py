@@ -308,10 +308,10 @@ def order_success(request):
                 new_order.save()
                 messages.info(request, _("Order ") + str(customer_order_no) + _(" Placed Successfully"))
                 #notify truckers per email
-                users = User.objects.filter(groups__name='Trucker') #get truckers, needs to be User objects cos that's where the email is
-                for user in users:
-                    email = user.email
-                    username = user.username
+                connected_truckers = Friend.objects.friends(request.user) #get truckers which are connected to shipper
+                for trucker in connected_truckers:
+                    email = trucker.email
+                    username = trucker.username
                     send_mail(
                     'A new opportunity awaits you!', #email subject
                     'Dear ' + username + """, \n \n
