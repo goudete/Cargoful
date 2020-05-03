@@ -118,6 +118,28 @@ fieldset {
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
+#contact button[type="button"] {
+  cursor: pointer;
+  width: 100%;
+  border: none;
+  background: #838383;
+  color: #FFF;
+  margin: 0 0 5px;
+  padding: 10px;
+  font-size: 15px;
+}
+
+#contact button[type="button"]:hover {
+  background: #FE0070;
+  -webkit-transition: background 0.3s ease-in-out;
+  -moz-transition: background 0.3s ease-in-out;
+  transition: background-color 0.3s ease-in-out;
+}
+
+#contact button[type="button"]:active {
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
 .copyright {
   text-align: center;
 }
@@ -169,5 +191,6 @@ fieldset {
     <fieldset>
       <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
     </fieldset>
+    <button name="submit" type="button" onclick="history.back();" id="contact-submit" data-submit="...Sending">Back</button>
   </form>
 </div>
