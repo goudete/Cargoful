@@ -169,7 +169,7 @@
             </div>
             <div class="col-md-auto">
               <a tabindex="0" class="btn btn-sm btn-outline-primary py-0" role="button" data-toggle="popover" data-trigger="focus" style="font-size: 0.8em;"
-              id = "id_info_button" title="{% trans 'CargoFul Price Recommendation' %}" data-content="{% trans 'Based on the truck type you selected as well as the distance of the trip, CargoFul suggests setting this price.' %}">
+              id = "id_info_button" title="{% trans 'Cargoful Price Recommendation' %}" data-content="{% trans 'Based on the truck type you selected as well as the distance of the trip, Cargoful suggests setting this price.' %}">
               <i class="fas fa-info-circle"></i>
             </a>
             </div>
@@ -577,7 +577,7 @@ function fillInPrice(){
       document.getElementById('id_price').value = price;
       //$("#id_loader_block").hide();
       $("#loader_spinner").hide();
-      document.getElementById('spinner_text').innerText = "{% trans 'Recommended Price (pesos)' %}".concat(String(price))
+      document.getElementById('spinner_text').innerText = "{% trans 'Recommended Price (pesos): ' %}".concat(String(price))
       $("#id_info_button").show();
     }
   });

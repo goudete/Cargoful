@@ -442,7 +442,7 @@ def ajax_price_calculation(request):
     #                            pu_city_name,del_city_name,truck_type)))
     price = pricingModel.calculatePrice(distance,'Aguascalientes','Aguascalientes',truck_type,
                                         float(pu_lat),float(pu_long),float(del_lat),float(del_long))
-
+    price = round(price,-1) #round to nearest unit of ten. e.g. 46 --> 50
     data = {
         'distance':distance,
         'price': price,
