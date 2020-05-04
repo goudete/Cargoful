@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-01 17:47-0500\n"
+"POT-Creation-Date: 2020-05-03 22:07-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: CargoFul/settings.py:77
+#: CargoFul/settings.py:78
 msgid "English"
 msgstr "Inglés"
 
-#: CargoFul/settings.py:78
+#: CargoFul/settings.py:79
 msgid "Spanish"
 msgstr "Español"
 
@@ -41,7 +41,7 @@ msgstr "Tipo de Usuario"
 #: authorization/models.py:10 cf_admin/templates/cf_admin/dashboard.html:65
 #: cf_admin/templates/cf_admin/dashboard.html:125
 #: shipper/templates/shipper/connects.html:40
-#: shipper/templates/shipper/notifications.html:161
+#: shipper/templates/shipper/notifications.html:163
 #: shipper/templates/shipper/search_connections.html:41
 #: trucker/templates/trucker/connects.html:40
 #: trucker/templates/trucker/notifications.html:148
@@ -53,6 +53,101 @@ msgstr "Nombre de Compañía"
 msgid "Phone"
 msgstr "Telefono"
 
+#: authorization/templates/passwords/password_reset_complete.html:8
+msgid "You're good to go!"
+msgstr "Listo!"
+
+#: authorization/templates/passwords/password_reset_complete.html:9
+msgid ""
+"Your password has been successfully reset and you can now login with your "
+"new password."
+msgstr "Su contraseña ha sido cambiada exitosamente"
+
+#: authorization/templates/passwords/password_reset_complete.html:12
+#: authorization/templates/passwords/password_reset_done.html:13
+msgid "Having trouble?"
+msgstr "Está teniendo dificultades?"
+
+#: authorization/templates/passwords/password_reset_complete.html:12
+#: authorization/templates/passwords/password_reset_done.html:13
+msgid "Contact us"
+msgstr "Contacto"
+
+#: authorization/templates/passwords/password_reset_complete.html:15
+#: authorization/templates/passwords/password_reset_done.html:16
+msgid "Continue to Login"
+msgstr "Iniciar sesión"
+
+#: authorization/templates/passwords/password_reset_confirm.html:33
+#: authorization/templates/passwords/password_reset_confirm_OG.html:24
+msgid "Reset your password"
+msgstr "Cambiar contraseña"
+
+#: authorization/templates/passwords/password_reset_confirm.html:34
+#: authorization/templates/passwords/password_reset_confirm_OG.html:25
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr "Por favor repita su contraseña"
+
+#: authorization/templates/passwords/password_reset_confirm.html:48
+#: authorization/templates/passwords/password_reset_confirm_OG.html:38
+msgid "Change my password"
+msgstr "Cambiar contraseña"
+
+#: authorization/templates/passwords/password_reset_confirm.html:58
+#: authorization/templates/passwords/password_reset_confirm_OG.html:47
+#: authorization/templates/passwords/reset_password.html:47
+#: authorization/templates/registration/login.html:49
+msgid "Don't have an account?"
+msgstr "No te has registrado?"
+
+#: authorization/templates/passwords/password_reset_confirm.html:58
+#: authorization/templates/passwords/password_reset_confirm_OG.html:47
+#: authorization/templates/passwords/reset_password.html:47
+#: authorization/templates/registration/login.html:49
+msgid "Sign up"
+msgstr "Registrarme"
+
+#: authorization/templates/passwords/password_reset_confirm.html:61
+#: authorization/templates/passwords/password_reset_confirm_OG.html:50
+#: authorization/templates/passwords/reset_password.html:50
+msgid "Want to Login?"
+msgstr "Iniciar Sesión"
+
+#: authorization/templates/passwords/password_reset_confirm.html:61
+#: authorization/templates/passwords/password_reset_confirm_OG.html:50
+#: authorization/templates/passwords/reset_password.html:50
+#: authorization/templates/registration/login.html:40
+msgid "Login"
+msgstr "Iniciar sesión "
+
+#: authorization/templates/passwords/password_reset_done.html:8
+msgid "Help is on its way!"
+msgstr ""
+
+#: authorization/templates/passwords/password_reset_done.html:9
+msgid ""
+"We have sent you an email with instructions on how you can reset your "
+"password, provided an account exists with email provided."
+msgstr ""
+
+#: authorization/templates/passwords/password_reset_done.html:10
+msgid ""
+"If you don't receive an email, please make sure you have entered the address "
+"you registered with. You may also want to check your spam folder."
+msgstr ""
+
+#: authorization/templates/passwords/reset_password.html:25
+msgid ""
+"Please enter the email associated with your account below. We will send you "
+"an email with instructions on how you can reset your password."
+msgstr ""
+
+#: authorization/templates/passwords/reset_password.html:38
+msgid "Send password reset email"
+msgstr ""
+
 #: authorization/templates/registration/base.html:40
 msgid "Language"
 msgstr "Lenguaje"
@@ -61,17 +156,13 @@ msgstr "Lenguaje"
 msgid "Login to you account"
 msgstr "Iniciar sesión"
 
-#: authorization/templates/registration/login.html:40
-msgid "Login"
-msgstr "Iniciar sesión "
+#: authorization/templates/registration/login.html:52
+msgid "Forgotten your Password?"
+msgstr ""
 
-#: authorization/templates/registration/login.html:49
-msgid "Don't have an account?"
-msgstr "No te has registrado?"
-
-#: authorization/templates/registration/login.html:49
-msgid "Sign up"
-msgstr "Registrarme"
+#: authorization/templates/registration/login.html:52
+msgid "Reset Password"
+msgstr ""
 
 #: authorization/templates/registration/register.html:12
 msgid "Create your Cargoful account"
@@ -98,26 +189,22 @@ msgid "Username or Password is incorrect"
 msgstr "Usuario o Contraseña incorrectos"
 
 #: cf_admin/templates/cf_admin/base.html:80
-#: shipper/templates/shipper/base.html:89
-#: trucker/templates/trucker/base.html:96
 msgid "Hello"
 msgstr "Hola"
 
 #: cf_admin/templates/cf_admin/base.html:83
-#: shipper/templates/shipper/base.html:105
-#: trucker/templates/trucker/base.html:120
+#: shipper/templates/shipper/base.html:144
+#: trucker/templates/trucker/base.html:151
 msgid "Logout"
 msgstr "Cerrar sesión"
 
 #: cf_admin/templates/cf_admin/base.html:116
-#: shipper/templates/shipper/base.html:132
-#: trucker/templates/trucker/base.html:147
+#: shipper/templates/shipper/base.html:162
+#: trucker/templates/trucker/base.html:169
 msgid "Disrupting Mexican Logistics"
 msgstr "Transformando a la industria de logística en México"
 
 #: cf_admin/templates/cf_admin/base.html:124
-#: shipper/templates/shipper/base.html:155
-#: trucker/templates/trucker/base.html:170
 msgid "Contact"
 msgstr "Contacto"
 
@@ -130,13 +217,13 @@ msgstr "Confirmar embarque"
 #: cf_admin/templates/cf_admin/confirm_order.html:26
 #: cf_admin/templates/cf_admin/dashboard.html:128
 #: shipper/templates/shipper/confirmation.html:25
-#: shipper/templates/shipper/dashboard.html:94
+#: shipper/templates/shipper/dashboard.html:120
 #: shipper/templates/shipper/past_orders.html:88
 #: shipper/templates/shipper/review_counter_offer.html:25
-#: trucker/templates/trucker/available_orders.html:43
+#: trucker/templates/trucker/available_orders.html:42
 #: trucker/templates/trucker/confirm_order.html:26
-#: trucker/templates/trucker/my_orders.html:84
-#: trucker/templates/trucker/past_orders.html:63
+#: trucker/templates/trucker/my_orders.html:83
+#: trucker/templates/trucker/past_orders.html:62
 msgid "Pickup Address"
 msgstr "Dirección de Origen"
 
@@ -144,14 +231,14 @@ msgstr "Dirección de Origen"
 #: cf_admin/templates/cf_admin/dashboard.html:129
 #: shipper/templates/shipper/change_order.html:42
 #: shipper/templates/shipper/confirmation.html:32
-#: shipper/templates/shipper/dashboard.html:95
+#: shipper/templates/shipper/dashboard.html:121
 #: shipper/templates/shipper/past_orders.html:89
 #: shipper/templates/shipper/post_order.html:61
 #: shipper/templates/shipper/review_counter_offer.html:32
-#: trucker/templates/trucker/available_orders.html:44
+#: trucker/templates/trucker/available_orders.html:43
 #: trucker/templates/trucker/confirm_order.html:33
-#: trucker/templates/trucker/my_orders.html:85
-#: trucker/templates/trucker/past_orders.html:64
+#: trucker/templates/trucker/my_orders.html:84
+#: trucker/templates/trucker/past_orders.html:63
 msgid "Delivery Address"
 msgstr "Dirección de Destino"
 
@@ -159,28 +246,28 @@ msgstr "Dirección de Destino"
 #: cf_admin/templates/cf_admin/dashboard.html:127 shipper/models.py:50
 #: shipper/templates/shipper/change_order.html:115
 #: shipper/templates/shipper/confirmation.html:39
-#: shipper/templates/shipper/dashboard.html:96
+#: shipper/templates/shipper/dashboard.html:122
 #: shipper/templates/shipper/past_orders.html:90
 #: shipper/templates/shipper/review_counter_offer.html:39
-#: trucker/templates/trucker/available_orders.html:45
+#: trucker/templates/trucker/available_orders.html:44
 #: trucker/templates/trucker/confirm_order.html:40
-#: trucker/templates/trucker/my_orders.html:87
-#: trucker/templates/trucker/past_orders.html:66
+#: trucker/templates/trucker/my_orders.html:86
+#: trucker/templates/trucker/past_orders.html:65
 msgid "Pickup Date"
 msgstr "Fecha de Embarque"
 
-#: cf_admin/templates/cf_admin/confirm_order.html:44 shipper/models.py:60
+#: cf_admin/templates/cf_admin/confirm_order.html:44 shipper/models.py:61
 #: shipper/templates/shipper/change_order.html:134
 #: shipper/templates/shipper/confirmation.html:43
 #: shipper/templates/shipper/review_counter_offer.html:43
-#: trucker/templates/trucker/available_orders.html:46
+#: trucker/templates/trucker/available_orders.html:45
 #: trucker/templates/trucker/confirm_order.html:44
-#: trucker/templates/trucker/my_orders.html:88
-#: trucker/templates/trucker/past_orders.html:67
+#: trucker/templates/trucker/my_orders.html:87
+#: trucker/templates/trucker/past_orders.html:66
 msgid "Pickup Time"
 msgstr "Hora de Embarque"
 
-#: cf_admin/templates/cf_admin/confirm_order.html:51 shipper/models.py:95
+#: cf_admin/templates/cf_admin/confirm_order.html:51 shipper/models.py:96
 #: shipper/templates/shipper/change_order.html:145
 #: shipper/templates/shipper/confirmation.html:50
 #: shipper/templates/shipper/review_counter_offer.html:50
@@ -192,38 +279,38 @@ msgstr "Tipo de Camión"
 #: cf_admin/templates/cf_admin/dashboard.html:131 shipper/models.py:53
 #: shipper/templates/shipper/change_order.html:157
 #: shipper/templates/shipper/confirmation.html:54
-#: shipper/templates/shipper/dashboard.html:101
+#: shipper/templates/shipper/dashboard.html:127
 #: shipper/templates/shipper/past_orders.html:94
-#: trucker/templates/trucker/available_orders.html:48
+#: trucker/templates/trucker/available_orders.html:47
 #: trucker/templates/trucker/confirm_order.html:55
-#: trucker/templates/trucker/my_orders.html:90
-#: trucker/templates/trucker/past_orders.html:68
+#: trucker/templates/trucker/my_orders.html:88
+#: trucker/templates/trucker/past_orders.html:67
 msgid "Price"
 msgstr "Precio"
 
 #: cf_admin/templates/cf_admin/confirm_order.html:62
-#: cf_admin/templates/cf_admin/dashboard.html:130 shipper/models.py:62
-#: shipper/templates/shipper/change_order.html:164
-#: shipper/templates/shipper/confirmation.html:61
-#: shipper/templates/shipper/dashboard.html:98
+#: cf_admin/templates/cf_admin/dashboard.html:130 shipper/models.py:63
+#: shipper/templates/shipper/change_order.html:168
+#: shipper/templates/shipper/confirmation.html:65
+#: shipper/templates/shipper/dashboard.html:124
 #: shipper/templates/shipper/past_orders.html:92
 #: shipper/templates/shipper/review_counter_offer.html:54
-#: trucker/templates/trucker/confirm_order.html:63
+#: trucker/templates/trucker/confirm_order.html:67
 msgid "Contents"
 msgstr "Contenido"
 
-#: cf_admin/templates/cf_admin/confirm_order.html:66 shipper/models.py:63
-#: shipper/templates/shipper/change_order.html:171
-#: shipper/templates/shipper/confirmation.html:65
-#: trucker/templates/trucker/confirm_order.html:67
+#: cf_admin/templates/cf_admin/confirm_order.html:66 shipper/models.py:64
+#: shipper/templates/shipper/change_order.html:176
+#: shipper/templates/shipper/confirmation.html:72
+#: trucker/templates/trucker/confirm_order.html:74
 msgid "Instructions"
 msgstr "Instrucciones"
 
 #: cf_admin/templates/cf_admin/confirm_order.html:79
-#: shipper/templates/shipper/change_order.html:181
-#: shipper/templates/shipper/confirmation.html:121
-#: shipper/templates/shipper/post_order.html:463
-#: trucker/templates/trucker/confirm_order.html:80
+#: shipper/templates/shipper/change_order.html:186
+#: shipper/templates/shipper/confirmation.html:128
+#: shipper/templates/shipper/post_order.html:465
+#: trucker/templates/trucker/confirm_order.html:87
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -238,6 +325,8 @@ msgstr "Nuevos Usuarios"
 
 #: cf_admin/templates/cf_admin/dashboard.html:66
 #: cf_admin/templates/cf_admin/dashboard.html:126
+#: shipper/templates/shipper/connects.html:41
+#: trucker/templates/trucker/connects.html:41
 msgid "Email"
 msgstr "Correo Electrónico"
 
@@ -256,67 +345,77 @@ msgid "New Orders"
 msgstr "Embarques Nuevos"
 
 #: cf_admin/templates/cf_admin/dashboard.html:124
-#: shipper/templates/shipper/dashboard.html:93
+#: shipper/templates/shipper/dashboard.html:119
 #: shipper/templates/shipper/notifications.html:37
-#: shipper/templates/shipper/notifications.html:94
+#: shipper/templates/shipper/notifications.html:95
 #: shipper/templates/shipper/past_orders.html:87
-#: trucker/templates/trucker/available_orders.html:41
-#: trucker/templates/trucker/my_orders.html:82
-#: trucker/templates/trucker/past_orders.html:61
+#: trucker/templates/trucker/available_orders.html:40
+#: trucker/templates/trucker/my_orders.html:81
+#: trucker/templates/trucker/past_orders.html:60
 msgid "Order Number"
 msgstr "Número de Embarque"
 
 #: cf_admin/templates/cf_admin/dashboard.html:153
 #: shipper/templates/shipper/notifications.html:56
-#: trucker/templates/trucker/available_orders.html:67
+#: trucker/templates/trucker/available_orders.html:66
 msgid "Review"
 msgstr "Revisar"
 
-#: cf_admin/views.py:87 cf_admin/views.py:162
+#: cf_admin/views.py:82 cf_admin/views.py:157
 msgid " successfully approved"
 msgstr " Aprobado Exitosamente"
 
-#: cf_admin/views.py:162 shipper/views.py:309 trucker/views.py:122
+#: cf_admin/views.py:157 shipper/views.py:321 trucker/views.py:127
 msgid "Order "
 msgstr "Embarque "
 
-#: cf_admin/views.py:175 cf_admin/views.py:187
+#: cf_admin/views.py:170 cf_admin/views.py:182
 msgid " successfully deleted"
 msgstr " Eliminado Exitosamente"
 
-#: shipper/templates/shipper/base.html:79
-msgid "Search Truckers"
-msgstr "Buscar Transportistas"
+#: shipper/models.py:55
+msgid "Weight"
+msgstr "Peso"
 
-#: shipper/templates/shipper/base.html:93
+#: shipper/templates/shipper/base.html:76
 #: shipper/templates/shipper/dashboard.html:68
+#: shipper/templates/shipper/dashboard.html:86
 msgid "My Orders"
 msgstr "Mis Embarques"
 
-#: shipper/templates/shipper/base.html:96
+#: shipper/templates/shipper/base.html:82
 #: shipper/templates/shipper/past_orders.html:68
 msgid "Past Orders"
 msgstr "Embarques Anteriores"
 
-#: shipper/templates/shipper/base.html:99
-#: trucker/templates/trucker/base.html:114
-msgid "Notifications"
-msgstr "Notificaciones"
-
-#: shipper/templates/shipper/base.html:102
+#: shipper/templates/shipper/base.html:88
 #: shipper/templates/shipper/connects.html:26
 msgid "My Truckers"
 msgstr "Mis Transportistas"
 
-#: shipper/templates/shipper/base.html:153
-#: trucker/templates/trucker/base.html:168
+#: shipper/templates/shipper/base.html:93
+#: trucker/templates/trucker/base.html:102
+msgid "Help"
+msgstr "Ayuda"
+
+#: shipper/templates/shipper/base.html:96
+#: trucker/templates/trucker/base.html:105
 #, fuzzy
 #| msgid "Contact"
 msgid "Contact Us"
 msgstr "Contacto"
 
+#: shipper/templates/shipper/base.html:117
+msgid "Search Truckers"
+msgstr "Buscar Transportistas"
+
+#: shipper/templates/shipper/base.html:141
+#: trucker/templates/trucker/base.html:148
+msgid "Documents"
+msgstr "Documentos"
+
 #: shipper/templates/shipper/change_order.html:18
-#: shipper/templates/shipper/confirmation.html:125
+#: shipper/templates/shipper/confirmation.html:132
 msgid "Edit Order"
 msgstr "Editar"
 
@@ -357,46 +456,63 @@ msgstr "Incluir hora de Embarque"
 msgid "Please Choose a Pickup Time"
 msgstr "Por favor seleccione una Hora de Origen"
 
-#: shipper/templates/shipper/change_order.html:184
-#: shipper/templates/shipper/confirmation.html:129
+#: shipper/templates/shipper/change_order.html:164
+#: shipper/templates/shipper/confirmation.html:61
+#: shipper/templates/shipper/review_counter_offer.html:61
+#: trucker/templates/trucker/confirm_order.html:63
+msgid "Weight (Tons)"
+msgstr "Peso"
+
+#: shipper/templates/shipper/change_order.html:189
+#: shipper/templates/shipper/confirmation.html:136
 msgid "Confirm"
 msgstr "Confirmar"
 
 #: shipper/templates/shipper/confirmation.html:40
 #: shipper/templates/shipper/confirmation.html:44
+#: trucker/templates/trucker/available_orders.html:59
+#: trucker/templates/trucker/available_orders.html:60
 #: trucker/templates/trucker/confirm_order.html:41
 #: trucker/templates/trucker/confirm_order.html:45
+#: trucker/templates/trucker/my_orders.html:101
+#: trucker/templates/trucker/my_orders.html:102
 msgid "Negotiable"
 msgstr "Negociable"
 
-#: shipper/templates/shipper/connects.html:41
-#: shipper/templates/shipper/dashboard.html:99
-#: trucker/templates/trucker/connects.html:41
+#: shipper/templates/shipper/connects.html:42
+#: trucker/templates/trucker/connects.html:42
+msgid "Phone Number"
+msgstr "Número Telefónico"
+
+#: shipper/templates/shipper/connects.html:43
+#: shipper/templates/shipper/dashboard.html:125
+#: trucker/templates/trucker/confirm_order.html:124
+#: trucker/templates/trucker/connects.html:43
 #: trucker/templates/trucker/my_orders.html:89
 msgid "Status"
 msgstr "Estatus"
 
-#: shipper/templates/shipper/connects.html:49
+#: shipper/templates/shipper/connects.html:53
 #: shipper/templates/shipper/search_connections.html:50
-#: trucker/templates/trucker/connects.html:49
+#: trucker/templates/trucker/connects.html:53
 #: trucker/templates/trucker/search_connections.html:50
 msgid "Connected"
 msgstr "Conectado"
 
-#: shipper/templates/shipper/connects.html:51
+#: shipper/templates/shipper/connects.html:55
 #: shipper/templates/shipper/search_connections.html:52
-#: trucker/templates/trucker/connects.html:51
+#: trucker/templates/trucker/connects.html:55
 #: trucker/templates/trucker/search_connections.html:52
 msgid "Pending"
 msgstr "Pendiente"
 
-#: shipper/templates/shipper/connects.html:65
-#: trucker/templates/trucker/connects.html:65
+#: shipper/templates/shipper/connects.html:69
+#: trucker/templates/trucker/connects.html:69
 msgid "No Connections Yet"
 msgstr "Sin conecciones"
 
 #: shipper/templates/shipper/dashboard.html:39
-#: trucker/templates/trucker/my_orders.html:35
+#: trucker/templates/trucker/my_orders.html:34
 msgid "Your Account is Pending Approval"
 msgstr "Su cuenta aún no ha sido aprobada"
 
@@ -405,6 +521,7 @@ msgid "Reach out if you have any questions: help@cargoful.org"
 msgstr "Contáctenos si tiene alguna duda: en help@cargoful.org"
 
 #: shipper/templates/shipper/dashboard.html:74
+#: shipper/templates/shipper/dashboard.html:92
 msgid "Total Orders"
 msgstr "Embarques Totales"
 
@@ -413,20 +530,34 @@ msgstr "Embarques Totales"
 msgid "New Order"
 msgstr "Nuevo Embarque"
 
-#: shipper/templates/shipper/dashboard.html:97
+#: shipper/templates/shipper/dashboard.html:123
 #: shipper/templates/shipper/past_orders.html:91
-#: trucker/templates/trucker/available_orders.html:47
-#: trucker/templates/trucker/my_orders.html:86
-#: trucker/templates/trucker/past_orders.html:65
+#: trucker/templates/trucker/available_orders.html:46
+#: trucker/templates/trucker/my_orders.html:85
+#: trucker/templates/trucker/past_orders.html:64
 msgid "Distance"
 msgstr "Distancia"
 
-#: shipper/templates/shipper/dashboard.html:100
+#: shipper/templates/shipper/dashboard.html:126
 #: shipper/templates/shipper/past_orders.html:93
 msgid "Trucking Company"
 msgstr "Nombre de Transportista"
 
-#: shipper/templates/shipper/dashboard.html:149
+#: shipper/templates/shipper/dashboard.html:128
+msgid "Orden de Embarco"
+msgstr ""
+
+#: shipper/templates/shipper/dashboard.html:165
+#: trucker/templates/trucker/my_orders.html:153
+msgid "Uploaded"
+msgstr "Ingresados"
+
+#: shipper/templates/shipper/dashboard.html:174
+#: trucker/templates/trucker/my_orders.html:162
+msgid "Upload"
+msgstr "Ingresar"
+
+#: shipper/templates/shipper/dashboard.html:192
 msgid "No Orders Posted Yet"
 msgstr "No hay embarques publicados"
 
@@ -443,76 +574,80 @@ msgid "Company"
 msgstr "Compañía"
 
 #: shipper/templates/shipper/notifications.html:40
-#: trucker/templates/trucker/confirm_order.html:93
+#: trucker/templates/trucker/confirm_order.html:100
 msgid "Counter Offer"
 msgstr "Contraoferta"
 
 #: shipper/templates/shipper/notifications.html:57
-#: shipper/templates/shipper/review_counter_offer.html:81
+#: shipper/templates/shipper/review_counter_offer.html:88
 msgid "Deny"
 msgstr "Rechazar"
 
-#: shipper/templates/shipper/notifications.html:71
-#: shipper/templates/shipper/notifications.html:136
+#: shipper/templates/shipper/notifications.html:72
+#: shipper/templates/shipper/notifications.html:138
 msgid "No Order Updates"
 msgstr "No hay actualizaciones en los embarques"
 
-#: shipper/templates/shipper/notifications.html:82
+#: shipper/templates/shipper/notifications.html:83
 msgid "Order Updates"
 msgstr "Actualizaciones de embarques"
 
-#: shipper/templates/shipper/notifications.html:104
+#: shipper/templates/shipper/notifications.html:105
 msgid "has accepted order"
 msgstr "ha aceptado el embarque"
 
-#: shipper/templates/shipper/notifications.html:106
+#: shipper/templates/shipper/notifications.html:107
 msgid "has updated order"
 msgstr "ha actualizado el embarque"
 
-#: shipper/templates/shipper/notifications.html:106
+#: shipper/templates/shipper/notifications.html:107
 msgid "from"
 msgstr "de"
 
-#: shipper/templates/shipper/notifications.html:108
-#: trucker/templates/trucker/my_orders.html:108
+#: shipper/templates/shipper/notifications.html:109
+#: trucker/templates/trucker/my_orders.html:109
 msgid "Booked"
 msgstr "Reservado"
 
-#: shipper/templates/shipper/notifications.html:110
-#: shipper/templates/shipper/notifications.html:113
-#: trucker/templates/trucker/my_orders.html:109
-#: trucker/templates/trucker/my_orders.html:124
+#: shipper/templates/shipper/notifications.html:111
+#: shipper/templates/shipper/notifications.html:114
+#: trucker/templates/trucker/my_orders.html:110
+#: trucker/templates/trucker/my_orders.html:125
 msgid "In Transit"
 msgstr "En Tránsito"
 
-#: shipper/templates/shipper/notifications.html:115
-#: trucker/templates/trucker/my_orders.html:110
-#: trucker/templates/trucker/my_orders.html:125
-#: trucker/templates/trucker/my_orders.html:139
+#: shipper/templates/shipper/notifications.html:112
+msgid "to"
+msgstr "a"
+
+#: shipper/templates/shipper/notifications.html:116
+#: trucker/templates/trucker/my_orders.html:111
+#: trucker/templates/trucker/my_orders.html:126
+#: trucker/templates/trucker/my_orders.html:140
 msgid "Delivered"
 msgstr "Entregado"
 
-#: shipper/templates/shipper/notifications.html:147
+#: shipper/templates/shipper/notifications.html:149
 #: trucker/templates/trucker/notifications.html:134
 msgid "Connection Requests"
 msgstr "Solicitar Conexión"
 
-#: shipper/templates/shipper/notifications.html:173
-#: shipper/templates/shipper/review_counter_offer.html:85
-#: trucker/templates/trucker/confirm_order.html:84
+#: shipper/templates/shipper/notifications.html:175
+#: shipper/templates/shipper/review_counter_offer.html:92
+#: trucker/templates/trucker/confirm_order.html:91
 #: trucker/templates/trucker/notifications.html:160
 msgid "Accept"
 msgstr "Aceptar"
 
-#: shipper/templates/shipper/notifications.html:174
+#: shipper/templates/shipper/notifications.html:176
 #: trucker/templates/trucker/notifications.html:161
 msgid "Decline"
 msgstr "Declinar"
 
-#: shipper/templates/shipper/notifications.html:188
+#: shipper/templates/shipper/notifications.html:191
 #: trucker/templates/trucker/notifications.html:175
 msgid "No Connection Requests"
-msgstr "No hay soliicitudes de conexiones"
+msgstr "No hay solicitudes de conexiones"
 
 #: shipper/templates/shipper/past_orders.html:74
 msgid "Total"
@@ -535,42 +670,42 @@ msgid "Calculating Recommended Price..."
 msgstr "Calculando precio recomendado"
 
 #: shipper/templates/shipper/post_order.html:172
-msgid "CargoFul Price Recommendation"
+msgid "Cargoful Price Recommendation"
 msgstr "Precio recomendado por Cargoful"
 
 #: shipper/templates/shipper/post_order.html:172
 msgid ""
 "Based on the truck type you selected as well as the distance of the trip, "
-"CargoFul suggests setting this price."
+"Cargoful suggests setting this price."
 msgstr ""
 "En base al tipo de unidad, la distancia y la oferta y demanda actual en el "
 "mercado, Cargoful recomienda ofrecer este precio"
 
-#: shipper/templates/shipper/post_order.html:185
+#: shipper/templates/shipper/post_order.html:187
 msgid "Please Specify Contents"
 msgstr "Porfavor especifique el contenido"
 
-#: shipper/templates/shipper/post_order.html:194
+#: shipper/templates/shipper/post_order.html:196
 msgid "If You Have No Specific Instructions, Put N/A"
 msgstr "Si no existen instrucciones especíificas, favor de introducier N/A"
 
-#: shipper/templates/shipper/post_order.html:466
+#: shipper/templates/shipper/post_order.html:468
 msgid "Post"
 msgstr "Publicar"
 
-#: shipper/templates/shipper/post_order.html:580
-msgid "Recommended Price (pesos)"
+#: shipper/templates/shipper/post_order.html:582
+msgid "Recommended Price (pesos): "
 msgstr "Precio Recomendado: $"
 
 #: shipper/templates/shipper/review_counter_offer.html:10
 msgid "Review Order"
 msgstr "Revisar Embarque"
 
-#: shipper/templates/shipper/review_counter_offer.html:61
+#: shipper/templates/shipper/review_counter_offer.html:65
 msgid "Your Price"
 msgstr "Tu Precio"
 
-#: shipper/templates/shipper/review_counter_offer.html:65
+#: shipper/templates/shipper/review_counter_offer.html:72
 msgid "Counter Price"
 msgstr "Contra Oferta"
 
@@ -597,72 +732,88 @@ msgstr "Conectar"
 msgid "No Truckers Match Your Search"
 msgstr "Ningún transportista cumple con los criterios de búsqueda"
 
-#: shipper/views.py:309
+#: shipper/views.py:321
 msgid " Placed Successfully"
 msgstr " Registrado Exitosamente"
 
-#: shipper/views.py:465 trucker/views.py:257
+#: shipper/views.py:477 trucker/views.py:262
 msgid "Requested Connection With "
 msgstr "Conexión solicitada con "
 
-#: shipper/views.py:502 trucker/views.py:177
+#: shipper/views.py:514 trucker/views.py:182
 msgid "Connection from "
 msgstr "Conexión de "
 
-#: shipper/views.py:502 trucker/views.py:122 trucker/views.py:177
+#: shipper/views.py:514 trucker/views.py:127 trucker/views.py:182
 msgid " Accepted"
 msgstr " Aceptada"
 
-#: shipper/views.py:656
+#: shipper/views.py:668
 msgid "Thank you for your feedback!"
 msgstr "Gracias por tus comentarios!"
 
-#: trucker/templates/trucker/available_orders.html:28
+#: trucker/templates/trucker/available_orders.html:27
 msgid "Available Orders"
 msgstr "Embarques Disponibles"
 
-#: trucker/templates/trucker/available_orders.html:42
-#: trucker/templates/trucker/my_orders.html:83
-#: trucker/templates/trucker/past_orders.html:62
+#: trucker/templates/trucker/available_orders.html:41
+#: trucker/templates/trucker/my_orders.html:82
+#: trucker/templates/trucker/past_orders.html:61
 msgid "Shipping Company"
 msgstr "Compañía Embarcadora"
 
-#: trucker/templates/trucker/available_orders.html:82
+#: trucker/templates/trucker/available_orders.html:81
 msgid "No Available Orders"
 msgstr "No hay Embarques Disponibles"
 
-#: trucker/templates/trucker/base.html:88
-msgid "Search Shippers"
-msgstr "Buscar Embarcadores"
-
-#: trucker/templates/trucker/base.html:99
-#: trucker/templates/trucker/my_orders.html:69
+#: trucker/templates/trucker/base.html:76
+#: trucker/templates/trucker/my_orders.html:68
 msgid "My Jobs"
 msgstr "Mis Embarques"
 
-#: trucker/templates/trucker/base.html:103
+#: trucker/templates/trucker/base.html:82
 msgid "Find Jobs"
 msgstr "Buscar Embarques"
 
-#: trucker/templates/trucker/base.html:109
-#: trucker/templates/trucker/past_orders.html:48
+#: trucker/templates/trucker/base.html:91
+#: trucker/templates/trucker/past_orders.html:47
 msgid "Past Jobs"
 msgstr "Embarques Anteriores"
 
-#: trucker/templates/trucker/base.html:117
+#: trucker/templates/trucker/base.html:98
 #: trucker/templates/trucker/connects.html:26
 msgid "My Shippers"
 msgstr "Mis Embarcadores"
 
-#: trucker/templates/trucker/base.html:157
-msgid "Feedback?"
-msgstr "Comentarios"
+#: trucker/templates/trucker/base.html:125
+msgid "Search Shippers"
+msgstr "Buscar Embarcadores"
 
-#: trucker/templates/trucker/confirm_order.html:100
+#: trucker/templates/trucker/confirm_order.html:107
 msgid "Bid"
 msgstr "Ofrecer"
 
-#: trucker/templates/trucker/my_orders.html:37
+#: trucker/templates/trucker/confirm_order.html:116
+msgid "Counter Offer History"
+msgstr "Historial de Contraofertas"
+
+#: trucker/templates/trucker/confirm_order.html:123
+msgid "Offer"
+msgstr "Oferta"
+
+#: trucker/templates/trucker/confirm_order.html:130
+msgid "you offered "
+msgstr "ofreció "
+
+#: trucker/templates/trucker/confirm_order.html:132
+msgid "Response Pending "
+msgstr "Respuesta Pendiente "
+
+#: trucker/templates/trucker/confirm_order.html:134
+msgid "Denied"
+msgstr "Rechazado"
+
+#: trucker/templates/trucker/my_orders.html:36
 msgid ""
 "Please confirm your email and upload all necessary documents. If you have "
 "any question, contact us at: help@cargoful.org"
@@ -670,17 +821,21 @@ msgstr ""
 "Por favor confirme su correo electronico y envíenos los documentos "
 "necesarios. Cualquier duda contactenos: help@cargoful.org"
 
-#: trucker/templates/trucker/my_orders.html:40
+#: trucker/templates/trucker/my_orders.html:39
 msgid "Upload Your Documents"
 msgstr "Ingrese Sus Documentos"
 
-#: trucker/templates/trucker/my_orders.html:116
-#: trucker/templates/trucker/my_orders.html:131
-#: trucker/templates/trucker/my_orders.html:145
+#: trucker/templates/trucker/my_orders.html:90
+msgid "Carta Porte"
+msgstr ""
+
+#: trucker/templates/trucker/my_orders.html:117
+#: trucker/templates/trucker/my_orders.html:132
+#: trucker/templates/trucker/my_orders.html:146
 msgid "Update"
 msgstr "Actualizar"
 
-#: trucker/templates/trucker/my_orders.html:165
+#: trucker/templates/trucker/my_orders.html:181
 msgid "You Have No Jobs Yet"
 msgstr "Aún no tienes embarques"
 
@@ -726,7 +881,7 @@ msgstr "Ver embarque"
 msgid "No New Orders Posted"
 msgstr "No Hay Nuevos Embarques Publicados"
 
-#: trucker/templates/trucker/past_orders.html:95
+#: trucker/templates/trucker/past_orders.html:94
 msgid "No Past Jobs"
 msgstr "No Hay Embarques Anteriores"
 
@@ -739,18 +894,87 @@ msgid "No Shippers Match Your Search"
 msgstr "No hay Embarcadores que Cumplan con los Criterios"
 
 #: trucker/templates/trucker/upload_docs.html:34
-msgid "Post Your Documents"
-msgstr "Ingrese Sus Documentos"
+msgid "Corporate Documents"
+msgstr "Documentos Corporativos"
 
-#: trucker/templates/trucker/upload_docs.html:70
+#: trucker/templates/trucker/upload_docs.html:35
+msgid "Download my Documents"
+msgstr "Descargar Sus Documentos"
+
+#: trucker/templates/trucker/upload_docs.html:44
+msgid "Acta Constitutiva"
+msgstr ""
+
+#: trucker/templates/trucker/upload_docs.html:49
+msgid "Constancia de Situación Fiscal de la SHCP"
+msgstr ""
+
+#: trucker/templates/trucker/upload_docs.html:55
+msgid "Comprobante de Domicilio"
+msgstr ""
+
+#: trucker/templates/trucker/upload_docs.html:60
+msgid "Estado de Cuenta Bancaria"
+msgstr ""
+
+#: trucker/templates/trucker/upload_docs.html:71
+#: trucker/templates/trucker/upload_docs.html:132
 msgid "Upload Files"
 msgstr "Ingresar"
 
-#: trucker/views.py:386
-#, fuzzy
-#| msgid "Thank you for your feedback!"
+#: trucker/templates/trucker/upload_docs.html:79
+msgid "New Unit"
+msgstr ""
+
+#: trucker/templates/trucker/upload_docs.html:88
+msgid "Tarjtea de Circulación"
+msgstr ""
+
+#: trucker/templates/trucker/upload_docs.html:93
+msgid "Tarjeta de Tractocamión"
+msgstr ""
+
+#: trucker/templates/trucker/upload_docs.html:99
+msgid "Tarjeta de Caja (para las que aplique)"
+msgstr ""
+
+#: trucker/templates/trucker/upload_docs.html:104
+msgid "Fotografía del Placas Visibles de Tractocamión"
+msgstr ""
+
+#: trucker/templates/trucker/upload_docs.html:107
+msgid "Fotografía del Frente de Tractocamión"
+msgstr ""
+
+#: trucker/templates/trucker/upload_docs.html:110
+msgid "Fotografía del Costados de Tractocamión"
+msgstr ""
+
+#: trucker/templates/trucker/upload_docs.html:113
+msgid "Fotografía del Posterior de Caja (para las que aplique)"
+msgstr ""
+
+#: trucker/templates/trucker/upload_docs.html:116
+msgid "Fotografía del Interior de Caja (para las que aplique)"
+msgstr ""
+
+#: trucker/templates/trucker/upload_docs.html:121
+msgid "Poliza de Seguro"
+msgstr ""
+
+#: trucker/templates/trucker/upload_docs.html:127
+msgid "Especificaciones de servicio del proveedor de GPS"
+msgstr ""
+
+#: trucker/views.py:396
 msgid "Thank you for uploading your documents"
-msgstr "Gracias por tus comentarios!"
+msgstr "Gracias por ingresar sus documentos!"
+
+#~ msgid "Notifications"
+#~ msgstr "Notificaciones"
+
+#~ msgid "Feedback?"
+#~ msgstr "Comentarios"
 
 #~ msgid "user_type"
 #~ msgstr "Tipo de Usuario"

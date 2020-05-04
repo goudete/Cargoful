@@ -107,6 +107,7 @@
               <input type = 'number' name = 'order_id' value = {{o.order.id}} hidden = 'true'>
               <button type = 'submit' class = 'btn btn-secondary'>{% trans "View Order" %}</button> <!-- this is for viewing the order -->
               <button type = 'submit' formaction = 'read_order_notification' class = 'btn btn-success'>Ok</button> <!-- this button is for when you just want the notification to go away -->
+            </form>
           </td>
         </tr>
         {% endfor %}
@@ -159,6 +160,7 @@
               <input type = 'number' name = 'request_id' value = {{r.id}} hidden = 'true'>
               <button type = 'submit' class = 'btn btn-success'>{% trans "Accept" %}</button>
               <button type = 'submit' formaction = 'deny_request' class = 'btn btn-danger'>{% trans "Decline" %}</button>
+            </form>
           </td>
         </tr>
         {% endfor %}
