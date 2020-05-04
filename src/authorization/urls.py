@@ -1,7 +1,8 @@
 from django.urls import path
 from django.conf.urls import url
 from . import views
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import (LoginView, LogoutView, PasswordResetView,
+                                      PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView)
 
 
 urlpatterns = [
@@ -15,4 +16,8 @@ urlpatterns = [
     path('email_confirmed/',views.email_confirmed, name = "email_confirmed"),
     path('set_language_en', views.set_language_en, name='set_language_en'),
     path('set_language_es', views.set_language_es, name='set_language_es'),
+    path('reset-password',PasswordResetView.as_view(template_name = "passwords/reset_password.html"), name = "reset_password"),
+    path('reset-password/done',PasswordResetDoneView.as_view(template_name = "passwords/password_reset_done.html"), name = "password_reset_done"),
+    path('reset-password/confirm/<uidb64>/<token>/',PasswordResetConfirmView.as_view(template_name="passwords/password_reset_confirm.html"), name = "password_reset_confirm"),
+    path('reset-password/complete',PasswordResetCompleteView.as_view(template_name = "passwords/password_reset_complete.html"), name = "password_reset_complete"),
     ]

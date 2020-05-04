@@ -26,4 +26,5 @@ urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(template_name='registration/login.html')),
     path('', include('authorization.urls')),
     path('cf_admin/', include('cf_admin.urls')),
+    path('comms/', include('comms.urls')),
 ]

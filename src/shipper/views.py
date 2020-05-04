@@ -308,10 +308,10 @@ def order_success(request):
                 new_order.save()
                 messages.info(request, _("Order ") + str(customer_order_no) + _(" Placed Successfully"))
                 #notify truckers per email
-                users = User.objects.filter(groups__name='Trucker') #get truckers, needs to be User objects cos that's where the email is
-                for user in users:
-                    email = user.email
-                    username = user.username
+                connected_truckers = Friend.objects.friends(request.user) #get truckers which are connected to shipper
+                for trucker in connected_truckers:
+                    email = trucker.email
+                    username = trucker.username
                     send_mail(
                     'A new opportunity awaits you!', #email subject
                     'Dear ' + username + """, \n \n
@@ -442,7 +442,7 @@ def ajax_price_calculation(request):
     #                            pu_city_name,del_city_name,truck_type)))
     price = pricingModel.calculatePrice(distance,'Aguascalientes','Aguascalientes',truck_type,
                                         float(pu_lat),float(pu_long),float(del_lat),float(del_long))
-
+    price = round(price,-1) #round to nearest unit of ten. e.g. 46 --> 50
     data = {
         'distance':distance,
         'price': price,
@@ -656,56 +656,3 @@ def get_feedback(request):
         messages.info(request, _("Thank you for your feedback!"))
 
         return HttpResponseRedirect('/shipper')
-
-def contact_form_view(request):
-    if request.method == "POST":
-        query_dict = request.POST #request.data doesnt work for some reason
-        print("testing accessing")
-        print(query_dict['name'])
-
-
-        customer_name = query_dict['name']
-        email = query_dict['email']
-        phone_number = query_dict['phone_number']
-        website = query_dict['website']
-        message = query_dict['message']
-
-        out_message = "Hi, " + customer_name + " has contacted the team with the following message: \n \n"
-        out_message += message + "\n \n"
-        out_message += "Get back to him at " + email + ". \n \n \n"
-
-        user = request.user
-        out_message += "Additional user info:  \n \n"
-        out_message += "username: " + str(user.username) + "\n"
-        out_message += "user type: " + str(user.profile.user_type) + "\n"
-        out_message += "registered email: " + str(user.profile.user.email) + "\n"
-        if len(website) > 0:
-            out_message += "given website: " + website + "\n"
-        if len(phone_number) > 0:
-            out_message += "given phone number: " + phone_number + "\n"
-        send_mail(
-        customer_name + ' HAS A NEW HELP REQUEST!', #email subject
-        out_message, #email content
-        'help@cargoful.org',
-        ['help@cargoful.org'],
-        fail_silently = False,
-        )
-
-        #send another mail confirming help is on the way
-        send_mail(
-        'Help is on the way!', #email subject
-        """Dear """ + customer_name + """, \n
-Thank you for reaching out to the Cargoful team! \n
-We will review your message and get back to you soon. \n \n
-Never alone with Cargoful! \n
-Your Cargoful team \n \n
-Here your request: \n""" + message, #email content
-        'help@cargoful.org',
-        [email],
-        fail_silently = False,
-        )
-        messages.info(request, "Thanks "+ str(customer_name)
-        + "! We have received your message and will get back to you shortly at " + email)
-        return HttpResponseRedirect('/shipper')
-    else:
-        return render(request, 'shipper/contact_form.html')

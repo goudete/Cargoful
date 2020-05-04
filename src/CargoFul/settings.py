@@ -59,7 +59,8 @@ INSTALLED_APPS = [
     'storages',
     'friendship',
     'phonenumber_field',
-    'django_extensions'
+    'django_extensions',
+    'comms',
 ]
 
 MIDDLEWARE = [
