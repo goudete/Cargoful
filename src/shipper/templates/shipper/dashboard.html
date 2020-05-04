@@ -63,23 +63,49 @@
   }
 </style>
 
-<div class="row justify-content-center mt-5">
+<!-- <div class="row justify-content-center mt-5">
   <div class="col-md-10">
-    <h1>{% trans "My Orders" %}</h1>
+    <h3>{% trans "My Orders" %}</h3>
   </div>
-</div>
+</div> -->
 
-<div class="row justify-content-center pt-2">
+<!-- <div class="row justify-content-center pt-2">
   <div class="col-md-10">
     <p><b>{% trans "Total Orders" %}: {{set.count}}</b></p>
-  </div>
+  </div> -->
 
-  <div class="col-md-10">
+  <!-- <div class="col-md-10">
     {% if  company.user.profile.is_approved == True %}
     <a href="/shipper/post_order" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">{% trans "New Order" %}</a>
     {% endif %}
+  </div> -->
+<!-- </div> -->
+
+<div class="row justify-content-center mt-5">
+  <div class="col-md-10">
+    <h3>{% trans "My Orders" %}</h3>
   </div>
 </div>
+
+<div class="row">
+  <div class="col-11 ml-auto">
+    <p><b>{% trans "Total Orders" %}: {{set.count}}</b></p>
+  </div>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-2">
+  </div>
+  <div class="col-2 ml-auto">
+    <a href="/shipper/post_order">
+    <svg class="bi bi-plus-circle-fill" width="3.5em" height="3.5em" viewBox="0 0 16 16" fill="rgb(235,5,113)" xmlns="http://www.w3.org/2000/svg">
+      <path fill-rule="evenodd" d="M16 8A8 8 0 110 8a8 8 0 0116 0zM8.5 4a.5.5 0 00-1 0v3.5H4a.5.5 0 000 1h3.5V12a.5.5 0 001 0V8.5H12a.5.5 0 000-1H8.5V4z" clip-rule="evenodd"/>
+    </svg>
+    </a>
+  </div>
+</div>
+
+
 
 <div class="row justify-content-center pt-2" id = 'dashboard'>
 <div class="col-md-10">

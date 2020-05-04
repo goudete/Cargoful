@@ -348,7 +348,7 @@ def past_orders(request):
         num_notifications = len(list(connect_requests)) + len(list(order_notifications)) + len(list(counter_offers))
         #end notification number
         past_orders = order.objects.filter(truck_company = me).filter(status = 4)
-        return render(request, 'trucker/past_orders.html', {'set': past_orders})
+        return render(request, 'trucker/past_orders.html', {'set': past_orders, 'me' : me})
 
 
 @login_required

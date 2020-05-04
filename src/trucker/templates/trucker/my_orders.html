@@ -1,8 +1,8 @@
 {% extends 'trucker/base.html'%}
 
-{% block content %}
-{% load trucker_tags %}
+
 {% load i18n %}
+{% block content %}
 
 <!-- Welcome and Successful order messages -->
 {% if messages %}
@@ -66,7 +66,7 @@
 <!-- messages end here -->
 <div class="row justify-content-center mt-5">
   <div class="col-md-10">
-    <h1>{% trans "My Jobs" %}</h1>
+    <h3>{% trans "My Jobs" %}</h3>
   </div>
 </div>
 <!-- start of table -->

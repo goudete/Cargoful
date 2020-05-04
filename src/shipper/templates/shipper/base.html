@@ -11,6 +11,7 @@
 
    <!-- CoreUI CSS -->
    <link rel="stylesheet" href="https://unpkg.com/@coreui/coreui@3.0.0-rc.0/dist/css/coreui.min.css" crossorigin="anonymous">
+   <link rel="stylesheet" href="https://unpkg.com/@coreui/icons@1.0.0/css/all.min.css">
    <title>Cargoful</title>
 
    <!-- Loading static files -->
@@ -59,115 +60,111 @@
   <!-- Confirmation page boilerplate ends here -->
 </head>
 
+<!-- New Code Starts -->
 <body class="c-app">
- <!-- Navbar -->
- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-     <div class="d-flex flex-grow-1">
-         <span class="w-100 d-lg-none d-block"></span>
-         <a class="navbar-brand" href="/shipper">
-           <img src="{% static 'imgs/CargoFulPigeon.png' %}" width="200" height="40" class="d-inline-block align-top">
-         </a>
-         <div class="d-flex flex-row-reverse text-right">
-             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar7">
-                 <span class="navbar-toggler-icon"></span>
-             </button>
-         </div>
-         <!-- Start SearchBar -->
-         <form class="form-inline" action = "search_truckers" method = "POST">
-           {% csrf_token %}
-           <div class="form-group col-xs-5 col-lg-1">
-             <input class="form-control mr-sm-2" type="search" name = "query" placeholder="{% trans 'Search Truckers' %}" aria-label="Search">
-           </div>
-           <input type = 'submit' style="display: none;">
-         </form>
-         <!-- End SearchBar -->
-     </div>
+  <!-- SideBar Starts -->
+  <div class="c-sidebar c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
+    <div class="c-sidebar-brand d-lg-down-none pt-1">
+      <a class="navbar-brand" href="/shipper">
+        <img src="{% static 'imgs/CargoFulPigeon.png' %}" width="200" height="40" class="d-inline-block align-top">
+      </a>
+    </div>
 
-     <div class="d-flex">
-       <ul class="nav">
-         <li class="nav-item">
-         <a class="nav-link disabled" href="#" style = "color: white;">{% trans "Hello" %}, {{ request.user }}</a>
-         </li>
-         <!-- other buttons -->
-         <li class="nav-item mr-3">
-             <a href="/shipper/" class="btn btn-secondary">{% trans "My Orders" %}</a>
-         </li>
-         <li class="nav-item mr-3">
-             <a href="/shipper/past_orders" class="btn btn-secondary">{% trans "Past Orders" %}</a>
-         </li>
-         <li class = "nav-item mr-3">
-           <a href = "/shipper/notifications" class = "btn btn-secondary">{% trans "Notifications" %}{% if num_notifications > 0 %} ({{ num_notifications }}){% endif %}</a>
-         </li>
-         <li class = 'nav-item mr-3'>
-           <a href = "/shipper/connection_requests" class = "btn btn-secondary">{% trans "My Truckers" %}</a>
-         </li>
-         <li class="nav-item mr-5">
-             <a href="{% url 'logout' %}" class="btn btn-secondary">{% trans "Logout" %}</a>
-         </li>
-      </ul>
-     </div>
- </nav>
+    <ul class="c-sidebar-nav">
+      <li class="c-sidebar-nav-item mt-4">
+        <a class="c-sidebar-nav-link" href="/shipper/">
+          <i class="c-sidebar-nav-icon cil-home"></i> {% trans "My Orders" %}
+        </a>
+      </li>
 
- <div class = "content">
-  {% block content%}
-  {% endblock %}
-</div>
-<!-- Popper.js first, then CoreUI JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js" integrity="sha384-L2pyEeut/H3mtgCBaUNw7KWzp5n9&#43;4pDQiExs933/5QfaTh8YStYFFkOzSoXjlTb" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@coreui/coreui@3.0.0-rc.0/dist/js/coreui.min.js"></script>
+      <li class="c-sidebar-nav-item">
+        <a class="c-sidebar-nav-link" href="/shipper/past_orders">
+          <i class="c-sidebar-nav-icon cil-history"></i> {% trans "Past Orders" %}
+        </a>
+      </li>
 
-  <!-- Footer -->
-  <div class="footer-margin">
-    <footer id="sticky-footer" class="card-footer font-small navbar-dark bg-dark mt-4">
+      <li class="c-sidebar-nav-item">
+        <a class="c-sidebar-nav-link" href="/shipper/connection_requests">
+          <i class="c-sidebar-nav-icon cil-truck"></i> {% trans "My Truckers" %}
+        </a>
+      </li>
 
-      <!-- Footer Links -->
-      <div class="container text-center text-md-left">
+      <li class="c-sidebar-nav-divider"></li>
+      <li class="c-sidebar-nav-title">{% trans "Help" %}</li>
+      <li class="c-sidebar-nav-item">
+        <a class="c-sidebar-nav-link" href="/shipper/contact">
+          <i class="c-sidebar-nav-icon cil-envelope-closed"></i> {% trans "Contact Us" %}
+        </a>
+      </li>
 
-        <!-- Footer links -->
-        <div class="row text-center text-md-left mt-3 pb-3">
+    </ul>
+  </div>
+  <!-- Sidebar Ends -->
 
-          <!-- Grid column -->
-          <div class="col-md-2 mxr-auto mt-3">
-            <h6 class="text-uppercase mb-4 font-weight-bold text-white">Cargoful</h6>
-            <p class="text-white">{% trans "Disrupting Mexican Logistics" %}</p>
-          </div>
+  <div class="c-wrapper c-fixed-components">
+    <header class="c-header c-header-light c-header-fixed">
+      <!-- Header content here -->
+      <button class="c-header-toggler c-class-toggler d-lg-none mfe-auto" type="button" data-target="#sidebar" data-class="c-sidebar-show">
+        <i class="c-sidebar-nav-icon cil-menu"></i>
+      </button>
+      <button class="c-header-toggler c-class-toggler mfs-3 d-md-down-none" type="button" data-target="#sidebar" data-class="c-sidebar-lg-show" responsive="true">
+        <i class="c-sidebar-nav-icon cil-menu"></i>
+      </button>
 
-          <!-- Grid column -->
-          <hr class="w-100 clearfix d-md-none">
-
-          <!-- Start Feedback form -->
-          <!-- <form class="form-inline" action = "get_feedback" method = "POST">
-            {% csrf_token %}
-            <div class="form-group col-xs-5 col-lg-1">
-              <input type="text" class="form-control mr-sm-2"  name = "feedback" id="feedback" placeholder="Feedback?" aria-label="Search"> -->
-              <!-- <input type="text" name="user_id" value={{ request.user }} hidden='True'> -->
-            <!-- </div>
-            <input type = 'submit' style="display: none;">
-          </form> -->
-          <!-- End Feedback Form -->
-
-          <!-- Grid column -->
-          <div class="col-md-2 ml-auto mt-3 text-white">
-            <a class="btn btn-secondary" href = "/shipper/contact" class="text-uppercase mb-4 font-weight-bold">
-              <!--<a href = "/shipper/contact" />-->
-              {% trans "Contact Us" %}</a>
-
-              <!-- <h6 class="text-uppercase mb-4 font-weight-bold">{% trans "Contact" %}</h6> -->
-
-            <!-- <p class="text-white">
-              <i class="fas fa-home mr-3"></i> Mexico City, Mexico</p> -->
-            <!-- <p class="text-white">
-              <i class="fas fa-envelope"></i> help@cargoful.org</p> -->
-          </div>
-          <!-- Grid column -->
-
+      <form class="form-inline" action = "search_truckers" method = "POST">
+        {% csrf_token %}
+        <div class="form-group col-sm-10 col-lg-10">
+          <input class="form-control shadow bg-white ml-3" type="search" name = "query" placeholder="{% trans 'Search Truckers' %}" aria-label="Search" size="30"/>
         </div>
+        <input type = 'submit' style="display: none;">
+      </form>
 
-      </div>
+      <ul class="c-header-nav ml-auto mr-4">
+        <li class="c-header-nav-item mx-2"><a class="c-header-nav-link" href="/shipper/notifications">
+            {% if num_notifications > 0 %}
+            <svg class="bi bi-exclamation-circle" width="1em" height="1em" viewBox="0 0 16 16" fill="red" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z" clip-rule="evenodd"/>
+              <path d="M7.002 11a1 1 0 112 0 1 1 0 01-2 0zM7.1 4.995a.905.905 0 111.8 0l-.35 3.507a.552.552 0 01-1.1 0L7.1 4.995z"/>
+            </svg>
+            {% else %}
+            <i class="c-sidebar-nav-icon cil-bell"></i>
+            {% endif %}
+        </li>
 
+        <li class="c-header-nav-item dropdown"><a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+          <div class="cil-user"></div>
+        </a>
+          <div class="dropdown-menu dropdown-menu-right pt-0">
+            <div class="dropdown-header bg-light py-2"><strong>{{ request.user.first_name }} {{ request.user.last_name }}</strong></div>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">
+            <i class="c-sidebar-nav-icon cil-file mr-2 mb-2"></i> {% trans "Documents" %}</a>
+
+            <a class="dropdown-item" href="{% url 'logout' %}">
+            <i class="c-sidebar-nav-icon cil-account-logout mr-2 mb-2"></i> {% trans "Logout" %}</a>
+          </div>
+        </li>
+      </ul>
+    </header>
+
+    <div class="c-body">
+      <main class="c-main">
+        <!-- Main content here -->
+        {% block content%}
+        {% endblock %}
+      </main>
+    </div>
+
+    <footer class="c-footer">
+      <!-- Footer Content -->
+      <div>Cargoful &copy; 2020</div>
+      <div class="ml-auto"><i class="c-sidebar-nav-icon cif-mx"></i></div>
+      <!-- <div class="ml-auto">{% trans "Disrupting Mexican Logistics" %} </div> -->
     </footer>
   </div>
-  <!-- Footer -->
+  <!-- Popper.js first, then CoreUI JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js" integrity="sha384-L2pyEeut/H3mtgCBaUNw7KWzp5n9&#43;4pDQiExs933/5QfaTh8YStYFFkOzSoXjlTb" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@coreui/coreui@3.0.0-rc.0/dist/js/coreui.min.js"></script>
 
   </body>
 </html>
