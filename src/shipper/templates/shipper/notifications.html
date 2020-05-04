@@ -55,6 +55,7 @@
               <input type = 'number' name = 'counter_offer_order_id' value = {{c.order.id}} hidden = 'true'>
               <button type = 'submit' class = 'btn btn-secondary'>{% trans "Review" %}</button>
               <button type = 'submit' class = 'btn btn-danger' formaction = 'deny_counter_offer'>{% trans "Deny" %}</button>
+            </form>
           </td>
         </tr>
         {% endfor %}
@@ -120,6 +121,7 @@
               {% csrf_token %}
               <input type = 'number' name = 'status_id' value = {{s.id}} hidden = 'true'>
               <button type = 'submit' class = 'btn btn-success'>Ok</button>
+            </form>
           </td>
         </tr>
         {% endfor %}
@@ -172,6 +174,7 @@
               <input type = 'number' name = 'request_id' value = {{r.id}} hidden = 'true'>
               <button type = 'submit' class = 'btn btn-success'>{% trans "Accept" %}</button>
               <button type = 'submit' formaction = 'deny_request' class = 'btn btn-danger'>{% trans "Decline" %}</button>
+            </form>
           </td>
         </tr>
         {% endfor %}

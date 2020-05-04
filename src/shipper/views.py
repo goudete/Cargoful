@@ -31,6 +31,10 @@ from .recurrence_handlers import getRecurrenceVars, getRecurrenceEndVars, getRec
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
+from trucker.file_storage import FileStorage
+import botocore
+import boto3
+import magic
 
 # Create your views here.
 
@@ -60,7 +64,7 @@ def post_order(request):
         counter_offers = counter_offer.objects.filter(order__shipping_company__user = request.user).filter(status = 0)
         num_notifications = len(list(connect_requests)) + len(list(status_updates)) + len(list(counter_offers))
         #end notification number
-        jdp = json.dumps(request.data) #get request into json form
+        jdp = json.dumps(request.POST) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
         jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
         #getting order specs
@@ -74,8 +78,11 @@ def post_order(request):
         elif time != "":
             time = str(time) + " AM"
         #other specs
+        weight = jsn['weight']
         truck, price = jsn['truck_type'], jsn['price']
         contents, instructions = jsn['contents'], jsn['instructions']
+        #get orden de embarco file
+        orden_de_embarco = request.FILES['orden_de_embarco']
         #render a copy of order form (different HTML file b/c there is no crispy forms)
         TRUCK_TYPES = [
         ('Low Boy', 'Low Boy'),
@@ -113,10 +120,12 @@ def post_order(request):
             'truck': truck,
             'truck_dict': TRUCK_TYPES,
             'price': price,
+            'weight': weight,
             'contents': contents,
             'instructions': instructions,
             'g_api': Google_API,
-            'num_notifications': num_notifications
+            'num_notifications': num_notifications,
+            'orden_de_embarco': orden_de_embarco
         })
     #if the method is a get then the user is posting a new order for the first time
     else:
@@ -161,7 +170,7 @@ def confirm(request):
         num_notifications = len(list(connect_requests)) + len(list(status_updates)) + len(list(counter_offers))
         #end notification number
         """stuff for handling json inside request"""
-        jdp = json.dumps(request.data) #get request into json form
+        jdp = json.dumps(request.POST) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
         #get necessary info
         #use googlemaps api to get lat and long for pickup and delivery
@@ -199,6 +208,7 @@ def confirm(request):
         #get the distance btwn pickup and delivery
         distance = round(haversine((pu_lat,pu_long), (del_lat,del_long)), 4)
         #other regular metrics
+
         """THIS IS FOR INCLUDING DATE AND TIME, DO NOT DELETE!!!!!!!"""
         if 'include_date' in jsn.keys():
             date = jsn['pickup_date']
@@ -214,12 +224,14 @@ def confirm(request):
             if hour < 12:
                 hour += 12
             time = str(hour) + ":" + time.split(" ")[0].split(":")[1]+" PM"
+        """ END of IMPORTANT!!!!! Date and Time block """
+
         #other specs
         truck = jsn['truck_type']
         cargo = jsn['contents']
         instructions = jsn['instructions']
         price = jsn['price']
-
+        weight = jsn['weight']
         #get recurrence type: Daily, Weekly, Monthly or Yearly. Based on this we get the necessary variables to pass
         # recurrence_type = request.POST.get("recurrence_types", None)
         # recurrence_vars = getRecurrenceVars(recurrence_type,request,jsn)
@@ -244,7 +256,8 @@ def confirm(request):
             'cargo': cargo,
             'instruct': instructions,
             'price': price,
-            'num_notifications': num_notifications,
+            'weight': weight,
+            'num_notifications': num_notifications
         #    'recurrence_type': recurrence_type
         }
         # for key in recurrence_vars:
@@ -267,7 +280,7 @@ def confirm(request):
 def order_success(request):
     #check if request is a post
     if request.method == "POST":
-        jdp = json.dumps(request.data) #get request into json form
+        jdp = json.dumps(request.POST) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
         #geocode stuff
         pu_lat, pu_long = jsn['pickup_latitude'], jsn['pickup_longitude']
@@ -281,7 +294,6 @@ def order_success(request):
         ship = shipper.objects.filter(user = request.user).first()
         num_orders = len(order.objects.filter(shipping_company = ship))+1
         customer_order_no = 'CF'+str(id)+"-"+str(num_orders)
-
         # recurrence_type = jsn['recurrence_type']
         # recurrence_vars = getRecurrenceVarsFromConfirmation(recurrence_type,jsn)
         # recurrence_end_vars = getRecurrenceEndVarsFromConfirmation(recurrence_type,jsn)
@@ -656,3 +668,76 @@ def get_feedback(request):
         messages.info(request, _("Thank you for your feedback!"))
 
         return HttpResponseRedirect('/shipper')
+
+def contact_form_view(request):
+    if request.method == "POST":
+        query_dict = request.POST #request.data doesnt work for some reason
+        print("testing accessing")
+        print(query_dict['name'])
+
+
+        customer_name = query_dict['name']
+        email = query_dict['email']
+        phone_number = query_dict['phone_number']
+        website = query_dict['website']
+        message = query_dict['message']
+
+        out_message = "Hi, " + customer_name + " has contacted the team with the following message: \n \n"
+        out_message += message + "\n \n"
+        out_message += "Get back to him at " + email + ". \n \n \n"
+
+        user = request.user
+        out_message += "Additional user info:  \n \n"
+        out_message += "username: " + str(user.username) + "\n"
+        out_message += "user type: " + str(user.profile.user_type) + "\n"
+        out_message += "registered email: " + str(user.profile.user.email) + "\n"
+        if len(website) > 0:
+            out_message += "given website: " + website + "\n"
+        if len(phone_number) > 0:
+            out_message += "given phone number: " + phone_number + "\n"
+        send_mail(
+        customer_name + ' HAS A NEW HELP REQUEST!', #email subject
+        out_message, #email content
+        'help@cargoful.org',
+        ['help@cargoful.org'],
+        fail_silently = False,
+        )
+
+        #send another mail confirming help is on the way
+        send_mail(
+        'Help is on the way!', #email subject
+        """Dear """ + customer_name + """, \n
+Thank you for reaching out to the Cargoful team! \n
+We will review your message and get back to you soon. \n \n
+Never alone with Cargoful! \n
+Your Cargoful team \n \n
+Here your request: \n""" + message, #email content
+        'help@cargoful.org',
+        [email],
+        fail_silently = False,
+        )
+        messages.info(request, "Thanks "+ str(customer_name)
+        + "! We have received your message and will get back to you shortly at " + email)
+        return HttpResponseRedirect('/shipper')
+    else:
+        return render(request, 'shipper/contact_form.html')
+
+@login_required
+@allowed_users(allowed_roles = ['Shipper'])
+@api_view(['POST'])
+def upload_orden_de_embarco(request):
+    jdp = json.dumps(request.POST) #get request into json form
+    jsn = json.loads(jdp) #get dictionary from json
+    jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
+    cur_order = order.objects.filter(id = jsn['order_id']).first()
+    #save carta porte to S3
+    files_dir = 'docs/{order}'.format(order = "order" +str(cur_order.id))
+    file_storage = FileStorage()
+    doc = request.FILES['orden_de_embarco'] #get file
+    mime = magic.from_buffer(doc.read(), mime=True).split("/")[1]
+    doc_path = os.path.join(files_dir, "orden_de_embarco."+mime) #set path for file to be stored in
+    cur_order.orden_de_embarco.name = doc_path
+    cur_order.save()
+    file_storage.save(doc_path, doc)
+    #save doc to order's cartaporte file
+    return HttpResponseRedirect("/shipper")

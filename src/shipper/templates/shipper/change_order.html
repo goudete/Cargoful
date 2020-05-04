@@ -159,12 +159,17 @@
         </div>
       </div>
 
-      <div class="row justify-content-center mt-3">
-        <div class="col-8">
+      <div class="row justify-content-center mt-4">
+        <div class = "col-4">
+          <h5>{% trans "Weight (Tons)" %}</h5>
+          <input class = 'form-control' id = 'weight' name = 'weight' type = 'number' step = '0.01' value = {{weight}} size = '60' required/>
+        </div>
+        <div class="col-4">
           <h5>{% trans "Contents" %}</h5>
           <input class = 'form-control' id = 'contents' name="contents" type="text" value = "{{contents}}" size = '60' required/>
         </div>
       </div>
+
 
       <div class = "row justify-content-center mt-3">
         <div class="col-8">

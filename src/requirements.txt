@@ -8,7 +8,6 @@ Django==3.0.4
 django-crispy-forms==1.9.0
 django-environ==0.4.5
 django-extensions==2.2.9
-django-friends==0.1.5
 django-friendship==1.9.1
 django-phonenumber-field==4.0.0
 django-storages==1.9.1
@@ -26,9 +25,9 @@ phonenumbers==8.12.2
 Pillow==7.0.0
 pykml==0.2.0
 python-dateutil==2.8.1
+python-gettext==4.0
 python-magic-bin==0.4.14
 pytz==2019.3
-reportlab==3.5.42
 requests==2.23.0
 s3transfer==0.3.3
 six==1.14.0

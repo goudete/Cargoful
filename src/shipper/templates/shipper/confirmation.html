@@ -17,7 +17,7 @@
     <div id = 'mark2' style='background-image: url("{% static "imgs/CargoFulLogo-12.png" %}");'></div>
   </div>
 
-  <form action = 'order_placed' method = "post">
+  <form action = 'order_placed' method = "post" enctype = "multipart/form-data">
     {% csrf_token %}
 
     <div class="row justify-content-center mt-4">
@@ -57,10 +57,17 @@
     </div>
 
     <div class="row justify-content-center mt-3">
+      <div class = "col-4">
+        <h5>{% trans "Weight (Tons)" %}</h5>
+        <input class = "form-control" id = 'weight' name = 'weight' type = "number" step = "0.01" value = {{weight}} size = '60' readonly/>
+      </div>
       <div class="col-4">
         <h5>{% trans "Contents" %}</h5>
         <input class = 'form-control' id = 'contents' name="contents" type="text" value = "{{cargo}}" size = '60' readonly/>
       </div>
+    </div>
+
+    <div class = "row justify-content-center mt-3">
       <div class="col-4">
         <h5>{% trans "Instructions" %}</h5>
         <input class = 'form-control' id = 'instructions' name="instructions" type="text" value = "{{instruct}}" size = '60' readonly/>
@@ -139,8 +146,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoicmZpdGNoIiwiYSI6ImNrN3dqdTYwYjAzNzUzZm85NXRre
 var map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/light-v10',
-  center: [{{mid_long}}, {{mid_lat}}],
-  zoom: 3
+  center: [-104.83333, 24.83333],
+  zoom: 4
 });
 
 // code from the next step will go here!
@@ -186,6 +193,63 @@ new mapboxgl.Marker(mark2)
   .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
   .setHTML('<h3>' + geojson.features[1].properties.title + '</h3><p>' + geojson.features[1].properties.description + '</p>'))
   .addTo(map);
+
+function getRoute() {
+  var start = [{{pu_long}}, {{pu_lat}}];
+  var end = [{{del_long}}, {{del_lat}}];
+  var url = 'https://api.mapbox.com/directions/v5/mapbox/driving/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?geometries=geojson&access_token=' + mapboxgl.accessToken;
+  // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+  var req = new XMLHttpRequest();
+  req.open('GET', url, true);
+  req.onload = function() {
+    var json = JSON.parse(req.response);
+    var data = json.routes[0];
+    var route = data.geometry.coordinates;
+    var geojson2 = {
+      type: 'Feature',
+      properties: {},
+      geometry: {
+        type: 'LineString',
+        coordinates: route
+      }
+    };
+    console.log(geojson2.geometry.coordinates);
+    // if the route already exists on the map, reset it using setData
+    if (map.getSource('route')) {
+      map.getSource('route').setData(geojson2);
+    } else { // otherwise, make a new request
+      map.addLayer({
+        id: 'route',
+        type: 'line',
+        source: {
+          type: 'geojson',
+          data: {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'LineString',
+              coordinates: geojson2.geometry.coordinates
+            }
+          }
+        },
+        layout: {
+          'line-join': 'round',
+          'line-cap': 'round'
+        },
+        paint: {
+          'line-color': '#eb0e8f',
+          'line-width': 5,
+          'line-opacity': 0.75
+        }
+      });
+    }
+  };
+  req.send();
+}
+
+map.on('load', function() {
+  getRoute();
+});
 
 </script>
 

@@ -66,11 +66,6 @@ def Download_Docs(request):
     )
     resp['Content-Disposition'] = 'attachment; filename = %s' % zip_file_name
     return resp
-    # s3.download_file(bucket_name, aws_dir+"/Acta_Constitutiva", os.path.join(local_dir, "Acta_Constitutiva.pdf"))
-    # s3.download_file(bucket_name, aws_dir+"/Comprobante_Domicilio", os.path.join(local_dir, "Comprobante_Domicilio.pdf"))
-    # s3.download_file(bucket_name, aws_dir+"/Constancia_SHCP", os.path.join(local_dir, "Constancia_SHCP.pdf"))
-    # s3.download_file(bucket_name, aws_dir+"/Estado_Bancaria", os.path.join(local_dir, "Estado_Bancaria.pdf"))
-    # s3.download_file(bucket_name, aws_dir+"/INE", os.path.join(local_dir, "INE"))
 
 
 @login_required

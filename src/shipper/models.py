@@ -52,14 +52,15 @@ class order(models.Model):
     #other specs
     price = models.DecimalField(_('Price'), default = 0.0, max_digits = 9, decimal_places = 2, validators=[MinValueValidator(0.0)])
     distance = models.DecimalField(default = 0.0, max_digits = 15, decimal_places = 2)
-    carta_porte = models.ImageField(upload_to = get_carta_porte_path, blank = True, null = True)
-    orden_de_embarco = models.ImageField(upload_to = get_orden_de_embarco, blank = True, null = True)
+    weight = models.DecimalField(_('Weight'), default = 0.0, max_digits = 10, decimal_places = 2)
+    carta_porte = models.FileField(blank = True, null = True)
+    orden_de_embarco = models.FileField(blank = True, null = True)
     shipment_number = models.PositiveIntegerField(default = 0)
     numero_de_pedido = models.PositiveIntegerField(default = 0)
     numero_de_abaran = models.PositiveIntegerField(default = 0)
     pickup_time = models.TimeField(_('Pickup Time'), default = timezone.now, auto_now_add = False, blank = True, null = True)
     delivery_time = models.TimeField(default = timezone.now, auto_now_add = False)
-    contents = models.TextField(_('Contents'), default = '')
+    contents = models.CharField(_('Contents'), default = '', max_length = 255)
     instructions = models.TextField(_('Instructions'), default = '')
     created_at = models.DateTimeField(auto_now_add=True)
     #truck_type is an option field, the user can pick one of the following options

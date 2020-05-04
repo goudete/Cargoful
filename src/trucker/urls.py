@@ -19,4 +19,7 @@ urlpatterns = [
     path('past_orders', views.past_orders), #this is for showing past orders
     path('get_feedback', views.get_feedback, name='get_feedback'),
     path('upload_docs', views.upload_docs), #for uploading a document
+    path('download_my_docs', views.download_docs), #for downloading your docs
+    path('new_unit', views.upload_new_unit_docs), #for adding new unit to platform
+    path('upload_carta_porte', views.upload_carta_porte), #for including carta porte with doc
 ]

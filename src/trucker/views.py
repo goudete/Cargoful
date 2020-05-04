@@ -17,6 +17,10 @@ import os
 from django.core.mail import send_mail
 from django.utils.translation import gettext as _
 import magic
+import botocore
+import boto3
+from io import BytesIO
+import zipfile
 
 # Create your views here.
 
@@ -69,6 +73,7 @@ def Confirm_Order(request):
     # POST truck_company , status change to 1
     me = truck_company.objects.filter(user=request.user).first()
     cur_order = order.objects.filter(id=order_id).first()
+    all_counter_offers = counter_offer.objects.filter(trucker_user = me).filter(order = cur_order)
     """calculate midpoint of lat and long for map in html page"""
     x,y,z = 0,0,0
     lat1,long1 = math.radians(cur_order.pickup_latitude), math.radians(cur_order.pickup_longitude)
@@ -88,7 +93,7 @@ def Confirm_Order(request):
     mdpt_long = math.degrees(math.atan2(y,x))
     mdpt_sqrt = math.sqrt(x*x + y*y)
     mdpt_lat = math.degrees(math.atan2(z, mdpt_sqrt))
-    return render(request, 'trucker/confirm_order.html', {'order': cur_order, 'mid_long': mdpt_long, 'mid_lat': mdpt_lat, 'me' : me, 'num_notifications': num_notifications})
+    return render(request, 'trucker/confirm_order.html', {'order': cur_order, 'mid_long': mdpt_long, 'mid_lat': mdpt_lat, 'me' : me, 'num_notifications': num_notifications, 'counter_offers': all_counter_offers})
 
 @login_required
 @allowed_users(allowed_roles = ['Trucker'])
@@ -289,6 +294,7 @@ def read_show_order_notification(request):
         notification.truckers.remove(request.user)
         #then display order
         cur_order = order.objects.get(id=jsn['order_id'])
+        all_counter_offers = counter_offer.objects.filter(trucker_user = me).filter(order = cur_order)
         """calculate midpoint of lat and long for map in html page"""
         x,y,z = 0,0,0
         lat1,long1 = math.radians(cur_order.pickup_latitude), math.radians(cur_order.pickup_longitude)
@@ -308,7 +314,7 @@ def read_show_order_notification(request):
         mdpt_long = math.degrees(math.atan2(y,x))
         mdpt_sqrt = math.sqrt(x*x + y*y)
         mdpt_lat = math.degrees(math.atan2(z, mdpt_sqrt))
-        return render(request, 'trucker/confirm_order.html', {'order': cur_order, 'mid_long': mdpt_long, 'mid_lat': mdpt_lat, 'me' : me, 'num_notifications': num_notifications})
+        return render(request, 'trucker/confirm_order.html', {'order': cur_order, 'mid_long': mdpt_long, 'mid_lat': mdpt_lat, 'me' : me, 'num_notifications': num_notifications, 'counter_offers': all_counter_offers})
 
 
 #this method is for when a trucker just wants a new order notification to go away
@@ -348,7 +354,7 @@ def past_orders(request):
         num_notifications = len(list(connect_requests)) + len(list(order_notifications)) + len(list(counter_offers))
         #end notification number
         past_orders = order.objects.filter(truck_company = me).filter(status = 4)
-        return render(request, 'trucker/past_orders.html', {'set': past_orders, 'me' : me})
+        return render(request, 'trucker/past_orders.html', {'set': past_orders, 'me': me, 'num_notifications': num_notifications})
 
 
 @login_required
@@ -370,9 +376,13 @@ def get_feedback(request):
 @api_view(['GET', 'POST'])
 def upload_docs(request):
     if request.method == 'GET':
-        return render(request, 'trucker/upload_docs.html')
+        me = truck_company.objects.filter(user=request.user).first()
+        connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
+        order_notifications = order_post_notification.objects.filter(truckers = request.user) #query all order notifications associated w/ the user
+        counter_offers = counter_offer.objects.filter(trucker_user = me).exclude(status = 0).exclude(status = 3)
+        num_notifications = len(list(connect_requests)) + len(list(order_notifications)) + len(list(counter_offers))
+        return render(request, 'trucker/upload_docs.html', {'me': me, 'num_notifications': num_notifications})
     else:
-        print(request.FILES)
         files_dir = 'docs/{user}'.format(user = "CF" + str(request.user.id))
         file_storage = FileStorage()
         for file in request.FILES: #loop through files in request
@@ -408,3 +418,69 @@ Any questions? Don't hesitate to contact us at help@cargoful.org"""
         fail_silently = False,
         )
         return HttpResponseRedirect("/trucker")
+
+@login_required
+@allowed_users(allowed_roles = ['Trucker'])
+@api_view(['POST'])
+def upload_new_unit_docs(request):
+    me = truck_company.objects.filter(user=request.user).first()
+    files_dir = 'docs/{user}/{unit}'.format(user = "CF" + str(request.user.id), unit = "unit" + str(me.num_units))
+    file_storage = FileStorage()
+    for file in request.FILES: #loop through files in request
+        doc = request.FILES[file] #get file
+        mime = magic.from_buffer(doc.read(), mime=True).split("/")[1]
+        doc_path = os.path.join(files_dir, file+"."+mime) #set path for file to be stored in
+        file_storage.save(doc_path, doc)
+    me.num_units += 1
+    me.save()
+    return HttpResponseRedirect("/trucker")
+
+
+@login_required
+@allowed_users(allowed_roles=['Trucker'])
+@api_view(['GET'])
+def download_docs(request):
+    s3 = boto3.resource('s3') #setup to get from AWS
+    #setup to download off AWS
+    #create folder to store files
+    aws_dir = os.path.join('docs/CF'+str(request.user.id))
+    #create zip file
+    byte = BytesIO()
+    zip = zipfile.ZipFile(byte, "w")
+    zip_file_name = "Trucker-"+str(request.user.id)+".zip"
+    #download files
+    bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
+    objs = bucket.objects.filter(Prefix=aws_dir) #get folder
+    for obj in objs: #iterate over file objects in folder
+        path, filename = os.path.split(obj.key)
+        data = obj.get()['Body'].read()
+        open(filename, 'wb').write(data)
+        zip.write(filename) #write file to zip folder
+        os.unlink(filename)
+    zip.close()
+    resp = HttpResponse(
+        byte.getvalue(),
+        content_type = "application/x-zip-compressed"
+    )
+    resp['Content-Disposition'] = 'attachment; filename = %s' % zip_file_name
+    return resp
+
+@login_required
+@allowed_users(allowed_roles=['Trucker'])
+@api_view(['POST'])
+def upload_carta_porte(request):
+    jdp = json.dumps(request.POST) #get request into json form
+    jsn = json.loads(jdp) #get dictionary from json
+    jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
+    cur_order = order.objects.filter(id = jsn['order_id']).first()
+    #save carta porte to S3
+    files_dir = 'docs/{order}'.format(order = "order" +str(cur_order.id))
+    file_storage = FileStorage()
+    doc = request.FILES['carta_porte'] #get file
+    mime = magic.from_buffer(doc.read(), mime=True).split("/")[1]
+    doc_path = os.path.join(files_dir, "carta_porte."+mime) #set path for file to be stored in
+    cur_order.carta_porte.name = doc_path
+    cur_order.save()
+    file_storage.save(doc_path, doc)
+    #save doc to order's cartaporte file
+    return HttpResponseRedirect("/trucker")

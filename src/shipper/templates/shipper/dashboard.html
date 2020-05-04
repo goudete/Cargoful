@@ -1,5 +1,5 @@
 {% extends 'shipper/base.html'%}
-
+{% load static %}
 {% load i18n %}
 {% block content %}
 
@@ -125,6 +125,7 @@
       <th scope="col">{% trans "Status" %}</th>
       <th scope = "col">{% trans "Trucking Company" %}</th>
       <th scope="col">{% trans "Price" %}</th>
+      <th scope = "col">{% trans "Orden de Embarco" %}</th>
     </tr>
   </thead>
 
@@ -160,6 +161,22 @@
         {% endif %}
       </th>
       <td>{{ s.price }}</td>
+      {% if s.orden_de_embarco %}
+      <td style = "color:green;">{% trans "Uploaded" %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></td>
+      {% else %}
+      <td>
+        <form action = 'upload_orden_de_embarco' method = 'post' enctype = "multipart/form-data">
+          {% csrf_token %}
+          <input type = 'number' id = 'order_id' name = 'order_id' value = {{s.id}} hidden = 'true'>
+          <input type = "file" id ="orden de embarco" name = "orden_de_embarco" required>
+          <div class="row justify-content-center">
+            <div class="btn-group" role="group">
+                <button type="submit" class="btn btn-secondary mt-1">{% trans "Upload" %}</button>
+            </div>
+          </div>
+        </form>
+      </td>
+      {% endif %}
     </tr>
     {% endfor %}
   </tbody>

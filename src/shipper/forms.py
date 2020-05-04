@@ -13,13 +13,13 @@ class Order_Form(forms.ModelForm):
             'pickup_time',
             'truck_type',
             'price',
+            'weight',
             'contents',
             'instructions'
             ]
         widgets = {
             'pickup_date': forms.DateInput(attrs={'id':'datepicker', 'class': 'require-if-active', 'data-require-pair': '#include_date'}),
             'pickup_time': forms.TimeInput(attrs = {'id': 'timepicker', 'class': 'require-if-active', 'data-require-pair': '#include_time'}),
-            'contents': forms.Textarea(attrs={'cols': 5, 'rows': 5}),
             'instructions': forms.Textarea(attrs={'cols': 5, 'rows': 5})
         }
     def __init__(self, *args, **kwargs):

@@ -38,6 +38,8 @@
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <tr>
           <th scope = 'col'>{% trans "Company Name" %}</th>
+          <th scope = 'col'>{% trans "Email" %}</th>
+          <th scope = 'col'>{% trans "Phone Number" %}</th>
           <th scope = 'col'>{% trans "Status" %}</th>
         </tr>
       </thead>
@@ -45,10 +47,12 @@
         {% for c in connections %}
         <tr>
           <td>{{ c.profile.company_name }}</td>
+          <td>{{ c.profile.user.email }}</td>
+          <td>{{ c.profile.phone }}</td>
           {% if c not in pending %}
-          <td color = "green">{% trans "Connected" %} <img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></td>
+          <td style = "color: green;">{% trans "Connected" %} <img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></td>
           {% else %}
-          <td color = "orange">{% trans "Pending" %} <img src="{% static 'imgs/orange_arrow_2.png' %}" alt="" border=3 height=15 width=15></img></td>
+          <td style = "color: orange;">{% trans "Pending" %} <img src="{% static 'imgs/orange_arrow_2.png' %}" alt="" border=3 height=15 width=15></img></td>
           {% endif %}
         </tr>
         {% endfor %}

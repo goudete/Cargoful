@@ -1,6 +1,6 @@
 {% extends 'trucker/base.html'%}
-
-
+{% load static %}
+{% block content %}
 {% load i18n %}
 {% block content %}
 
@@ -86,8 +86,9 @@
           <th scope = 'col'>{% trans "Distance" %}</th>
           <th scope = 'col'>{% trans "Pickup Date" %}</th>
           <th scope = 'col'>{% trans "Pickup Time" %}</th>
-          <th scope = 'col'>{% trans "Status" %}</th>
           <th scope="col">{% trans "Price" %}</th>
+          <th scope = 'col'>{% trans "Status" %}</th>
+          <th scope = 'col'>{% trans "Carta Porte" %}</th>
         </tr>
       </thead>
       <tbody>
@@ -98,8 +99,9 @@
           <td>{{ my.pickup_address }}</td>
           <td>{{ my.delivery_address }}</td>
           <td>{{ my.distance }} KM</td>
-          {% if my.pickup_date is none %}<td>Negotiable</td>{% else %}<td>{{ my.pickup_date }}</td>{% endif %}
-          {% if my.pickup_time is none %}<td>Negotiable</td>{% else %}<td>{{ my.pickup_time }}</td>{% endif %}
+          {% if my.pickup_date is none %}<td>{% trans "Negotiable" %}</td>{% else %}<td>{{ my.pickup_date }}</td>{% endif %}
+          {% if my.pickup_time is none %}<td>{% trans "Negotiable" %}</td>{% else %}<td>{{ my.pickup_time }}</td>{% endif %}
+          <td>{{ my.price }}</td>
           <td>
             {% if my.status == 2 %}
             <form action = 'update_status' method = 'post'>{% csrf_token %}
@@ -148,7 +150,22 @@
             </form>
             {% endif %}
           </td>
-          <td>{{ my.price }}</td>
+          {% if my.carta_porte %}
+          <td style = "color: green;">{% trans "Uploaded" %} <img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></td>
+          {% else %}
+          <td>
+            <form action = 'upload_carta_porte' method = 'post' enctype = "multipart/form-data">
+              {% csrf_token %}
+              <input type = 'number' id = 'order_id' name = 'order_id' value = {{my.id}} hidden = 'true'>
+              <input type = "file" id ="carta porte" name = "carta_porte">
+              <div class="row justify-content-center">
+                <div class="btn-group" role="group">
+                    <button type="submit" class="btn btn-secondary mt-1">{% trans "Upload" %}</button>
+                </div>
+              </div>
+            </form>
+          </td>
+          {% endif %}
         </tr>
         {% endfor %}
       </tbody>

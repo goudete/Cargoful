@@ -31,7 +31,8 @@ integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9If
 
 <div class="row justify-content-center mt-5">
   <div class="col-md-8">
-    <h1>{% trans "Post Your Documents" %}</h1>
+    <h1>{% trans "Corporate Documents" %}</h1>
+    <a href = "/trucker/download_my_docs" tyep = "button" class = "btn btn-secondary">{% trans "Download my Documents" %}</a>
   </div>
 </div>
 
@@ -40,30 +41,91 @@ integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9If
         {% csrf_token %}
         <!--acta constitutiva-->
         <div class = "row justify-content-center mt-2 mb">
-          <label for = "Acta_Constitutiva"><b>Acta Constitutiva</b></label>
-          <input type = "file" id ="Acta_Constitutiva" name = "Acta_Constitutiva" required>
+          <label for = "Acta_Constitutiva"><b>{% trans "Acta Constitutiva" %}</b></label>
+          <input type = "file" id ="Acta_Constitutiva" name = "Acta_Constitutiva">
         </div>
           <!-- Constancia de Situación Fiscal de la SHCP -->
         <div class = "row justify-content-center mt-2 mb-2">
-          <label for = "Constancia_SHCP"><b>Constancia de Situación Fiscal de la SHCP</b></label>
-          <input type = "file" id = "Constancia_SHCP" name = "Constancia_SHCP" required>
+          <label for = "Constancia_SHCP"><b>{% trans "Constancia de Situación Fiscal de la SHCP" %}</b></label>
+          <input type = "file" id = "Constancia_SHCP" name = "Constancia_SHCP">
         </div>
 
         <!--Comprobante de Domicilio -->
         <div class = "row justify-content-center mt-2 mb-2">
-          <label for = "Comprobante_Domicilio"><b>Comprobante de Domicilio</b></label>
-          <input type = "file" id = "Comprobante_Domicilio" name = "Comprobante_Domicilio" required>
+          <label for = "Comprobante_Domicilio"><b>{% trans "Comprobante de Domicilio" %}</b></label>
+          <input type = "file" id = "Comprobante_Domicilio" name = "Comprobante_Domicilio">
         </div>
           <!--Estado de Cuenta Bancaria-->
         <div class = "row justify-content-center mt-2 mb-2">
-          <label for = "Estado_Bancaria"><b>Estado de Cuenta Bancaria</b></label>
-          <input type = "file" id = "Estado_Bancaria" name = "Estado_Bancaria" required>
+          <label for = "Estado_Bancaria"><b>{% trans "Estado de Cuenta Bancaria" %}</b></label>
+          <input type = "file" id = "Estado_Bancaria" name = "Estado_Bancaria">
         </div>
 
         <div class = "row justify-content-center">
           <!-- INE -->
           <label for = "INE"><b>INE</b></label>
-          <input type = "file" id = "INE" name = "INE" required>
+          <input type = "file" id = "INE" name = "INE">
+        </div>
+
+        <div class = "row justify-content-center mt-2 mb-2">
+          <button type = "submit" class = "btn btn-secondary" id = "submit">{% trans "Upload Files" %}</button>
+        </div>
+        <!--end of form-->
+    </form>
+</div>
+
+<div class="row justify-content-center mt-5">
+  <div class="col-md-8">
+    <h1>{% trans "New Unit" %}</h1>
+  </div>
+</div>
+
+<div class="container col-md-8">
+    <form method = "post" action = "new_unit" enctype = "multipart/form-data">
+        {% csrf_token %}
+        <!--tarjeta de circulation-->
+        <div class = "row justify-content-center mt-2 mb">
+          <label for = "Tarjtea de circulación"><b>{% trans "Tarjtea de Circulación" %}</b></label>
+          <input type = "file" id ="Tarjtea de circulación" name = "Tarjtea_de_circulación">
+        </div>
+          <!-- tarjeta de tractocamion-->
+        <div class = "row justify-content-center mt-2 mb-2">
+          <label for = "Tarjeta de tractocamión"><b>{% trans "Tarjeta de Tractocamión" %}</b></label>
+          <input type = "file" id = "Tarjeta de tractocamión" name = "Tarjeta_de_tractocamión">
+        </div>
+
+        <!--tarjeta de caja -->
+        <div class = "row justify-content-center mt-2 mb-2">
+          <label for = "Tarjeta de caja"><b>{% trans "Tarjeta de Caja (para las que aplique)" %}</b></label>
+          <input type = "file" id = "Tarjeta de caja" name = "Tarjeta_de_caja">
+        </div>
+          <!--fotografias de tractocamion-->
+        <div class = "row justify-content-center mt-2 mb-2">
+          <label for = "placas visibles"><b>{% trans "Fotografía del Placas Visibles de Tractocamión" %}</b></label>
+          <input type = "file" id = "placas visibles" name = "placas_visibles">
+
+          <label for = "frente"><b>{% trans "Fotografía del Frente de Tractocamión" %}</b></label>
+          <input type = "file" id = "frente" name = "frente">
+
+          <label for = "costados"><b>{% trans "Fotografía del Costados de Tractocamión" %}</b></label>
+          <input type = "file" id = "costados" name = "costados">
+
+          <label for = "posterior de caja"><b>{% trans "Fotografía del Posterior de Caja (para las que aplique)" %}</b></label>
+          <input type = "file" id = "posterior de caja" name = "posterior_de_caja">
+
+          <label for = "interior de caja"><b>{% trans "Fotografía del Interior de Caja (para las que aplique)" %}</b></label>
+          <input type = "file" id = "interior de caja" name = "interior_de_caja">
+        </div>
+
+        <div class = "row justify-content-center mt-2 mb-2">
+          <label for = "Poliza de Seguro"><b>{% trans "Poliza de Seguro" %}</b></label>
+          <input type = "file" id = "Poliza de Seguro" name = "Poliza_de_Seguro">
+        </div>
+
+        <div class = "row justify-content-center">
+          <!-- INE -->
+          <label for = "GPS"><b>{% trans "Especificaciones de servicio del proveedor de GPS" %}</b></label>
+          <input type = "file" id = "GPS" name = "GPS">
         </div>
 
         <div class = "row justify-content-center mt-2 mb-2">

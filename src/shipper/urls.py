@@ -19,4 +19,9 @@ urlpatterns = [
     path('deny_counter_offer', views.deny_counter_offer), #this url is for denying a counter offer
     path('past_orders', views.show_past_orders), #this url is for showing past orders (already delivered)
     path('get_feedback', views.get_feedback, name='get_feedback'),
+<<<<<<< Updated upstream
+=======
+    path('contact',views.contact_form_view, name ='contact'),
+    path('upload_orden_de_embarco', views.upload_orden_de_embarco), #for uploading the orden de embarco for an order
+>>>>>>> Stashed changes
 ]
