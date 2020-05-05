@@ -12,6 +12,13 @@ class Profile(models.Model):
     is_approved = models.BooleanField(default = False)
     created_at = models.DateTimeField(auto_now_add=True)
     email_confirmed = models.BooleanField(default = False)
+    COMPANY_TYPES = [('PF', 'Persona Física'), ('PM', 'Persona Moral')]
+    company_type = models.CharField(
+    _('Corporation Type'),
+    max_length = 15,
+    choices = COMPANY_TYPES, #references above list object
+    default = 'PF'
+    )
 
 class User_Feedback(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)

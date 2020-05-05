@@ -9,4 +9,6 @@ urlpatterns = [
     path('delete_user', views.Delete_User, name = 'Delete_User'),
     path('delete_order', views.Delete_Order, name = 'Delete_Order'),
     path('download', views.Download_Docs), #for reviewing a trucker and looking at their docs
+    path('download_orden_de_embarco', views.download_orden_de_embarco), #for downloading embarco
+    path('view_orden_de_embarco', views.view_orden_de_embarco), #for viewing embarco on new page
 ]

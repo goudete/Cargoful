@@ -274,7 +274,7 @@ def confirm(request):
     #long list of variables is for the html page, all of these will be displayed in the confirmation page
     return render(request, 'shipper/confirmation.html',renderDict)
 
-#if the order is confirmed, then this page is rendered, it saves the order to db
+#if the order is confirmed, then this sends the user to upload the orden de embarco
 @login_required
 @allowed_users(allowed_roles=['Shipper'])
 @api_view(['POST'])
@@ -283,65 +283,78 @@ def order_success(request):
     if request.method == "POST":
         jdp = json.dumps(request.POST) #get request into json form
         jsn = json.loads(jdp) #get dictionary from json
-        #geocode stuff
-        pu_lat, pu_long = jsn['pickup_latitude'], jsn['pickup_longitude']
-        del_lat, del_long = jsn['delivery_latitude'], jsn['delivery_longitude']
-        #address stuff
-        pu_address, del_address = jsn['pickup_address'], jsn['delivery_address']
-        #distance
-        dist = float(jsn['distance'])
-        #create the customer_order_no field
-        id = request.user.id
-        ship = shipper.objects.filter(user = request.user).first()
-        num_orders = len(order.objects.filter(shipping_company = ship))+1
-        customer_order_no = 'CF'+str(id)+"-"+str(num_orders)
-        # recurrence_type = jsn['recurrence_type']
-        # recurrence_vars = getRecurrenceVarsFromConfirmation(recurrence_type,jsn)
-        # recurrence_end_vars = getRecurrenceEndVarsFromConfirmation(recurrence_type,jsn)
-        # print("RECURRENCE_VARS CONFIRMATION")
-        # print(recurrence_vars)
-        # print("RECURRENCE_END_VARS CONFIRMATION")
-        # print(recurrence_end_vars)
+        jsn.pop('csrfmiddlewaretoken')
+        return render(request, 'shipper/include_orden_de_embarco.html', {'jsn':jsn})
 
-        #create order
-        if True: #recurrence_vars['recurrence_indicator'] == '0': #no recurrence selected
-            n_order = Order_Form(request.POST)
-            if n_order.is_valid():
-                new_order = n_order.save(commit = False)
-                company = shipper.objects.filter(user = request.user).first()
-                new_order.customer_order_no = customer_order_no
-                new_order.shipping_company = company
-                new_order.pickup_latitude = pu_lat
-                new_order.pickup_longitude = pu_long
-                new_order.delivery_latitude = del_lat
-                new_order.delivery_longitude = del_long
-                new_order.pickup_address = pu_address
-                new_order.delivery_address = del_address
-                new_order.distance = round(dist,2)
-                new_order.save()
-                messages.info(request, _("Order ") + str(customer_order_no) + _(" Placed Successfully"))
-                #notify truckers per email
-                connected_truckers = Friend.objects.friends(request.user) #get truckers which are connected to shipper
-                for trucker in connected_truckers:
-                    email = trucker.email
-                    username = trucker.username
-                    send_mail(
-                    'A new opportunity awaits you!', #email subject
-                    'Dear ' + username + """, \n \n
-                    a new opportunity has just been published on the Cargoful platform! \n \n
-                    Login at the link below and book it! \n \n
-                    http://34.216.209.104/accounts/login/ \n \n
-                    Finding your next job has never been so easy! \n
-                    Your Cargoful team """,
-                    'help@cargoful.org',
-                    [email],
-                    fail_silently = False,
-                    )
-                return render(request, 'shipper/include_orden_de_embarco.html', {'order':new_order.id})
-            else:
-                print('invalid!')
-        else:
-                return saveWeeklyRecurringOrder(recurrence_vars,recurrence_end_vars,request)
+#this is the view that creates the order, it either gets an orden de embarco assigned to it or not
+@login_required
+@allowed_users(allowed_roles = ['Shipper'])
+@api_view(['POST'])
+def upload_orden_de_embarco_from_order(request):
+    jdp = json.dumps(request.POST) #get request into json form
+    jsn = json.loads(jdp) #get dictionary from json
+    jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
+    #geocode stuff
+    pu_lat, pu_long = jsn['pickup_latitude'], jsn['pickup_longitude']
+    del_lat, del_long = jsn['delivery_latitude'], jsn['delivery_longitude']
+    #address stuff
+    pu_address, del_address = jsn['pickup_address'], jsn['delivery_address']
+    #distance
+    dist = float(jsn['distance'])
+    #create the customer_order_no field
+    id = request.user.id
+    ship = shipper.objects.filter(user = request.user).first()
+    num_orders = len(order.objects.filter(shipping_company = ship))+1
+    customer_order_no = 'CF'+str(id)+"-"+str(num_orders)
+    #save order
+    n_order = Order_Form(request.POST)
+    if n_order.is_valid():
+        new_order = n_order.save(commit = False)
+        company = shipper.objects.filter(user = request.user).first()
+        new_order.customer_order_no = customer_order_no
+        new_order.shipping_company = company
+        new_order.pickup_latitude = pu_lat
+        new_order.pickup_longitude = pu_long
+        new_order.delivery_latitude = del_lat
+        new_order.delivery_longitude = del_long
+        new_order.pickup_address = pu_address
+        new_order.delivery_address = del_address
+        new_order.distance = round(dist,2)
+        new_order.save()
+        #save carta porte to S3
+        if 'orden_de_embarco' in request.FILES:
+            files_dir = 'docs/{order}'.format(order = "order" +str(new_order.id))
+            file_storage = FileStorage()
+            doc = request.FILES['orden_de_embarco'] #get file
+            mime = magic.from_buffer(doc.read(), mime=True).split("/")[1]
+            doc_path = os.path.join(files_dir, "orden_de_embarco."+mime) #set path for file to be stored in
+            new_order.orden_de_embarco.name = doc_path
+            new_order.save()
+            file_storage.save(doc_path, doc)
+            #save doc to order's orden de embarco file
+        messages.info(request, _("Order ") + str(customer_order_no) + _(" Placed Successfully"))
+        #notify truckers per email
+        connected_truckers = Friend.objects.friends(request.user) #get truckers which are connected to shipper
+        for trucker in connected_truckers:
+            email = trucker.email
+            username = trucker.username
+            send_mail(
+            'A new opportunity awaits you!', #email subject
+            'Dear ' + username + """, \n \n
+            a new opportunity has just been published on the Cargoful platform! \n \n
+            Login at the link below and book it! \n \n
+            http://34.216.209.104/accounts/login/ \n \n
+            Finding your next job has never been so easy! \n
+            Your Cargoful team """,
+            'help@cargoful.org',
+            [email],
+            fail_silently = False,
+            )
+
+    else:
+        print('invalid!')
+
+    return HttpResponseRedirect("/shipper")
 
 @login_required
 @allowed_users(allowed_roles=['Shipper'])

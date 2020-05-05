@@ -67,6 +67,53 @@ def Download_Docs(request):
     resp['Content-Disposition'] = 'attachment; filename = %s' % zip_file_name
     return resp
 
+@login_required
+@allowed_users(allowed_roles=['Cf_admin'])
+@api_view(['POST'])
+def download_orden_de_embarco(request):
+    if request.method == "POST":
+        s3 = boto3.resource('s3') #setup to get from AWS
+        jdp = json.dumps(request.POST) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        order_id = jsn['order_id']
+        aws_dir = 'docs/order'+str(order_id)
+        bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
+        objs = bucket.objects.filter(Prefix=aws_dir) #get folder
+        for obj in objs:
+            path, filename = os.path.split(obj.key)
+            if 'orden_de_embarco' in filename:
+                orden_de_embarco = obj.get()['Body'].read()
+                mimetype = filename.split(".")[1]
+                response = HttpResponse(orden_de_embarco, "application/"+str(mimetype))
+                response['Content-Disposition'] = 'attachment;filename=orden_de_embarco.%s' % mimetype
+                return response
+            else:
+                pass
+
+@login_required
+@allowed_users(allowed_roles=['Cf_admin'])
+@api_view(['POST'])
+def view_orden_de_embarco(request):
+    if request.method == "POST":
+        s3 = boto3.resource('s3') #setup to get from AWS
+        jdp = json.dumps(request.POST) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        order_id = jsn['order_id']
+        shipper_id = jsn['shipper_id']
+        aws_dir = 'docs/order'+str(order_id)
+        bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
+        objs = bucket.objects.filter(Prefix=aws_dir) #get folder
+        for obj in objs:
+            print(obj)
+            path, filename = os.path.split(obj.key)
+            if 'orden_de_embarco' in filename:
+                orden_de_embarco = obj.get()['Body'].read()
+                mimetype = filename.split(".")[1]
+                response = HttpResponse(orden_de_embarco, "application/"+str(mimetype))
+                response['Content-Disposition'] = 'inline;filename=orden_de_embarco.%s' % mimetype
+                return response
+            else:
+                pass
 
 @login_required
 @allowed_users(allowed_roles=['Cf_admin'])

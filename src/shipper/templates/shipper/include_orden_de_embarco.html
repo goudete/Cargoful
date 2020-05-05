@@ -1,7 +1,23 @@
-{% extends 'shipper/base.html'%}
 {% load static %}
 {% load i18n %}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
+<!-- CoreUI CSS -->
+<link rel="stylesheet" href="https://unpkg.com/@coreui/coreui@3.0.0-rc.0/dist/css/coreui.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/@coreui/icons@1.0.0/css/all.min.css">
+<title>Cargoful</title>
+
+<!-- Loading static files -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+<!-- Confirmation page boilerplate starts here -->
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
 {% block content %}
 <!--styling to make table overflow scroll -->
 <style>
@@ -31,13 +47,48 @@
 <div class="row justify-content-center pt-2" id = 'dashboard'>
   <div class="col-md-8">
     <div class="card">
-      <form action = "upload_orden_de_embarco" method = "post" enctype = "multipart/form-data">
+      <form action = "upload_orden_de_embarco_from_order" method = "post" enctype = "multipart/form-data">
         {% csrf_token %}
-        <input type = "number" name = "order_id" value = {{order}} hidden = "true">
-        <input type = "file" name = "orden_de_embarco">
+        <!-- all of these inputs are going to be hidden, they hold the data about the order -->
+        <input class = 'form-control' id = 'addy' name = 'pickup_address' type = 'text' value = "{{jsn.pickup_address}}" size = '60' hidden = 'true' readonly>
+        <input class = 'form-control' id = 'addy' name = 'delivery_address' type = 'text' value = "{{jsn.delivery_address}}" size = '60' hidden = 'true' readonly>
+        <input class = 'form-control' id = 'date' name="pickup_date"  {% if jsn.pickup_date == "" %} value = "" {% else %}value = {{jsn.pickup_date}} {% endif %} size = '60' hidden = 'true' readonly/>
+        <input class = 'form-control' id = 'time' name="pickup_time" {% if jsn.pickup_time == "" %} value = "" {% else %}type="time" value = {{jsn.pickup_time}} {% endif %} size = '60' hidden = 'true' readonly/>
+        <input class = 'form-control' id = 'truck_type' name="truck_type" type="text" value = "{{jsn.truck_type}}" size = '60' hidden = 'true' readonly/>
+        <input class = 'form-control' id = 'price' name="price" type="number" step="0.01" value = {{jsn.price}} size = '60' hidden = 'true' readonly/>
+        <input class = "form-control" id = 'weight' name = 'weight' type = "number" step = "0.01" value = {{jsn.weight}} size = '60' hidden = 'true' readonly/>
+        <input class = 'form-control' id = 'contents' name="contents" type="text" value = "{{jsn.contents}}" size = '60' hidden ='true' readonly/>
+        <input class = 'form-control' id = 'instructions' name="instructions" type="text" value = "{{jsn.instructions}}" hidden = 'true' size = '60' readonly/>
+        <input class = 'field' id = 'distance' name = 'distance' type = 'number' value = {{jsn.distance}} hidden = 'true' readonly>
+        <input class = 'field' id = 'pu_lat' name = 'pickup_latitude' type = 'number' value = {{jsn.pickup_latitude}} hidden = 'true' readonly>
+        <input class = 'field' id = 'pu_long' name = 'pickup_longitude' type = 'number' value = {{jsn.pickup_longitude}} hidden = 'true' readonly>
+        <input class = 'field' id = 'del_lat' name = 'delivery_latitude' type = 'number' value = {{jsn.delivery_latitude}} hidden = 'true' readonly>
+        <input class = 'field' id = 'del_long' name = 'delivery_longitude' type = 'number' value = {{jsn.delivery_longitude}} hidden = 'true' readonly>
+        <!-- end of hidden stuff -->
+        <input type = "file" name = "orden_de_embarco" required> <!-- making it required so that you cant accidentally upload nothing -->
         <button type = "submit" class="btn btn-secondary">{% trans "Upload" %}</button>
       </form>
-      <a href = "/shipper" class = "btn btn-danger">{% trans "Skip This" %}</a>
+      <!-- this 2nd form is the same, but it doesnt include a file, its for if they want to skip the orden de embarco -->
+      <form action = "upload_orden_de_embarco_from_order" method = "post" enctype = "multipart/form-data">
+        {% csrf_token %}
+        <!-- all of these inputs are going to be hidden, they hold the data about the order -->
+        <input class = 'form-control' id = 'addy' name = 'pickup_address' type = 'text' value = "{{jsn.pickup_address}}" size = '60' hidden = 'true' readonly>
+        <input class = 'form-control' id = 'addy' name = 'delivery_address' type = 'text' value = "{{jsn.delivery_address}}" size = '60' hidden = 'true' readonly>
+        <input class = 'form-control' id = 'date' name="pickup_date"  {% if jsn.pickup_date == "" %} value = "" {% else %}value = {{jsn.pickup_date}} {% endif %} size = '60' hidden = 'true' readonly/>
+        <input class = 'form-control' id = 'time' name="pickup_time" {% if jsn.pickup_time == "" %} value = "" {% else %}type="time" value = {{jsn.pickup_time}} {% endif %} size = '60' hidden = 'true' readonly/>
+        <input class = 'form-control' id = 'truck_type' name="truck_type" type="text" value = "{{jsn.truck_type}}" size = '60' hidden = 'true' readonly/>
+        <input class = 'form-control' id = 'price' name="price" type="number" step="0.01" value = {{jsn.price}} size = '60' hidden = 'true' readonly/>
+        <input class = "form-control" id = 'weight' name = 'weight' type = "number" step = "0.01" value = {{jsn.weight}} size = '60' hidden = 'true' readonly/>
+        <input class = 'form-control' id = 'contents' name="contents" type="text" value = "{{jsn.contents}}" size = '60' hidden ='true' readonly/>
+        <input class = 'form-control' id = 'instructions' name="instructions" type="text" value = "{{jsn.instructions}}" hidden = 'true' size = '60' readonly/>
+        <input class = 'field' id = 'distance' name = 'distance' type = 'number' value = {{jsn.distance}} hidden = 'true' readonly>
+        <input class = 'field' id = 'pu_lat' name = 'pickup_latitude' type = 'number' value = {{jsn.pickup_latitude}} hidden = 'true' readonly>
+        <input class = 'field' id = 'pu_long' name = 'pickup_longitude' type = 'number' value = {{jsn.pickup_longitude}} hidden = 'true' readonly>
+        <input class = 'field' id = 'del_lat' name = 'delivery_latitude' type = 'number' value = {{jsn.delivery_latitude}} hidden = 'true' readonly>
+        <input class = 'field' id = 'del_long' name = 'delivery_longitude' type = 'number' value = {{jsn.delivery_longitude}} hidden = 'true' readonly>
+        <!-- end of hidden stuff -->
+        <button type = "submit" class="btn btn-danger">{% trans "Skip This" %}</button> <!-- made the button red so that they realize that they shouldnt skip -->
+      </form>
     </div>
   </div>
 </div>

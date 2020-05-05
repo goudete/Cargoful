@@ -22,6 +22,7 @@ urlpatterns = [
     path('get_feedback', views.get_feedback, name='get_feedback'),
     path('contact',views.contact_form_view, name ='contact'),
     path('upload_orden_de_embarco', views.upload_orden_de_embarco), #for uploading the orden de embarco for an order
+    path('upload_orden_de_embarco_from_order', views.upload_orden_de_embarco_from_order), #for uploading orden de embarco form order
     path('download_carta_porte', views.download_carta_porte), #this is for downloading a carta porte doc
     path('view_carta_porte', views.view_carta_porte), #this is for viewing a carta porte
 ]
