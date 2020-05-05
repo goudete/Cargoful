@@ -328,16 +328,16 @@ def order_success(request):
                     send_mail(
                     'A new opportunity awaits you!', #email subject
                     'Dear ' + username + """, \n \n
-a new opportunity has just been published on the Cargoful platform! \n \n
-Login at the link below and book it! \n \n
-http://34.216.209.104:8000/accounts/login/ \n \n
-Finding your next job has never been so easy! \n
-Your Cargoful team """,
+                    a new opportunity has just been published on the Cargoful platform! \n \n
+                    Login at the link below and book it! \n \n
+                    http://34.216.209.104/accounts/login/ \n \n
+                    Finding your next job has never been so easy! \n
+                    Your Cargoful team """,
                     'help@cargoful.org',
                     [email],
                     fail_silently = False,
                     )
-                return HttpResponseRedirect('/shipper')
+                return render(request, 'shipper/include_orden_de_embarco.html', {'order':new_order.id})
             else:
                 print('invalid!')
         else:
@@ -401,7 +401,6 @@ def show_truckers(request):
         return render(request, 'shipper/search_connections.html', {'truckers': set(truckers), 'connects': connection_list, 'pending': pending, 'num_notifications': num_notifications})
 
 def ajax_price_calculation(request):
-
     pu_address_full = request.GET.get('puAddy', None)
     del_address_full = request.GET.get('delAddy', None)
     truck_type = request.GET.get('truck_type', None)
@@ -578,7 +577,7 @@ def accept_counter_offer(request):
         username = trucker.user.username
         send_mail(
         'Counter Offer Accepted!', #email subject
-        'Congratulations, ' + username + '! Your counter-offer for a delivery has been accepted. Log on now at http://34.216.209.104:8000/accounts/login/', #email content
+        'Congratulations, ' + username + '! Your counter-offer for a delivery has been accepted. Log on now at http://34.216.209.104/accounts/login/', #email content
         'help@cargoful.org',
         [email],
         fail_silently = False,
@@ -748,11 +747,11 @@ def contact_form_view(request):
         send_mail(
         'Help is on the way!', #email subject
         """Dear """ + customer_name + """, \n
-Thank you for reaching out to the Cargoful team! \n
-We will review your message and get back to you soon. \n \n
-Never alone with Cargoful! \n
-Your Cargoful team \n \n
-Here your request: \n""" + message, #email content
+        Thank you for reaching out to the Cargoful team! \n
+        We will review your message and get back to you soon. \n \n
+        Never alone with Cargoful! \n
+        Your Cargoful team \n \n
+        Here your request: \n""" + message, #email content
         'help@cargoful.org',
         [email],
         fail_silently = False,
@@ -780,7 +779,7 @@ def upload_orden_de_embarco(request):
     cur_order.orden_de_embarco.name = doc_path
     cur_order.save()
     file_storage.save(doc_path, doc)
-    #save doc to order's cartaporte file
+    #save doc to order's orden de embarco file
     return HttpResponseRedirect("/shipper")
 
 @login_required

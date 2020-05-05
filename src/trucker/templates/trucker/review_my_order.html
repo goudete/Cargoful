@@ -18,9 +18,6 @@
     <div id = 'mark2' style='background-image: url("{% static "imgs/CargoFulLogo-12.png" %}");'></div>
   </div>
 
-  <form action = 'order_accepted' method = "post">
-    {% csrf_token %}
-
     <div class="row justify-content-center mt-4">
       <div class="col-8">
         <h5>{% trans "Pickup Address" %}</h5>
@@ -69,45 +66,44 @@
       </div>
     </div>
 
-    <div class = "row justify-content-center mt-3">
+    <!-- form for uploading carta porte and viewing/downloading orden de embarco -->
+    <div class = 'row justify-content-center mt-3 mb-3'>
+      <div class = "col-4">
+        <h5>{% trans "Orden de Embarco" %}</h5>
+        {% if order.orden_de_embarco %}
+        <form action = 'download_orden_de_embarco' method = 'post'>
+          {% csrf_token %}
+          <input type = 'number' name = 'order_id' value = {{order.id}} hidden = 'true' readonly/>
+          <input type = 'number' name = 'shipper_id' value = {{order.shipping_company.user.id}} hidden = 'true' readonly/>
+          <button type = 'submit' class = "btn btn-secondary">{% trans "Download" %}</button>
+          <button type = 'submit' formaction = "view_orden_de_embarco" class = "btn btn-secondary">{% trans "View" %}</button>
+        </form>
+        {% else %}
+        <h7 style = "color: red;">{% trans "Not Uploaded by Shipper " %}<img src="{% static 'imgs/red_x.png' %}" alt="" border=3 height=15 width=15></img></h7>
+        {% endif %}
+      </div>
+
+      <div class = "col-4">
+        <h5>{% trans "Carta Porte" %}</h5>
+        {% if not order.carta_porte %}
+        <form action = "upload_carta_porte" method = "post" enctype = "multipart/form-data">
+          {% csrf_token %}
+          <input type = 'number' name = 'order_id' value = {{order.id}} hidden = 'true' readonly/>
+          <input type = "file" id ="carta porte" name = "carta_porte">
+          <button type="submit" class="btn btn-secondary mt-1">{% trans "Upload" %}</button>
+        </form>
+        {% else %}
+        <h7 style = "color:green;">{% trans "Uploaded " %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></h7>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class = "row justify-content-center mt-3 mb-3">
       <div class="col-4">
         <h5>{% trans "Instructions" %}</h5>
         <input class = 'form-control' id = 'instructions' type="text" value = "{{order.instructions}}" size = '60' readonly/>
       </div>
     </div>
-  </form>
-
-  <!-- form for uploading carta porte and viewing/downloading orden de embarco -->
-  <div class = 'row justify-content-center mt-3 mb-3'>
-    <div class = "col-4">
-      <h5>{% trans "Orden de Embarco" %}</h5>
-      {% if order.orden_de_embarco %}
-      <form action = 'download_orden_de_embarco' method = 'post'>
-        {% csrf_token %}
-        <input type = 'number' name = 'order_id' value = {{order.id}} hidden = 'true' readonly/>
-        <input type = 'number' name = 'shipper_id' value = {{order.shipping_company.user.id}} hidden = 'true' readonly/>
-        <button type = 'submit' class = "btn btn-secondary">{% trans "Download" %}</button>
-        <button type = 'submit' formaction = "view_orden_de_embarco" class = "btn btn-secondary">{% trans "View" %}</button>
-      </form>
-      {% else %}
-      <h7 style = "color: red;">{% trans "Not Uploaded by Shipper " %}<img src="{% static 'imgs/red_x.png' %}" alt="" border=3 height=15 width=15></img></h7>
-      {% endif %}
-    </div>
-
-    <div class = "col-4">
-      <h5>{% trans "Carta Porte" %}</h5>
-      {% if not order.carta_porte %}
-      <form action = "upload_carta_porte" method = "post" enctype = "multipart/form-data">
-        {% csrf_token %}
-        <input type = 'number' name = 'order_id' value = {{order.id}} hidden = 'true' readonly/>
-        <input type = "file" id ="carta porte" name = "carta_porte">
-        <button type="submit" class="btn btn-secondary mt-1">{% trans "Upload" %}</button>
-      </form>
-      {% else %}
-      <h7 style = "color:green;">{% trans "Uploaded " %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></h7>
-      {% endif %}
-    </div>
-  </div>
 
 </div>
 

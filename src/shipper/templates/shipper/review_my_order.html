@@ -76,7 +76,7 @@
         <form action = "upload_orden_de_embarco" method = "post" enctype = "multipart/form-data">
           {% csrf_token %}
           <input type = 'number' name = 'order_id' value = {{order.id}} hidden = 'true' readonly/>
-          <input type = "file" id ="carta porte" name = "orden_de_embarco">
+          <input type = "file" id ="orden_de_embarco" name = "orden_de_embarco">
           <button type="submit" class="btn btn-secondary mt-1">{% trans "Upload" %}</button>
         </form>
         {% else %}

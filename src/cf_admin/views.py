@@ -89,7 +89,7 @@ def Approve_User(request):
         ('Dear ' + str(username) + """, \n
         Your account has been approved - Welcome to Cargoful!  \n  \n
         Please login at the link below to get access to the latest shipments on the platform!  \n  \n
-        http://34.216.209.104:8000/accounts/login/ \n \n
+        http://34.216.209.104/accounts/login/ \n \n
         Looking forward to many kms together!
         Your Carfogul team  \n  \n  \n  \n
         Any questions? Don't hesitate to contact us at help@cargoful.org"""),

@@ -1,0 +1,44 @@
+{% extends 'shipper/base.html'%}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+<!--styling to make table overflow scroll -->
+<style>
+  table tbody{
+    height: 300px;
+    overflow-y: auto;
+  }
+  table thead th{
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 5;
+    background-color: white;
+    color: black;
+  }
+</style>
+<!-- messages end here -->
+
+<!-- dash of connections -->
+<div class="row justify-content-center mt-5">
+  <div class="col-md-8">
+    <h3>{% trans "Before Your Order is Posted, Please Include Your Orden de Embarco" %}</h3>
+  </div>
+</div>
+
+<!-- start of connections table -->
+<div class="row justify-content-center pt-2" id = 'dashboard'>
+  <div class="col-md-8">
+    <div class="card">
+      <form action = "upload_orden_de_embarco" method = "post" enctype = "multipart/form-data">
+        {% csrf_token %}
+        <input type = "number" name = "order_id" value = {{order}} hidden = "true">
+        <input type = "file" name = "orden_de_embarco">
+        <button type = "submit" class="btn btn-secondary">{% trans "Upload" %}</button>
+      </form>
+      <a href = "/shipper" class = "btn btn-danger">{% trans "Skip This" %}</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
