@@ -20,6 +20,9 @@ urlpatterns = [
     path('get_feedback', views.get_feedback, name='get_feedback'),
     path('upload_docs', views.upload_docs), #for uploading a document
     path('download_my_docs', views.download_docs), #for downloading your docs
+    path('download_orden_de_embarco', views.download_orden_de_embarco), #for downloading the orden de embarco from an order
+    path('view_orden_de_embarco', views.view_orden_de_embarco), #for just looking at an orden de embarco on a new tab
     path('new_unit', views.upload_new_unit_docs), #for adding new unit to platform
+    path('review_my_order', views.review_my_order), #for reviewing an order you already have
     path('upload_carta_porte', views.upload_carta_porte), #for including carta porte with doc
 ]

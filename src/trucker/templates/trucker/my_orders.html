@@ -83,11 +83,11 @@
           <th scope = 'col'>{% trans "Pickup Address" %}</th>
           <th scope = 'col'>{% trans "Delivery Address" %}</th>
           <th scope = 'col'>{% trans "Distance" %}</th>
-          <th scope = 'col'>{% trans "Pickup Date" %}</th>
-          <th scope = 'col'>{% trans "Pickup Time" %}</th>
+          <!-- <th scope = 'col'>{% trans "Pickup Date" %}</th>
+          <th scope = 'col'>{% trans "Pickup Time" %}</th> -->
           <th scope="col">{% trans "Price" %}</th>
           <th scope = 'col'>{% trans "Status" %}</th>
-          <th scope = 'col'>{% trans "Carta Porte" %}</th>
+          <th scope = 'col'></th>
         </tr>
       </thead>
       <tbody>
@@ -98,8 +98,8 @@
           <td>{{ my.pickup_address }}</td>
           <td>{{ my.delivery_address }}</td>
           <td>{{ my.distance }} KM</td>
-          {% if my.pickup_date is none %}<td>{% trans "Negotiable" %}</td>{% else %}<td>{{ my.pickup_date }}</td>{% endif %}
-          {% if my.pickup_time is none %}<td>{% trans "Negotiable" %}</td>{% else %}<td>{{ my.pickup_time }}</td>{% endif %}
+          <!-- {% if my.pickup_date is none %}<td>{% trans "Negotiable" %}</td>{% else %}<td>{{ my.pickup_date }}</td>{% endif %}
+          {% if my.pickup_time is none %}<td>{% trans "Negotiable" %}</td>{% else %}<td>{{ my.pickup_time }}</td>{% endif %} -->
           <td>{{ my.price }}</td>
           <td>
             {% if my.status == 2 %}
@@ -149,10 +149,18 @@
             </form>
             {% endif %}
           </td>
+          <td>
+            <form action = 'review_my_order' method = 'post'>
+              {% csrf_token %}
+              <input type = 'number' id = 'order_id' name = 'order_id' value = {{my.id}} hidden = 'true' readonly/>
+              <button type = 'submit' class = 'btn btn-secondary mt-1'>{% trans "Review" %}</button>
+            </form>
+          </td>
+          <!--
           {% if my.carta_porte %}
           <td style = "color: green;">{% trans "Uploaded" %} <img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></td>
-          {% else %}
-          <td>
+          {% else %} -->
+          <!-- <td>
             <form action = 'upload_carta_porte' method = 'post' enctype = "multipart/form-data">
               {% csrf_token %}
               <input type = 'number' id = 'order_id' name = 'order_id' value = {{my.id}} hidden = 'true'>
@@ -164,7 +172,7 @@
               </div>
             </form>
           </td>
-          {% endif %}
+          {% endif %} -->
         </tr>
         {% endfor %}
       </tbody>

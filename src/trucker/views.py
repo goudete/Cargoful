@@ -95,6 +95,46 @@ def Confirm_Order(request):
     mdpt_lat = math.degrees(math.atan2(z, mdpt_sqrt))
     return render(request, 'trucker/confirm_order.html', {'order': cur_order, 'mid_long': mdpt_long, 'mid_lat': mdpt_lat, 'me' : me, 'num_notifications': num_notifications, 'counter_offers': all_counter_offers})
 
+""" This method is almost the same as confirm_order, only difference is that the template does not allow you to accept the order bc you already own it"""
+@login_required
+@allowed_users(allowed_roles=['Trucker'])
+@api_view(['POST'])
+def review_my_order(request):
+    me = truck_company.objects.filter(user=request.user).first()
+    connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
+    order_notifications = order_post_notification.objects.filter(truckers = request.user) #query all order notifications associated w/ the user
+    counter_offers = counter_offer.objects.filter(trucker_user = me).exclude(status = 0).exclude(status = 3)
+    num_notifications = len(list(connect_requests)) + len(list(order_notifications)) + len(list(counter_offers))
+    jdp = json.dumps(request.data) #get request into json form
+    jsn = json.loads(jdp) #get dictionary from json
+    jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
+    order_id = jsn['order_id']
+    #post to db and remove from available jobs
+    # POST truck_company , status change to 1
+    me = truck_company.objects.filter(user=request.user).first()
+    cur_order = order.objects.filter(id=order_id).first()
+    all_counter_offers = counter_offer.objects.filter(trucker_user = me).filter(order = cur_order)
+    """calculate midpoint of lat and long for map in html page"""
+    x,y,z = 0,0,0
+    lat1,long1 = math.radians(cur_order.pickup_latitude), math.radians(cur_order.pickup_longitude)
+    x += (math.cos(lat1)*math.cos(long1))
+    y += (math.cos(lat1)*math.sin(long1))
+    z += math.sin(lat1)
+    #
+    lat2,long2 = math.radians(cur_order.delivery_latitude), math.radians(cur_order.delivery_longitude)
+    x += (math.cos(lat2)*math.cos(long2))
+    y += (math.cos(lat2)*math.sin(long2))
+    z += math.sin(lat2)
+    #avg
+    x /= 2
+    y/= 2
+    z/= 2
+    #get mdpts in radians
+    mdpt_long = math.degrees(math.atan2(y,x))
+    mdpt_sqrt = math.sqrt(x*x + y*y)
+    mdpt_lat = math.degrees(math.atan2(z, mdpt_sqrt))
+    return render(request, 'trucker/review_my_order.html', {'order': cur_order, 'mid_long': mdpt_long, 'mid_lat': mdpt_lat, 'me' : me, 'num_notifications': num_notifications, 'counter_offers': all_counter_offers})
+
 @login_required
 @allowed_users(allowed_roles = ['Trucker'])
 @api_view(['POST'])
@@ -484,3 +524,51 @@ def upload_carta_porte(request):
     file_storage.save(doc_path, doc)
     #save doc to order's cartaporte file
     return HttpResponseRedirect("/trucker")
+
+@login_required
+@allowed_users(allowed_roles=['Trucker'])
+@api_view(['POST'])
+def download_orden_de_embarco(request):
+    if request.method == "POST":
+        s3 = boto3.resource('s3') #setup to get from AWS
+        jdp = json.dumps(request.POST) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        order_id = jsn['order_id']
+        aws_dir = 'docs/order'+str(order_id)
+        bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
+        objs = bucket.objects.filter(Prefix=aws_dir) #get folder
+        for obj in objs:
+            path, filename = os.path.split(obj.key)
+            if 'orden_de_embarco' in filename:
+                orden_de_embarco = obj.get()['Body'].read()
+                mimetype = filename.split(".")[1]
+                response = HttpResponse(orden_de_embarco, "application/"+str(mimetype))
+                response['Content-Disposition'] = 'attachment;filename=orden_de_embarco.%s' % mimetype
+                return response
+            else:
+                pass
+
+@login_required
+@allowed_users(allowed_roles=['Trucker'])
+@api_view(['POST'])
+def view_orden_de_embarco(request):
+    if request.method == "POST":
+        s3 = boto3.resource('s3') #setup to get from AWS
+        jdp = json.dumps(request.POST) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        order_id = jsn['order_id']
+        shipper_id = jsn['shipper_id']
+        aws_dir = 'docs/order'+str(order_id)
+        bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
+        objs = bucket.objects.filter(Prefix=aws_dir) #get folder
+        for obj in objs:
+            print(obj)
+            path, filename = os.path.split(obj.key)
+            if 'orden_de_embarco' in filename:
+                orden_de_embarco = obj.get()['Body'].read()
+                mimetype = filename.split(".")[1]
+                response = HttpResponse(orden_de_embarco, "application/"+str(mimetype))
+                response['Content-Disposition'] = 'inline;filename=orden_de_embarco.%s' % mimetype
+                return response
+            else:
+                pass

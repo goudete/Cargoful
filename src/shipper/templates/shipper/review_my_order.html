@@ -1,0 +1,215 @@
+{% extends 'shipper/base.html'%}
+
+{% load static %}
+{% load i18n %}
+{% block content %}
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+      <h3>{% trans "Order Specs" %}</h3>
+    </div>
+  </div>
+
+  <div class="row justify-content-center mt-5">
+    <div id='map'></div>
+    <div id = 'mark1' style='background-image: url("{% static "imgs/CargoFulLogo-12.png" %}");'></div>
+    <div id = 'mark2' style='background-image: url("{% static "imgs/CargoFulLogo-12.png" %}");'></div>
+  </div>
+
+  <form action = 'accept_counter_offer' method = "post">
+    {% csrf_token %}
+
+    <div class="row justify-content-center">
+      <div class="col-8">
+        <h5>{% trans "Pickup Address" %}</h5>
+        <input class = 'form-control' id = 'addy' type = 'text' value = '{{order.pickup_address}}' size = '60' readonly>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-8">
+        <h5>{% trans "Delivery Address" %}</h5>
+        <input class = 'form-control' id = 'addy' type = 'text' value = '{{order.delivery_address}}' size = '60' readonly>
+      </div>
+    </div>
+
+    <div class="row justify-content-center mt-4">
+      <div class="col-4">
+        <h5>{% trans "Pickup Date" %}</h5>
+        <input class = 'form-control' id = 'date' value = "{{order.pickup_date}}" size = '60' readonly/>
+      </div>
+      <div class="col-4">
+        <h5>{% trans "Pickup Time" %}</h5>
+        <input class = 'form-control' id = 'time' type="text" value = "{{order.pickup_time}}" size = '60' readonly/>
+      </div>
+    </div>
+
+    <div class="row justify-content-center mt-4">
+      <div class="col-4">
+        <h5>{% trans "Truck Type" %}</h5>
+        <input class = 'form-control' id = 'truck_type' type="text" value = "{{order.truck_type}}" size = '60' readonly/>
+      </div>
+      <div class="col-4">
+        <h5>{% trans "Contents" %}</h5>
+        <input class = 'form-control' id = 'contents' type="text" value = "{{order.contents}}" size = '60' readonly/>
+      </div>
+    </div>
+
+    <div class="row justify-content-center mt-4">
+      <div class = "col-4">
+        <h5>{% trans "Weight (Tons)" %}</h5>
+        <input class = 'form-control' id = 'weight' type = 'number' step = '0.01' value = {{order.weight}} size = '60' readonly/>
+      </div>
+      <div class="col-4">
+        <h5>{% trans "Price" %}</h5>
+        <input class = 'form-control' id = 'price' type="number" step="0.01" value = {{order.price}} size = '60' readonly/>
+      </div>
+    </div>
+  </form>
+
+    <!-- carta porte and orden de embarco stuff -->
+    <div class = "row justify-content-center mt-4 mb-4">
+      <div class = "col-4">
+        <h5>{% trans "Orden de Embarco" %}</h5>
+        {% if not order.orden_de_embarco %}
+        <form action = "upload_orden_de_embarco" method = "post" enctype = "multipart/form-data">
+          {% csrf_token %}
+          <input type = 'number' name = 'order_id' value = {{order.id}} hidden = 'true' readonly/>
+          <input type = "file" id ="carta porte" name = "orden_de_embarco">
+          <button type="submit" class="btn btn-secondary mt-1">{% trans "Upload" %}</button>
+        </form>
+        {% else %}
+        <h7 style = "color:green;">{% trans "Uploaded " %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></h7>
+        {% endif %}
+      </div>
+
+      <div class = "col-4">
+        <h5>{% trans "Carta Porte" %}</h5>
+        {% if order.carta_porte %}
+        <form action = 'download_carta_porte' method = 'post'>
+          {% csrf_token %}
+          <input type = 'number' name = 'order_id' value = {{order.id}} hidden = 'true' readonly/>
+          <button type = 'submit' class = "btn btn-secondary">{% trans "Download" %}</button>
+          <button type = 'submit' formaction = "view_carta_porte" class = "btn btn-secondary">{% trans "View" %}</button>
+        </form>
+        {% else %}
+        <h7 style = "color: red;">{% trans "Not Uploaded by Trucker " %}<img src="{% static 'imgs/red_x.png' %}" alt="" border=3 height=15 width=15></img></h7>
+        {% endif %}
+      </div>
+    </div>
+
+<script>
+
+mapboxgl.accessToken = 'pk.eyJ1IjoicmZpdGNoIiwiYSI6ImNrN3dqdTYwYjAzNzUzZm85NXRreXo0bTcifQ.SNWvUpiNG9Q7EAQakLFsbw';
+
+var map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/light-v10',
+  center: [-104.83333, 24.83333],
+  zoom: 4
+});
+
+// code from the next step will go here!
+
+var geojson = {
+  type: 'FeatureCollection',
+  features: [{
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [{{order.pickup_longitude}}, {{order.pickup_latitude}}]
+    },
+    properties: {
+      title: 'Pickup Location',
+      description: '{{order.pickup_address}}'
+    }
+  },
+  {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [{{order.delivery_longitude}}, {{order.delivery_latitude}}]
+    },
+    properties: {
+      title: 'Delivery Location',
+      description: '{{order.delivery_address}}'
+    }
+  }]
+};
+
+var mark1 = document.getElementById('mark1');
+mark1.className = 'marker';
+new mapboxgl.Marker(mark1)
+  .setLngLat(geojson.features[0].geometry.coordinates)
+  .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+  .setHTML('<h3>' + geojson.features[0].properties.title + '</h3><p>' + geojson.features[0].properties.description + '</p>'))
+  .addTo(map);
+
+var mark2 = document.getElementById('mark2');
+mark2.className = 'marker';
+new mapboxgl.Marker(mark2)
+  .setLngLat(geojson.features[1].geometry.coordinates)
+  .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+  .setHTML('<h3>' + geojson.features[1].properties.title + '</h3><p>' + geojson.features[1].properties.description + '</p>'))
+  .addTo(map);
+
+  function getRoute() {
+    var start = [{{order.pickup_longitude}}, {{order.pickup_latitude}}];
+    var end = [{{order.delivery_longitude}}, {{order.delivery_latitude}}];
+    var url = 'https://api.mapbox.com/directions/v5/mapbox/driving/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?geometries=geojson&access_token=' + mapboxgl.accessToken;
+    // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+    var req = new XMLHttpRequest();
+    req.open('GET', url, true);
+    req.onload = function() {
+      var json = JSON.parse(req.response);
+      var data = json.routes[0];
+      var route = data.geometry.coordinates;
+      var geojson2 = {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'LineString',
+          coordinates: route
+        }
+      };
+      console.log(geojson2.geometry.coordinates);
+      // if the route already exists on the map, reset it using setData
+      if (map.getSource('route')) {
+        map.getSource('route').setData(geojson2);
+      } else { // otherwise, make a new request
+        map.addLayer({
+          id: 'route',
+          type: 'line',
+          source: {
+            type: 'geojson',
+            data: {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'LineString',
+                coordinates: geojson2.geometry.coordinates
+              }
+            }
+          },
+          layout: {
+            'line-join': 'round',
+            'line-cap': 'round'
+          },
+          paint: {
+            'line-color': '#eb0e8f',
+            'line-width': 5,
+            'line-opacity': 0.75
+          }
+        });
+      }
+    };
+    req.send();
+  }
+
+  map.on('load', function() {
+    getRoute();
+  });
+</script>
+
+{% endblock %}

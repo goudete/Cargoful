@@ -35,6 +35,7 @@ from trucker.file_storage import FileStorage
 import botocore
 import boto3
 import magic
+from CargoFul import settings
 
 # Create your views here.
 
@@ -639,6 +640,46 @@ def review_counter_offer(request):
         """end mdpt calculation"""
         return render(request, 'shipper/review_counter_offer.html', {"counter":c_offer, "order": c_offer_order, "mdpt_long": mdpt_long, "mdpt_lat": mdpt_lat})
 
+"""this method is almost the same as review_counter_offer, except this one does not have the feature of accepting or denying a counter offer"""
+@login_required
+@allowed_users(allowed_roles = ['Shipper'])
+@api_view(['POST'])
+def review_my_order(request):
+    if request.method == "POST":
+        me = shipper.objects.get(user = request.user)
+        #for getting number of unread notifications
+        connect_requests = FriendshipRequest.objects.filter(to_user=request.user) #query pending connections
+        status_updates = status_update.objects.filter(shipper = me).filter(read = False)
+        counter_offers = counter_offer.objects.filter(order__shipping_company__user = request.user).filter(status = 0)
+        num_notifications = len(list(connect_requests)) + len(list(status_updates)) + len(list(counter_offers))
+        #end notification number
+        jdp = json.dumps(request.data) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        #get counter offer and order objects
+        cur_order = order.objects.get(id = jsn['order_id'])
+        #get stuff about order to show shipper
+        """lines 537 - 555 are for getting mdpt of two lat/lng coordinates"""
+        x,y,z = 0,0,0
+        lat1,long1 = math.radians(cur_order.pickup_latitude), math.radians(cur_order.pickup_longitude)
+        x += (math.cos(lat1)*math.cos(long1))
+        y += (math.cos(lat1)*math.sin(long1))
+        z += math.sin(lat1)
+        #
+        lat2,long2 = math.radians(cur_order.delivery_latitude), math.radians(cur_order.delivery_longitude)
+        x += (math.cos(lat2)*math.cos(long2))
+        y += (math.cos(lat2)*math.sin(long2))
+        z += math.sin(lat2)
+        #avg
+        x /= 2
+        y/= 2
+        z/= 2
+        #get mdpts in radians
+        mdpt_long = math.degrees(math.atan2(y,x))
+        mdpt_sqrt = math.sqrt(x*x + y*y)
+        mdpt_lat = math.degrees(math.atan2(z, mdpt_sqrt))
+        """end mdpt calculation"""
+        return render(request, 'shipper/review_my_order.html', {"order": cur_order, "mdpt_long": mdpt_long, "mdpt_lat": mdpt_lat})
+
 @login_required
 @allowed_users(allowed_roles = ['Shipper'])
 @api_view(['GET'])
@@ -741,3 +782,52 @@ def upload_orden_de_embarco(request):
     file_storage.save(doc_path, doc)
     #save doc to order's cartaporte file
     return HttpResponseRedirect("/shipper")
+
+@login_required
+@allowed_users(allowed_roles = ['Shipper'])
+@api_view(['POST'])
+def download_carta_porte(request):
+    if request.method == "POST":
+        s3 = boto3.resource('s3') #setup to get from AWS
+        jdp = json.dumps(request.POST) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        order_id = jsn['order_id']
+        aws_dir = 'docs/order'+str(order_id)
+        bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
+        objs = bucket.objects.filter(Prefix=aws_dir) #get folder
+        for obj in objs:
+            path, filename = os.path.split(obj.key)
+            if 'carta_porte' in filename:
+                orden_de_embarco = obj.get()['Body'].read()
+                mimetype = filename.split(".")[1]
+                response = HttpResponse(orden_de_embarco, "application/"+str(mimetype))
+                response['Content-Disposition'] = 'attachment;filename=orden_de_embarco.%s' % mimetype
+                return response
+            else:
+                pass
+        return HttpResponseRedirect('/shipper')
+
+@login_required
+@allowed_users(allowed_roles = ['Shipper'])
+@api_view(['POST'])
+def view_carta_porte(request):
+    if request.method == "POST":
+        s3 = boto3.resource('s3') #setup to get from AWS
+        jdp = json.dumps(request.POST) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        order_id = jsn['order_id']
+        aws_dir = 'docs/order'+str(order_id)
+        bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
+        objs = bucket.objects.filter(Prefix=aws_dir) #get folder
+        for obj in objs:
+            print(obj)
+            path, filename = os.path.split(obj.key)
+            if 'carta_porte' in filename:
+                orden_de_embarco = obj.get()['Body'].read()
+                mimetype = filename.split(".")[1]
+                response = HttpResponse(orden_de_embarco, "application/"+str(mimetype))
+                response['Content-Disposition'] = 'inline;filename=orden_de_embarco.%s' % mimetype
+                return response
+            else:
+                pass
+        ReturnHttpResponseRedirect('/shipper')

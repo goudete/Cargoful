@@ -119,13 +119,13 @@
       <th scope = 'col'>{% trans "Order Number" %}</th>
       <th scope = 'col'>{% trans "Pickup Address" %}</th>
       <th scope = 'col'>{% trans "Delivery Address" %}</th>
-      <th scope = 'col'>{% trans "Pickup Date" %}</th>
+      <!-- <th scope = 'col'>{% trans "Pickup Date" %}</th> -->
       <th scope = 'col'>{% trans "Distance" %}</th>
-      <th scope = 'col'>{% trans "Contents" %}</th>
+      <!-- <th scope = 'col'>{% trans "Contents" %}</th> -->
       <th scope="col">{% trans "Status" %}</th>
       <th scope = "col">{% trans "Trucking Company" %}</th>
       <th scope="col">{% trans "Price" %}</th>
-      <th scope = "col">{% trans "Orden de Embarco" %}</th>
+      <th scope = "col"></th>
     </tr>
   </thead>
 
@@ -135,9 +135,9 @@
       <td>{{ s.customer_order_no }}</td>
       <td>{{ s.pickup_address}}</td>
       <td>{{ s.delivery_address }}</td>
-      <td>{{ s.pickup_date }}</td>
+      <!-- <td>{{ s.pickup_date }}</td> -->
       <td>{{ s.distance }} KM</td>
-      <td>{{ s.contents }}</td>
+      <!-- <td>{{ s.contents }}</td> -->
       <th scope="row">
         {% if s.status == 0 %}
           Pending Approval
@@ -161,7 +161,14 @@
         {% endif %}
       </th>
       <td>{{ s.price }}</td>
-      {% if s.orden_de_embarco %}
+      <td>
+        <form action = "review_my_order" method = "post">
+          {% csrf_token %}
+          <input type = "number" name = "order_id" value = {{s.id}} hidden = "true" readonly/>
+          <button type = "submit" class = "btn btn-secondary">{% trans "Review" %}</button>
+        </form>
+      </td>
+      <!-- {% if s.orden_de_embarco %}
       <td style = "color:green;">{% trans "Uploaded" %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></td>
       {% else %}
       <td>
@@ -176,7 +183,7 @@
           </div>
         </form>
       </td>
-      {% endif %}
+      {% endif %} -->
     </tr>
     {% endfor %}
   </tbody>
