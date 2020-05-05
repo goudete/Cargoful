@@ -131,19 +131,26 @@ def Approve_User(request):
         user = User.objects.get(id=jsn['profile_id'])
         email = user.email
         username = user.username
-        send_mail(
-        'Welcome to Cargoful!', #email subject, next arg is content
-        ('Dear ' + str(username) + """, \n
-        Your account has been approved - Welcome to Cargoful!  \n  \n
-        Please login at the link below to get access to the latest shipments on the platform!  \n  \n
-        http://34.216.209.104/accounts/login/ \n \n
-        Looking forward to many kms together!
-        Your Carfogul team  \n  \n  \n  \n
-        Any questions? Don't hesitate to contact us at help@cargoful.org"""),
-        'help@cargoful.org',
-        [email],
-        fail_silently = False,
-        )
+        # send_mail(
+        # 'Welcome to Cargoful!', #email subject, next arg is content
+        # ('Dear ' + str(username) + """, \n
+        # Your account has been approved - Welcome to Cargoful!  \n  \n
+        # Please login at the link below to get access to the latest shipments on the platform!  \n  \n
+        # http://34.216.209.104/accounts/login/ \n \n
+        # Looking forward to many kms together!
+        # Your Carfogul team  \n  \n  \n  \n
+        # Any questions? Don't hesitate to contact us at help@cargoful.org"""),
+        # 'help@cargoful.org',
+        # [email],
+        # fail_silently = False,
+        # )
+        subject, from_email, to = 'Bienvenido a Cargoful!', settings.EMAIL_HOST_USER, email
+        with open(settings.BASE_DIR + "/cf_admin/templates/emails/account_approved_ES.txt") as f:
+            text_content = f.read()
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+        html_template = get_template("emails/account_approved_ES.html").render({'username':username})
+        msg.attach_alternative(html_template, "text/html")
+        msg.send()
         return HttpResponseRedirect('/cf_admin')
 
 @login_required
