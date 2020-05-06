@@ -85,7 +85,7 @@ def post_order(request):
         truck, price = jsn['truck_type'], jsn['price']
         contents, instructions = jsn['contents'], jsn['instructions']
         #get orden de embarco file
-        orden_de_embarco = request.FILES['orden_de_embarco']
+        # orden_de_embarco = request.FILES['orden_de_embarco']
         #render a copy of order form (different HTML file b/c there is no crispy forms)
         TRUCK_TYPES = [
         ('Low Boy', 'Low Boy'),
