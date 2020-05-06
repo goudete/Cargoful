@@ -28,7 +28,7 @@ from django.contrib.auth.models import User
 from DataProcessing.santiModel import pricingModel
 from trucker.models import counter_offer
 from .recurrence_handlers import getRecurrenceVars, getRecurrenceEndVars, getRecurrenceVarsFromConfirmation, getRecurrenceEndVarsFromConfirmation, saveWeeklyRecurringOrder
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
 from trucker.file_storage import FileStorage
@@ -36,6 +36,8 @@ import botocore
 import boto3
 import magic
 from CargoFul import settings
+from django.template.loader import get_template
+from django.template.loader import render_to_string
 
 # Create your views here.
 
@@ -338,18 +340,16 @@ def upload_orden_de_embarco_from_order(request):
         for trucker in connected_truckers:
             email = trucker.email
             username = trucker.username
-            send_mail(
-            'A new opportunity awaits you!', #email subject
-            'Dear ' + username + """, \n \n
-            a new opportunity has just been published on the Cargoful platform! \n \n
-            Login at the link below and book it! \n \n
-            http://34.216.209.104/accounts/login/ \n \n
-            Finding your next job has never been so easy! \n
-            Your Cargoful team """,
-            'help@cargoful.org',
-            [email],
-            fail_silently = False,
-            )
+            subject, from_email, to = 'Tenemos una oportunidad para ti', settings.EMAIL_HOST_USER, email
+            text_content = render_to_string('emails/new_opportunity/new_opportunity_ES_txt.html', {
+            'username': username,
+            })
+            msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+            html_template = get_template("emails/new_opportunity/new_opportunity_ES.html").render({
+                                        'username': username,
+                                        })
+            msg.attach_alternative(html_template, "text/html")
+            msg.send()
 
     else:
         print('invalid!')
