@@ -14,14 +14,17 @@ from django.contrib.auth.models import User
 from CargoFul import settings
 from trucker.file_storage import FileStorage
 import os
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.utils.translation import gettext as _
 import magic
 import botocore
 import boto3
 from io import BytesIO
 import zipfile
-
+from CargoFul import settings
+from django.template.loader import get_template
+from django.template.loader import render_to_string
+import numpy as np
 # Create your views here.
 
 # Create your views here.
@@ -429,7 +432,7 @@ def upload_docs(request):
         objs = bucket.objects.filter(Prefix=aws_dir) #get folder
         for obj in objs: #iterate over file objects in folder
             uploaded_docs.append(os.path.split(obj.key)[1].split(".")[0])
-        print(uploaded_docs)
+        uploaded_docs = np.unique(uploaded_docs)
         return render(request, 'trucker/upload_docs.html', {'me': me, 'num_notifications': num_notifications, 'docs':uploaded_docs})
     else:
         files_dir = 'docs/{user}'.format(user = "CF" + str(request.user.id))
@@ -440,32 +443,41 @@ def upload_docs(request):
             doc_path = os.path.join(files_dir, file+"."+mime) #set path for file to be stored in
             file_storage.save(doc_path, doc)
         me = truck_company.objects.filter(user=request.user).first()
-        me.docs_uploaded = True
         me.save()
         messages.info(request, _("Thank you for uploading your documents"))
         #send trucker an email with some info
+        uploaded_docs = []
+        s3 = boto3.resource('s3') #setup to get from AWS
+        aws_dir = os.path.join('docs/CF'+str(request.user.id))
+        bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
+        objs = bucket.objects.filter(Prefix=aws_dir) #get folder
+        for obj in objs: #iterate over file objects in folder
+            uploaded_docs.append(os.path.split(obj.key)[1].split(".")[0])
+        print(upload_docs)
+        uploaded_docs = np.unique(uploaded_docs)
+        print(uploaded_docs)
         current_user = request.user
         username = current_user.username
         email = current_user.email
-
-        out_message = """Dear """ +  str(username) + """,
-Thank you for uploading your documents to the platform!
-
-Our team is reviewing them, you will be notified once your account is approved!
-Please check your email frequently, as we may reach out for clarifications.
-
-Relax now that you can - you will not have anymore idle times with Cargoful!
-Your Cargoful team
-
-Any questions? Don't hesitate to contact us at help@cargoful.org"""
-
-        send_mail(
-        'Thank you for uploading your documents! ', #email subject
-        out_message, #email content
-        'help@cargoful.org',
-        [email],
-        fail_silently = False,
-        )
+        print(current_user.profile.company_type)
+        if current_user.profile.company_type == "Persona Moral":
+            number_docs_needed = 4
+        else:
+            number_docs_needed = 4
+        print(len(uploaded_docs))
+        if len(uploaded_docs) == number_docs_needed:
+            print("here")
+            subject, from_email, to = '¡Todos Tus documentos ya están en el sistema de Cargoful!', settings.EMAIL_HOST_USER, email
+            text_content = render_to_string('emails/docs_uploaded/docs_uploaded_ES_txt.html', {
+            'username': current_user.username,
+            })
+            msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+            html_template = get_template("emails/docs_uploaded/docs_uploaded_ES.html").render({
+                                        'username': current_user.username,
+                                        })
+            msg.attach_alternative(html_template, "text/html")
+            msg.send()
+            me.docs_uploaded = True
         return HttpResponseRedirect("/trucker")
 
 @login_required

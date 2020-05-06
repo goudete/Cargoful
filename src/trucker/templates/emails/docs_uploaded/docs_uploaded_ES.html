@@ -1,0 +1,31 @@
+{% load static %}
+{% load i18n %}
+
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  </head>
+  <body>
+    <div class="container">
+      <div class="row justify-content-center mt-5">
+        <div class="card shadow p-3 mb-5 bg-light-grey rounded" style="width: 25rem; background: #bfbfbf;">
+          <h5 class="card-title">{% trans "Bienvenido!" %}</h5>
+          <img src="{% static 'imgs/CargoFulPigeon.png' %}" width="200" height="40" class="d-inline-block align-top">
+          <div class="card-body">
+          Estimado   {{username}}, <br>
+          Muchas gracias por proporcionarnos los documentos que te pedimos. <br> <br>
+          Tu asesor de Cargoful los está revisando, te avisaremos en cuanto acaben y tu cuenta sea aprobada.  <br>
+          Por ahora, relájate ya que después no va a haber mucho tiempo por todo el trabajo que Cargoful te traerá. <br><br>
+          Tu equipo de Carfogul  <br><br><br><hr>
+          Tienes alguna duda? Escríbenos a help@cargoful.org
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,5 +1,5 @@
 {% autoescape off %}
-Ya casi acabamos,, {{ user.username }}!
+Ya casi acabamos, {{ user.username }}.
 Por favor da click en este link para verificar tu dirección de correo y empezar a cargar con Cargoful:
 
 http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
