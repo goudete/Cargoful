@@ -4,7 +4,8 @@ from django.contrib.auth.forms import UserCreationForm
 from shipper.models import shipper
 from .models import Profile
 from django.utils.translation import gettext_lazy as _
-
+from django.contrib.auth.models import User
+from django import forms
 
 class CreateUserForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
@@ -12,6 +13,12 @@ class CreateUserForm(UserCreationForm):
         self.fields['email'].required = True
         self.fields['first_name'].required = True
         self.fields['last_name'].required = True
+
+    def clean_email(self):
+        email_passed = self.cleaned_data.get('email')
+        if User.objects.filter(email=email_passed).exists():
+            raise forms.ValidationError("User with that email already exists")
+        return email_passed
 
     class Meta():
         model = User
