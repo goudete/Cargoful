@@ -39,32 +39,80 @@ integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9If
 <div class="container col-md-8">
     <form method = "post" enctype = "multipart/form-data">
         {% csrf_token %}
+
+        {% if me.company_type == "Persona Moral" %}
         <!--acta constitutiva-->
         <div class = "row justify-content-center mt-2 mb">
-          <label for = "Acta_Constitutiva"><b>{% trans "Acta Constitutiva" %}</b></label>
-          <input type = "file" id ="Acta_Constitutiva" name = "Acta_Constitutiva">
+          <div class = "col-6">
+            <label for = "Acta_Constitutiva"><b>{% trans "Acta Constitutiva" %}</b></label>
+            <input type = "file" id ="Acta_Constitutiva" name = "Acta_Constitutiva">
+          </div>
+          <div class = "col-6">
+            {% if "Acta_Constitutiva" in docs %}
+            <h7 style = "color:green;">{% trans "Uploaded " %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></h7>
+            {% else %}
+            <h7 style = "color:red;">{% trans "Missing " %}<img src="{% static 'imgs/red_x.png' %}" alt="" border=3 height=15 width=15></img></h7>
+            {% endif %}
+          </div>
         </div>
+        {% endif %}
           <!-- Constancia de Situación Fiscal de la SHCP -->
         <div class = "row justify-content-center mt-2 mb-2">
-          <label for = "Constancia_SHCP"><b>{% trans "Constancia de Situación Fiscal de la SHCP" %}</b></label>
-          <input type = "file" id = "Constancia_SHCP" name = "Constancia_SHCP">
+          <div class ="col-6">
+            <label for = "Constancia_SHCP"><b>{% trans "Constancia de Situación Fiscal de la SHCP" %}</b></label>
+            <input type = "file" id = "Constancia_SHCP" name = "Constancia_SHCP">
+          </div>
+          <div class = "col-6">
+            {% if "Constancia_SHCP" in docs %}
+            <h7 style = "color:green;">{% trans "Uploaded " %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></h7>
+            {% else %}
+            <h7 style = "color:red;">{% trans "Missing " %}<img src="{% static 'imgs/red_x.png' %}" alt="" border=3 height=15 width=15></img></h7>
+            {% endif %}
+          </div>
         </div>
 
         <!--Comprobante de Domicilio -->
         <div class = "row justify-content-center mt-2 mb-2">
-          <label for = "Comprobante_Domicilio"><b>{% trans "Comprobante de Domicilio" %}</b></label>
-          <input type = "file" id = "Comprobante_Domicilio" name = "Comprobante_Domicilio">
+          <div class = "col-6">
+            <label for = "Comprobante_Domicilio"><b>{% trans "Comprobante de Domicilio" %}</b></label>
+            <input type = "file" id = "Comprobante_Domicilio" name = "Comprobante_Domicilio">
+          </div>
+          <div class = "col-6">
+            {% if "Comprobante_Domicilio" in docs %}
+            <h7 style = "color:green;">{% trans "Uploaded " %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></h7>
+            {% else %}
+            <h7 style = "color:red;">{% trans "Missing " %}<img src="{% static 'imgs/red_x.png' %}" alt="" border=3 height=15 width=15></img></h7>
+            {% endif %}
+          </div>
         </div>
           <!--Estado de Cuenta Bancaria-->
         <div class = "row justify-content-center mt-2 mb-2">
-          <label for = "Estado_Bancaria"><b>{% trans "Estado de Cuenta Bancaria" %}</b></label>
-          <input type = "file" id = "Estado_Bancaria" name = "Estado_Bancaria">
+          <div class = "col-6">
+            <label for = "Estado_Bancaria"><b>{% trans "Estado de Cuenta Bancaria" %}</b></label>
+            <input type = "file" id = "Estado_Bancaria" name = "Estado_Bancaria">
+          </div>
+          <div class = "col-6">
+            {% if "Estado_Bancaria" in docs %}
+            <h7 style = "color:green;">{% trans "Uploaded " %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></h7>
+            {% else %}
+            <h7 style = "color:red;">{% trans "Missing " %}<img src="{% static 'imgs/red_x.png' %}" alt="" border=3 height=15 width=15></img></h7>
+            {% endif %}
+          </div>
         </div>
 
         <div class = "row justify-content-center">
           <!-- INE -->
-          <label for = "INE"><b>INE</b></label>
-          <input type = "file" id = "INE" name = "INE">
+          <div class ="col-6">
+            <label for = "INE"><b>INE</b></label>
+            <input type = "file" id = "INE" name = "INE">
+          </div>
+          <div class = "col-6">
+            {% if "INE" in docs %}
+            <h7 style = "color:green;">{% trans "Uploaded " %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></h7>
+            {% else %}
+            <h7 style = "color:red;">{% trans "Missing " %}<img src="{% static 'imgs/red_x.png' %}" alt="" border=3 height=15 width=15></img></h7>
+            {% endif %}
+          </div>
         </div>
 
         <div class = "row justify-content-center mt-2 mb-2">
@@ -85,13 +133,8 @@ integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9If
         {% csrf_token %}
         <!--tarjeta de circulation-->
         <div class = "row justify-content-center mt-2 mb">
-          <label for = "Tarjtea de circulación"><b>{% trans "Tarjtea de Circulación" %}</b></label>
+          <label for = "Tarjtea de circulación"><b>{% trans "Tarjtea de Circulación de Tractocamión" %}</b></label>
           <input type = "file" id ="Tarjtea de circulación" name = "Tarjtea_de_circulación">
-        </div>
-          <!-- tarjeta de tractocamion-->
-        <div class = "row justify-content-center mt-2 mb-2">
-          <label for = "Tarjeta de tractocamión"><b>{% trans "Tarjeta de Tractocamión" %}</b></label>
-          <input type = "file" id = "Tarjeta de tractocamión" name = "Tarjeta_de_tractocamión">
         </div>
 
         <!--tarjeta de caja -->
@@ -128,10 +171,50 @@ integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9If
           <input type = "file" id = "GPS" name = "GPS">
         </div>
 
+        <input type = "text" name = 'truck' value = "truck" hidden = "true" readonly/>
+
         <div class = "row justify-content-center mt-2 mb-2">
           <button type = "submit" class = "btn btn-secondary" id = "submit">{% trans "Upload Files" %}</button>
         </div>
         <!--end of form-->
+    </form>
+</div>
+
+<div class="row justify-content-center mt-5">
+  <div class="col-md-8">
+    <h3>{% trans "New Driver" %}</h3>
+  </div>
+</div>
+
+<div class="container col-md-8">
+    <form method = "post" action = "new_unit" enctype = "multipart/form-data">
+        {% csrf_token %}
+
+        <div class = "row justify-content-center mt-2 mb-2">
+          <label for = "Licencia"><b>{% trans "Licencia" %}</b></label>
+          <input type = "file" id = "Licencia" name = "Licencia">
+        </div>
+
+        <div class = "row justify-content-center mt-2 mb-2">
+          <label for = "Comprobante de Domicilio"><b>{% trans "Comprobante de Domicilio" %}</b></label>
+          <input type = "file" id = "Comprobante de Domicilio" name = "Comprobante_Domicilio">
+        </div>
+
+        <div class = "row justify-content-center mt-2 mb-2">
+          <label for = "Certificaciones de Terceros"><b>{% trans "Certificaciones de Terceros (si aplica)" %}</b></label>
+          <input type = "file" id = "Certificaciones de Terceros" name = "Certificaciones_Terceros">
+        </div>
+
+        <div class = "row justify-content-center mt-2 mb-2">
+          <label for = "INE"><b>{% trans "INE" %}</b></label>
+          <input type = "file" id = "INE" name = "INE">
+        </div>
+
+        <input type = "text" name = 'driver' value = "driver" hidden = "true" readonly/>
+
+        <div class = "row justify-content-center mt-2 mb-2">
+          <button type = "submit" class = "btn btn-secondary" id = "submit">{% trans "Upload Files" %}</button>
+        </div>
     </form>
 </div>
 {% endblock %}

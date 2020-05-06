@@ -32,9 +32,10 @@ class CreateUserForm(UserCreationForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('user_type', 'company_name', 'phone',)
+        fields = ('user_type', 'company_name', 'phone', 'company_type')
         USER_TYPES = (("Shipper", _("Shipper")), ("Trucker", _("Trucker")))
-        widgets = {'user_type': forms.Select(choices=USER_TYPES)}
+        COMPANY_TYPES = [('Persona Moral', _('Persona Moral')), ('Persona Física', _('Persona Física'))]
+        widgets = {'user_type': forms.Select(choices=USER_TYPES), 'company_type': forms.Select(choices = COMPANY_TYPES)}
         help_texts = {
             'phone': 'formato: +525566290550'
         }

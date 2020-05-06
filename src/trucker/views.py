@@ -421,7 +421,16 @@ def upload_docs(request):
         order_notifications = order_post_notification.objects.filter(truckers = request.user) #query all order notifications associated w/ the user
         counter_offers = counter_offer.objects.filter(trucker_user = me).exclude(status = 0).exclude(status = 3)
         num_notifications = len(list(connect_requests)) + len(list(order_notifications)) + len(list(counter_offers))
-        return render(request, 'trucker/upload_docs.html', {'me': me, 'num_notifications': num_notifications})
+        #check if any documents have been uploaded
+        uploaded_docs = []
+        s3 = boto3.resource('s3') #setup to get from AWS
+        aws_dir = os.path.join('docs/CF'+str(request.user.id))
+        bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
+        objs = bucket.objects.filter(Prefix=aws_dir) #get folder
+        for obj in objs: #iterate over file objects in folder
+            uploaded_docs.append(os.path.split(obj.key)[1].split(".")[0])
+        print(uploaded_docs)
+        return render(request, 'trucker/upload_docs.html', {'me': me, 'num_notifications': num_notifications, 'docs':uploaded_docs})
     else:
         files_dir = 'docs/{user}'.format(user = "CF" + str(request.user.id))
         file_storage = FileStorage()
@@ -464,14 +473,18 @@ Any questions? Don't hesitate to contact us at help@cargoful.org"""
 @api_view(['POST'])
 def upload_new_unit_docs(request):
     me = truck_company.objects.filter(user=request.user).first()
-    files_dir = 'docs/{user}/{unit}'.format(user = "CF" + str(request.user.id), unit = "unit" + str(me.num_units))
+    if 'truck' in request.POST:
+        files_dir = 'docs/{user}/{unit}'.format(user = "CF" + str(request.user.id), unit = "unit" + str(me.num_units))
+        me.num_units += 1
+    elif 'driver' in request.POST:
+        files_dir = 'docs/{user}/{driver}'.format(user = "CF" + str(request.user.id), driver = "driver" + str(me.num_drivers))
+        me.num_drivers += 1
     file_storage = FileStorage()
     for file in request.FILES: #loop through files in request
         doc = request.FILES[file] #get file
         mime = magic.from_buffer(doc.read(), mime=True).split("/")[1]
         doc_path = os.path.join(files_dir, file+"."+mime) #set path for file to be stored in
         file_storage.save(doc_path, doc)
-    me.num_units += 1
     me.save()
     return HttpResponseRedirect("/trucker")
 

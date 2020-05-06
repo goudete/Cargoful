@@ -12,6 +12,7 @@ class truck_company(models.Model):
     incomplete_orders = models.PositiveIntegerField(default=0)
     rating = models.PositiveIntegerField(default=0, validators=[MaxValueValidator(5)])
     num_units = models.PositiveIntegerField(default = 0)
+    num_drivers = models.PositiveIntegerField(default = 0)
     docs_uploaded = models.BooleanField(default = False)
     def _str_(self):
         return self.company_name
