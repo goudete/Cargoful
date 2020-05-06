@@ -11,4 +11,5 @@ urlpatterns = [
     path('download', views.Download_Docs), #for reviewing a trucker and looking at their docs
     path('download_orden_de_embarco', views.download_orden_de_embarco), #for downloading embarco
     path('view_orden_de_embarco', views.view_orden_de_embarco), #for viewing embarco on new page
+    #path('test', TemplateView.as_view(template_name='emails/account_approved_ES.html')) #test email templates
 ]
