@@ -127,8 +127,7 @@ def post_order(request):
             'contents': contents,
             'instructions': instructions,
             'g_api': Google_API,
-            'num_notifications': num_notifications,
-            'orden_de_embarco': orden_de_embarco
+            'num_notifications': num_notifications
         })
     #if the method is a get then the user is posting a new order for the first time
     else:
