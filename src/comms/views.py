@@ -1,8 +1,11 @@
 from django.shortcuts import render
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
+from CargoFul import settings
+from django.template.loader import get_template
+from django.template.loader import render_to_string
 
 def contactFormView(request):
     if request.method == "POST":
@@ -50,6 +53,20 @@ def contactFormView(request):
             [email],
             fail_silently = False,
             )
+
+            subject, from_email, to = 'La ayuda va en camino', settings.EMAIL_HOST_USER, email
+            text_content = render_to_string('emails/help_otw/help_otw_ES_txt.html', {
+            'name': customer_name,
+            'message':message
+            })
+            msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+            html_template = get_template("emails/help_otw/help_otw_ES.html").render({
+                                        'name': customer_name,
+                                        'message':message
+                                        })
+            msg.attach_alternative(html_template, "text/html")
+            msg.send()
+
             messages.info(request, "Thanks "+ str(customer_name)
             + "! We have received your message and will get back to you shortly at " + email)
             if user_type == "Shipper":
@@ -86,6 +103,8 @@ Here your request: \n""" + message, #email content
             [email],
             fail_silently = False,
             )
+
+
             return HttpResponseRedirect('/accounts/login')
     else:
         return render(request, 'contact_form.html')
