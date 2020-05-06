@@ -16,10 +16,11 @@ import math
 from django.contrib import messages
 from friendship.models import FriendshipRequest, Friend, Follow
 import os
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.utils.translation import gettext as _
 from io import BytesIO
 import zipfile
+from django.template.loader import get_template
 
 
 

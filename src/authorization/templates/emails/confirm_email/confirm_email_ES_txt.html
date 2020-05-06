@@ -1,0 +1,14 @@
+{% autoescape off %}
+Ya casi acabamos,, {{ user.username }}!
+Por favor da click en este link para verificar tu dirección de correo y empezar a cargar con Cargoful:
+
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+Una vez que hayas verificado tu dirección de correo y subido los documentos necesarios a la plataforma, podrás empezar a cargar con Cargoful.
+
+Estamos listo para viajar juntos - ¡Venga!
+Tu equipo en Cargoful
+
+Tienes alguna duda? Escríbenos a help@cargoful.org
+
+{% endautoescape %}

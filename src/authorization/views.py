@@ -9,7 +9,7 @@ from django.contrib.auth import login, authenticate, logout
 from shipper.models import shipper
 from .decorators import allowed_users
 from friendship.models import FriendshipRequest, Friend, Follow
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -18,6 +18,7 @@ from .tokens import account_activation_token
 from django.utils.translation import gettext as _
 from django.utils import translation
 from django.conf import settings
+from django.template.loader import get_template
 
 def register_view(request):
     if request.method == 'POST':
@@ -51,19 +52,36 @@ def register_view(request):
                 messages.success(request, _("Welcome to CargoFul ") + str(username) + "!")
                 #send email for email verification
                 current_site = get_current_site(request)
-                message = render_to_string('registration/confirm_email.html', {
+                # message = render_to_string('registration/confirm_email.html', {
+                # 'user': user,
+                # 'domain': current_site.domain,
+                # 'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+                # 'token':account_activation_token.make_token(user),
+                # })
+                # send_mail(
+                # 'Please verify your Cargoful account email!', #email subject
+                # message, #email content
+                # 'hellofromcargoful@gmail.com',
+                # [email],
+                # fail_silently = False,
+                # )
+
+                subject, from_email, to = '¡Ya casi eres parte de Cargoful! Verifica tu correo por favor', settings.EMAIL_HOST_USER, email
+                text_content = render_to_string('emails/confirm_email/confirm_email_ES_txt.html', {
                 'user': user,
                 'domain': current_site.domain,
                 'uid':urlsafe_base64_encode(force_bytes(user.pk)),
                 'token':account_activation_token.make_token(user),
                 })
-                send_mail(
-                'Please verify your Cargoful account email!', #email subject
-                message, #email content
-                'hellofromcargoful@gmail.com',
-                [email],
-                fail_silently = False,
-                )
+                msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+                html_template = get_template("emails/confirm_email/confirm_email_ES.html").render({
+                                            'username': user.username,
+                                            'domain': current_site.domain,
+                                            'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+                                            'token':account_activation_token.make_token(user),
+                                            })
+                msg.attach_alternative(html_template, "text/html")
+                msg.send()
                 return redirect('/login_success')
     else:
         form = CreateUserForm()
