@@ -61,6 +61,17 @@
     background-color: white;
     color: black;
   }
+
+  /* form.hide-submit input[type="submit"] { display: none;} */
+  #subbutton{
+    visibility: hidden;
+  }
+
+  svg:hover {
+  fill: gray;
+  cursor: pointer;
+}
+
 </style>
 <!-- messages end here -->
 <div class="row justify-content-center mt-5">
@@ -153,26 +164,14 @@
             <form action = 'review_my_order' method = 'post'>
               {% csrf_token %}
               <input type = 'number' id = 'order_id' name = 'order_id' value = {{my.id}} hidden = 'true' readonly/>
-              <button type = 'submit' class = 'btn btn-secondary mt-1'>{% trans "Review" %}</button>
+              <label>
+                <input type="submit" id="subbutton"/>
+                <svg class="bi bi-three-dots-vertical" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M9.5 13a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" clip-rule="evenodd"/>
+                </svg>
+              </label>
             </form>
           </td>
-          <!--
-          {% if my.carta_porte %}
-          <td style = "color: green;">{% trans "Uploaded" %} <img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></td>
-          {% else %} -->
-          <!-- <td>
-            <form action = 'upload_carta_porte' method = 'post' enctype = "multipart/form-data">
-              {% csrf_token %}
-              <input type = 'number' id = 'order_id' name = 'order_id' value = {{my.id}} hidden = 'true'>
-              <input type = "file" id ="carta porte" name = "carta_porte">
-              <div class="row justify-content-center">
-                <div class="btn-group" role="group">
-                    <button type="submit" class="btn btn-secondary mt-1">{% trans "Upload" %}</button>
-                </div>
-              </div>
-            </form>
-          </td>
-          {% endif %} -->
         </tr>
         {% endfor %}
       </tbody>

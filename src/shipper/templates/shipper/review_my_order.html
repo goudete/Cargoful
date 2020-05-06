@@ -3,6 +3,8 @@
 {% load static %}
 {% load i18n %}
 {% block content %}
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
   <div class="row justify-content-center mt-5">
@@ -11,7 +13,7 @@
     </div>
   </div>
 
-  <div class="row justify-content-center mt-5">
+  <div class="row justify-content-center mt-3">
     <div id='map'></div>
     <div id = 'mark1' style='background-image: url("{% static "imgs/CargoFulLogo-12.png" %}");'></div>
     <div id = 'mark2' style='background-image: url("{% static "imgs/CargoFulLogo-12.png" %}");'></div>
@@ -21,14 +23,14 @@
     {% csrf_token %}
 
     <div class="row justify-content-center">
-      <div class="col-8">
+      <div class="col-8 mt-4">
         <h5>{% trans "Pickup Address" %}</h5>
         <input class = 'form-control' id = 'addy' type = 'text' value = '{{order.pickup_address}}' size = '60' readonly>
       </div>
     </div>
 
     <div class="row justify-content-center">
-      <div class="col-8">
+      <div class="col-8 mt-4">
         <h5>{% trans "Delivery Address" %}</h5>
         <input class = 'form-control' id = 'addy' type = 'text' value = '{{order.delivery_address}}' size = '60' readonly>
       </div>
@@ -76,8 +78,17 @@
         <form action = "upload_orden_de_embarco" method = "post" enctype = "multipart/form-data">
           {% csrf_token %}
           <input type = 'number' name = 'order_id' value = {{order.id}} hidden = 'true' readonly/>
-          <input type = "file" id ="orden_de_embarco" name = "orden_de_embarco">
-          <button type="submit" class="btn btn-secondary mt-1">{% trans "Upload" %}</button>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <button type="submit" class="btn btn-outline-secondary">{% trans "Upload" %}</button>
+            </div>
+            <div class="custom-file">
+              <input type="file" name = "orden_de_embarco" class="custom-file-input" id="inputGroupFile02">
+              <label class="custom-file-label" for="inputGroupFile01">Escoger Archivo</label>
+            </div>
+          </div>
+          <!-- <input type = "file" id ="orden_de_embarco" name = "orden_de_embarco">
+          <button type="submit" class="btn btn-secondary mt-1">{% trans "Upload" %}</button> -->
         </form>
         {% else %}
         <h7 style = "color:green;">{% trans "Uploaded " %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></h7>
@@ -99,6 +110,15 @@
       </div>
     </div>
 
+<script type="application/javascript">
+  $('#inputGroupFile02').on('change',function(){
+      //get the file name
+      var fileName = $(this).val();
+      //replace the "Choose a file" label
+      $(this).next('.custom-file-label').html(fileName);
+      console.log(fileName);
+  })
+</script>
 <script>
 
 mapboxgl.accessToken = 'pk.eyJ1IjoicmZpdGNoIiwiYSI6ImNrN3dqdTYwYjAzNzUzZm85NXRreXo0bTcifQ.SNWvUpiNG9Q7EAQakLFsbw';

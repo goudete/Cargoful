@@ -476,9 +476,11 @@ def upload_new_unit_docs(request):
     if 'truck' in request.POST:
         files_dir = 'docs/{user}/{unit}'.format(user = "CF" + str(request.user.id), unit = "unit" + str(me.num_units))
         me.num_units += 1
+        message = _("Truck documents uploaded successfully")
     elif 'driver' in request.POST:
         files_dir = 'docs/{user}/{driver}'.format(user = "CF" + str(request.user.id), driver = "driver" + str(me.num_drivers))
         me.num_drivers += 1
+        message = _("Driver documents uploaded successfully")
     file_storage = FileStorage()
     for file in request.FILES: #loop through files in request
         doc = request.FILES[file] #get file
@@ -486,6 +488,7 @@ def upload_new_unit_docs(request):
         doc_path = os.path.join(files_dir, file+"."+mime) #set path for file to be stored in
         file_storage.save(doc_path, doc)
     me.save()
+    messages.info(request, message)
     return HttpResponseRedirect("/trucker")
 
 
@@ -535,6 +538,7 @@ def upload_carta_porte(request):
     cur_order.carta_porte.name = doc_path
     cur_order.save()
     file_storage.save(doc_path, doc)
+    messages.info(request, _("Carta Porte Uploaded for order ") + cur_order.customer_order_no)
     #save doc to order's cartaporte file
     return HttpResponseRedirect("/trucker")
 

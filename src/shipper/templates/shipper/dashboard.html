@@ -61,6 +61,15 @@
     background-color: white;
     color: black;
   }
+
+  #subbutton{
+    visibility: hidden;
+  }
+
+  svg:hover {
+  fill: gray;
+  cursor: pointer;
+}
 </style>
 
 <!-- <div class="row justify-content-center mt-5">
@@ -94,9 +103,9 @@
 </div>
 
 <div class="row justify-content-center">
-  <div class="col-2">
-  </div>
-  <div class="col-2 ml-auto">
+  <!-- <div class="col-2">
+  </div> -->
+  <div class="col-11 ml-auto">
     <a href="/shipper/post_order">
     <svg class="bi bi-plus-circle-fill" width="3.5em" height="3.5em" viewBox="0 0 16 16" fill="rgb(235,5,113)" xmlns="http://www.w3.org/2000/svg">
       <path fill-rule="evenodd" d="M16 8A8 8 0 110 8a8 8 0 0116 0zM8.5 4a.5.5 0 00-1 0v3.5H4a.5.5 0 000 1h3.5V12a.5.5 0 001 0V8.5H12a.5.5 0 000-1H8.5V4z" clip-rule="evenodd"/>
@@ -140,17 +149,17 @@
       <!-- <td>{{ s.contents }}</td> -->
       <th scope="row">
         {% if s.status == 0 %}
-          Pending Approval
+          {% trans "Pending Approval" %}
         {% elif s.status == 1 %}
-          Unassigned
+          {% trans "Unassigned" %}
         {% elif s.status == 2 %}
-          Booked
+          {% trans "Booked" %}
         {% elif s.status == 3 %}
-          In Transit
+          {% trans "In Transit" %}
         {% elif s.status == 4 %}
-          Delivered
+          {% trans "Delivered" %}
         {% elif s.status == 5 %}
-          Cancelled
+          {% trans "Cancelled" %}
         {% endif %}
       </th>
       <th>
@@ -165,25 +174,14 @@
         <form action = "review_my_order" method = "post">
           {% csrf_token %}
           <input type = "number" name = "order_id" value = {{s.id}} hidden = "true" readonly/>
-          <button type = "submit" class = "btn btn-secondary">{% trans "Review" %}</button>
+          <label>
+            <input type="submit" id="subbutton"/>
+            <svg class="bi bi-three-dots-vertical" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M9.5 13a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" clip-rule="evenodd"/>
+            </svg>
+          </label>
         </form>
       </td>
-      <!-- {% if s.orden_de_embarco %}
-      <td style = "color:green;">{% trans "Uploaded" %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></td>
-      {% else %}
-      <td>
-        <form action = 'upload_orden_de_embarco' method = 'post' enctype = "multipart/form-data">
-          {% csrf_token %}
-          <input type = 'number' id = 'order_id' name = 'order_id' value = {{s.id}} hidden = 'true'>
-          <input type = "file" id ="orden de embarco" name = "orden_de_embarco" required>
-          <div class="row justify-content-center">
-            <div class="btn-group" role="group">
-                <button type="submit" class="btn btn-secondary mt-1">{% trans "Upload" %}</button>
-            </div>
-          </div>
-        </form>
-      </td>
-      {% endif %} -->
     </tr>
     {% endfor %}
   </tbody>

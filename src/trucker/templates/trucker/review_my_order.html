@@ -5,6 +5,7 @@
 {% block content %}
 <div class="container">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
 
   <div class="row justify-content-center mt-5">
     <div class="col-md-8">
@@ -89,8 +90,19 @@
         <form action = "upload_carta_porte" method = "post" enctype = "multipart/form-data">
           {% csrf_token %}
           <input type = 'number' name = 'order_id' value = {{order.id}} hidden = 'true' readonly/>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <button type="submit" class="btn btn-outline-secondary">{% trans "Upload" %}</button>
+            </div>
+            <div class="custom-file">
+              <input type="file" name = "carta_porte" class="custom-file-input" id="inputGroupFile02">
+              <label class="custom-file-label" for="inputGroupFile01">Escoger Archivo</label>
+            </div>
+          </div>
+<!--
           <input type = "file" id ="carta porte" name = "carta_porte">
-          <button type="submit" class="btn btn-secondary mt-1">{% trans "Upload" %}</button>
+          <button type="submit" class="btn btn-secondary mt-1">{% trans "Upload" %}</button> -->
         </form>
         {% else %}
         <h7 style = "color:green;">{% trans "Uploaded " %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></h7>
@@ -218,6 +230,14 @@ new mapboxgl.Marker(mark2)
   map.on('load', function() {
     getRoute();
   });
+</script>
+<script type="application/javascript">
+  $('#inputGroupFile02').on('change',function(){
+      //get the file name
+      var fileName = $(this).val();
+      //replace the "Choose a file" label
+      $(this).next('.custom-file-label').html(fileName);
+  })
 </script>
 
 {% endblock %}

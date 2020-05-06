@@ -16,205 +16,329 @@
     background-color: white;
     color: black;
   }
-  input{
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-  }
+
 </style>
 <!-- messages end here -->
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
 integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-<div class="row justify-content-center mt-5">
-  <div class="col-md-8">
-    <h3>{% trans "Corporate Documents" %}</h3>
-    <a href = "/trucker/download_my_docs" tyep = "button" class = "btn btn-secondary">{% trans "Download my Documents" %}</a>
+<!-- Corporate Card Starts -->
+<form method = "post" enctype = "multipart/form-data">
+  {% csrf_token %}
+  <div class="row justify-content-center pt-2">
+      <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 30rem;">
+        <div class="card-body">
+          <h5 class="card-title">{% trans "Corporate Documents" %}</h5>
+
+          <p class="card-text">{% trans "Please upload the following documents so we can verify your account. You can upload them at separate times." %}</p>
+
+          {% if docs|length > 0 %}
+          <a href = "/trucker/download_my_docs" type = "button" class = "btn btn-link">{% trans "Download my Documents" %}</a>
+          {% endif %}
+
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+            </li>
+
+            {% if me.company_type == 'Persona Moral' %}
+            <li class="list-group-item">
+              <h7><b>Acta Constitutiva</b></h7>
+              <div class="input-group mb-3">
+                <div class="custom-file">
+                  <input type="file" name = "Acta_Constitutiva" class="custom-file-input" id="inputGroupFile02">
+                  <label class="custom-file-label" for="inputGroupFile01">{% if "Acta_Constitutiva" in docs %} Cambiar Archivo {% else %} Escoger Archivo {% endif %}</label>
+                </div>
+                {% if "Acta_Constitutiva" in docs %}
+                <h7 style = "color:green;">{% trans "Uploaded " %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></h7>
+                {% else %}
+                <h7 style = "color:red;">{% trans "Missing " %}<img src="{% static 'imgs/red_x.png' %}" alt="" border=3 height=15 width=15></img></h7>
+                {% endif %}
+              </div>
+            </li>
+            {% endif %}
+
+            <li class="list-group-item">
+              <h7><b>Constancia de Situación Fiscal de la SHCP</b></h7>
+              <div class="input-group mb-3 mt-2">
+                <div class="custom-file">
+                  <input type="file" name = "Constancia_SHCP" class="custom-file-input" id="inputGroupFile02">
+                  <label class="custom-file-label" for="inputGroupFile01">{% if "Constancia_SHCP" in docs %} Cambiar Archivo {% else %} Escoger Archivo {% endif %}</label>
+                </div>
+                {% if "Constancia_SHCP" in docs %}
+                <h7 style = "color:green;">{% trans "Uploaded " %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></h7>
+                {% else %}
+                <h7 style = "color:red;">{% trans "Missing " %}<img src="{% static 'imgs/red_x.png' %}" alt="" border=3 height=15 width=15></img></h7>
+                {% endif %}
+              </div>
+            </li>
+
+            <li class="list-group-item">
+              <h7><b>Comprobante de Domicilio</b></h7>
+              <div class="input-group mb-3 mt-2">
+                <!-- <div class="input-group-prepend">
+                  <button type="submit" class="btn btn-outline-secondary">{% trans "Upload" %}</button>
+                </div> -->
+                <div class="custom-file">
+                  <input type="file" name = "Comprobante_Domicilio" class="custom-file-input" id="inputGroupFile02">
+                  <label class="custom-file-label" for="inputGroupFile01">{% if "Comprobante_Domicilio" in docs %} Cambiar Archivo {% else %} Escoger Archivo {% endif %}</label>
+                </div>
+                {% if "Comprobante_Domicilio" in docs %}
+                <h7 style = "color:green;">{% trans "Uploaded " %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></h7>
+                {% else %}
+                <h7 style = "color:red;">{% trans "Missing " %}<img src="{% static 'imgs/red_x.png' %}" alt="" border=3 height=15 width=15></img></h7>
+                {% endif %}
+              </div>
+            </li>
+
+            <li class="list-group-item">
+              <h7><b>Estado de Cuenta Bancaria</b></h7>
+              <div class="input-group mb-3 mt-2">
+                <!-- <div class="input-group-prepend">
+                  <button type="submit" class="btn btn-outline-secondary">{% trans "Upload" %}</button>
+                </div> -->
+                <div class="custom-file">
+                  <input type="file" name = "Estado_Bancaria" class="custom-file-input" id="inputGroupFile02">
+                  <label class="custom-file-label" for="inputGroupFile01">{% if "Estado_Bancaria" in docs %} Cambiar Archivo {% else %} Escoger Archivo {% endif %}</label>
+                </div>
+                {% if "Estado_Bancaria" in docs %}
+                <h7 style = "color:green;">{% trans "Uploaded " %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></h7>
+                {% else %}
+                <h7 style = "color:red;">{% trans "Missing " %}<img src="{% static 'imgs/red_x.png' %}" alt="" border=3 height=15 width=15></img></h7>
+                {% endif %}
+              </div>
+            </li>
+
+            <li class="list-group-item">
+              <h7><b>INE</b></h7>
+              <div class="input-group mb-3 mt-2">
+                <div class="custom-file">
+                  <input type="file" name = "INE" class="custom-file-input" id="inputGroupFile02">
+                  <label class="custom-file-label" for="inputGroupFile01">{% if "INE" in docs %} Cambiar Archivo {% else %} Escoger Archivo {% endif %}</label>
+                </div>
+                {% if "INE" in docs %}
+                <h7 style = "color:green;">{% trans "Uploaded " %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></h7>
+                {% else %}
+                <h7 style = "color:red;">{% trans "Missing " %}<img src="{% static 'imgs/red_x.png' %}" alt="" border=3 height=15 width=15></img></h7>
+                {% endif %}
+              </div>
+            </li>
+          </ul>
+
+          <div class = "row justify-content-center mt-5">
+            <button type = "submit" class = "btn btn-secondary" id = "submit">{% trans "Upload Files" %}</button>
+          </div>
+
+      </div>
+    </div>
   </div>
-</div>
+</form>
+<!-- Corporate Documents Card Ends-->
 
-<div class="container col-md-8">
-    <form method = "post" enctype = "multipart/form-data">
-        {% csrf_token %}
 
-        {% if me.company_type == "Persona Moral" %}
-        <!--acta constitutiva-->
-        <div class = "row justify-content-center mt-2 mb">
-          <div class = "col-6">
-            <label for = "Acta_Constitutiva"><b>{% trans "Acta Constitutiva" %}</b></label>
-            <input type = "file" id ="Acta_Constitutiva" name = "Acta_Constitutiva">
-          </div>
-          <div class = "col-6">
-            {% if "Acta_Constitutiva" in docs %}
-            <h7 style = "color:green;">{% trans "Uploaded " %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></h7>
-            {% else %}
-            <h7 style = "color:red;">{% trans "Missing " %}<img src="{% static 'imgs/red_x.png' %}" alt="" border=3 height=15 width=15></img></h7>
-            {% endif %}
-          </div>
-        </div>
-        {% endif %}
-          <!-- Constancia de Situación Fiscal de la SHCP -->
-        <div class = "row justify-content-center mt-2 mb-2">
-          <div class ="col-6">
-            <label for = "Constancia_SHCP"><b>{% trans "Constancia de Situación Fiscal de la SHCP" %}</b></label>
-            <input type = "file" id = "Constancia_SHCP" name = "Constancia_SHCP">
-          </div>
-          <div class = "col-6">
-            {% if "Constancia_SHCP" in docs %}
-            <h7 style = "color:green;">{% trans "Uploaded " %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></h7>
-            {% else %}
-            <h7 style = "color:red;">{% trans "Missing " %}<img src="{% static 'imgs/red_x.png' %}" alt="" border=3 height=15 width=15></img></h7>
-            {% endif %}
-          </div>
-        </div>
 
-        <!--Comprobante de Domicilio -->
-        <div class = "row justify-content-center mt-2 mb-2">
-          <div class = "col-6">
-            <label for = "Comprobante_Domicilio"><b>{% trans "Comprobante de Domicilio" %}</b></label>
-            <input type = "file" id = "Comprobante_Domicilio" name = "Comprobante_Domicilio">
-          </div>
-          <div class = "col-6">
-            {% if "Comprobante_Domicilio" in docs %}
-            <h7 style = "color:green;">{% trans "Uploaded " %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></h7>
-            {% else %}
-            <h7 style = "color:red;">{% trans "Missing " %}<img src="{% static 'imgs/red_x.png' %}" alt="" border=3 height=15 width=15></img></h7>
-            {% endif %}
-          </div>
-        </div>
-          <!--Estado de Cuenta Bancaria-->
-        <div class = "row justify-content-center mt-2 mb-2">
-          <div class = "col-6">
-            <label for = "Estado_Bancaria"><b>{% trans "Estado de Cuenta Bancaria" %}</b></label>
-            <input type = "file" id = "Estado_Bancaria" name = "Estado_Bancaria">
-          </div>
-          <div class = "col-6">
-            {% if "Estado_Bancaria" in docs %}
-            <h7 style = "color:green;">{% trans "Uploaded " %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></h7>
-            {% else %}
-            <h7 style = "color:red;">{% trans "Missing " %}<img src="{% static 'imgs/red_x.png' %}" alt="" border=3 height=15 width=15></img></h7>
-            {% endif %}
-          </div>
-        </div>
+<!-- New Unit Card -->
+<form method = "post" action = "new_unit" enctype = "multipart/form-data">
+  {% csrf_token %}
+  <div class="row justify-content-center pt-2">
+      <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 30rem;">
+        <div class="card-body">
+          <h5 class="card-title">{% trans "New Unit" %}</h5>
 
-        <div class = "row justify-content-center">
-          <!-- INE -->
-          <div class ="col-6">
-            <label for = "INE"><b>INE</b></label>
-            <input type = "file" id = "INE" name = "INE">
-          </div>
-          <div class = "col-6">
-            {% if "INE" in docs %}
-            <h7 style = "color:green;">{% trans "Uploaded " %}<img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></h7>
-            {% else %}
-            <h7 style = "color:red;">{% trans "Missing " %}<img src="{% static 'imgs/red_x.png' %}" alt="" border=3 height=15 width=15></img></h7>
-            {% endif %}
-          </div>
-        </div>
+          <p class="card-text">{% trans "Please upload the following documents to register a new unit" %}</p>
 
-        <div class = "row justify-content-center mt-2 mb-2">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+            </li>
+
+            <li class="list-group-item">
+              <h7><b>Tarjeta de Circulación de Tractocamion</b></h7>
+              <div class="input-group mb-3 mt-2">
+                <div class="custom-file">
+                  <input type="file" name = "Tarjtea_de_circulación" class="custom-file-input" id="inputGroupFile02" required>
+                  <label class="custom-file-label" for="inputGroupFile01">Escoger Archivo</label>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item">
+              <h7><b>Tarjeta de Caja (para las que apliquen)</b></h7>
+              <div class="input-group mb-3 mt-2">
+                <div class="custom-file">
+                  <input type="file" name = "Tarjeta_de_caja" class="custom-file-input" id="inputGroupFile02" required>
+                  <label class="custom-file-label" for="inputGroupFile01">Escoger Archivo</label>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item">
+              <h7><b>Fotografía del Placas Visibles de Tractocamión</b></h7>
+              <div class="input-group mb-3 mt-2">
+                <div class="custom-file">
+                  <input type="file" name = "placas_visibles" class="custom-file-input" id="inputGroupFile02" required>
+                  <label class="custom-file-label" for="inputGroupFile01">Escoger Archivo</label>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item">
+              <h7><b>Fotografía del Frente de Tractocamión</b></h7>
+              <div class="input-group mb-3 mt-2">
+                <div class="custom-file">
+                  <input type="file" name = "frente" class="custom-file-input" id="inputGroupFile02" required>
+                  <label class="custom-file-label" for="inputGroupFile01">Escoger Archivo</label>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item">
+              <h7><b>Fotografía del Costado izquierdo del Tractocamión</b></h7>
+              <div class="input-group mb-3 mt-2">
+                <div class="custom-file">
+                  <input type="file" name = "costado_izquierdo" class="custom-file-input" id="inputGroupFile02" required>
+                  <label class="custom-file-label" for="inputGroupFile01">Escoger Archivo</label>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item">
+              <h7><b>Fotografía del Costado derecho del Tractocamión</b></h7>
+              <div class="input-group mb-3 mt-2">
+                <div class="custom-file">
+                  <input type="file" name = "costado_derecho" class="custom-file-input" id="inputGroupFile02" required>
+                  <label class="custom-file-label" for="inputGroupFile01">Escoger Archivo</label>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item">
+              <h7><b>Fotografía del Posterior de Caja (para las que apliquen)</b></h7>
+              <div class="input-group mb-3 mt-2">
+                <div class="custom-file">
+                  <input type="file" name = "posterior_de_caja" class="custom-file-input" id="inputGroupFile02" required>
+                  <label class="custom-file-label" for="inputGroupFile01">Escoger Archivo</label>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item">
+              <h7><b>Fotografía del Interior de Caja (para las que apliquen)</b></h7>
+              <div class="input-group mb-3 mt-2">
+                <div class="custom-file">
+                  <input type="file" name = "interior_de_caja" class="custom-file-input" id="inputGroupFile02" required>
+                  <label class="custom-file-label" for="inputGroupFile01">Escoger Archivo</label>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item">
+              <h7><b>Poliza de Seguro</b></h7>
+              <div class="input-group mb-3 mt-2">
+                <div class="custom-file">
+                  <input type="file" name = "Poliza_de_Seguro" class="custom-file-input" id="inputGroupFile02" required>
+                  <label class="custom-file-label" for="inputGroupFile01">Escoger Archivo</label>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item">
+              <h7><b>Especificaciones de servicio del proveedor de GPS</b></h7>
+              <div class="input-group mb-3 mt-2">
+                <div class="custom-file">
+                  <input type="file" name = "GPS" class="custom-file-input" id="inputGroupFile02" required>
+                  <label class="custom-file-label" for="inputGroupFile01">Escoger Archivo</label>
+                </div>
+              </div>
+            </li>
+
+            <input type = "text" name = 'truck' value = "truck" hidden = "true" readonly/>
+
+          </ul>
+
+          <div class = "row justify-content-center mt-5">
+            <button type = "submit" class = "btn btn-secondary" id = "submit">{% trans "Upload Files" %}</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </form>
+  <!-- New Unit Card Ends -->
+
+<!-- New Driver Card Ends -->
+<form method = "post" action = "new_unit" enctype = "multipart/form-data">
+  {% csrf_token %}
+  <div class="row justify-content-center pt-2">
+    <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 30rem;">
+      <div class="card-body">
+        <h5 class="card-title">{% trans "New Driver" %}</h5>
+
+        <p class="card-text">{% trans "Please upload the following documents to register a new unit" %}</p>
+
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+          </li>
+
+          <li class="list-group-item">
+            <h7><b>Licencia</b></h7>
+            <div class="input-group mb-3 mt-2">
+              <div class="custom-file">
+                <input type="file" name = "Licencia" class="custom-file-input" id="inputGroupFile02" required>
+                <label class="custom-file-label" for="inputGroupFile01">Escoger Archivo</label>
+              </div>
+            </div>
+          </li>
+
+          <li class="list-group-item">
+            <h7><b>Comprobante de Domicilio</b></h7>
+            <div class="input-group mb-3 mt-2">
+              <div class="custom-file">
+                <input type="file" name = "Comprobante_Domicilio" class="custom-file-input" id="inputGroupFile02" required>
+                <label class="custom-file-label" for="inputGroupFile01">Escoger Archivo</label>
+              </div>
+            </div>
+          </li>
+
+          <li class="list-group-item">
+            <h7><b>Certificaciones de Terceros (si aplica)</b></h7>
+            <div class="input-group mb-3 mt-2">
+              <div class="custom-file">
+                <input type="file" name = "Certificaciones_Terceros" class="custom-file-input" id="inputGroupFile02" required>
+                <label class="custom-file-label" for="inputGroupFile01">Escoger Archivo</label>
+              </div>
+            </div>
+          </li>
+
+          <li class="list-group-item">
+            <h7><b>INE</b></h7>
+            <div class="input-group mb-3 mt-2">
+              <div class="custom-file">
+                <input type="file" name = "INE" class="custom-file-input" id="inputGroupFile02" required>
+                <label class="custom-file-label" for="inputGroupFile01">Escoger Archivo</label>
+              </div>
+            </div>
+          </li>
+
+          <input type = "text" name = 'driver' value = "driver" hidden = "true" readonly/>
+        </ul>
+
+        <div class = "row justify-content-center mt-5">
           <button type = "submit" class = "btn btn-secondary" id = "submit">{% trans "Upload Files" %}</button>
         </div>
-        <!--end of form-->
-    </form>
-</div>
-
-<div class="row justify-content-center mt-5">
-  <div class="col-md-8">
-    <h3>{% trans "New Unit" %}</h3>
+      </div>
+    </div>
   </div>
-</div>
 
-<div class="container col-md-8">
-    <form method = "post" action = "new_unit" enctype = "multipart/form-data">
-        {% csrf_token %}
-        <!--tarjeta de circulation-->
-        <div class = "row justify-content-center mt-2 mb">
-          <label for = "Tarjtea de circulación"><b>{% trans "Tarjtea de Circulación de Tractocamión" %}</b></label>
-          <input type = "file" id ="Tarjtea de circulación" name = "Tarjtea_de_circulación">
-        </div>
+</form>
+<!-- New Driver Card Ends -->
 
-        <!--tarjeta de caja -->
-        <div class = "row justify-content-center mt-2 mb-2">
-          <label for = "Tarjeta de caja"><b>{% trans "Tarjeta de Caja (para las que aplique)" %}</b></label>
-          <input type = "file" id = "Tarjeta de caja" name = "Tarjeta_de_caja">
-        </div>
-          <!--fotografias de tractocamion-->
-        <div class = "row justify-content-center mt-2 mb-2">
-          <label for = "placas visibles"><b>{% trans "Fotografía del Placas Visibles de Tractocamión" %}</b></label>
-          <input type = "file" id = "placas visibles" name = "placas_visibles">
-
-          <label for = "frente"><b>{% trans "Fotografía del Frente de Tractocamión" %}</b></label>
-          <input type = "file" id = "frente" name = "frente">
-
-          <label for = "costados"><b>{% trans "Fotografía del Costados de Tractocamión" %}</b></label>
-          <input type = "file" id = "costados" name = "costados">
-
-          <label for = "posterior de caja"><b>{% trans "Fotografía del Posterior de Caja (para las que aplique)" %}</b></label>
-          <input type = "file" id = "posterior de caja" name = "posterior_de_caja">
-
-          <label for = "interior de caja"><b>{% trans "Fotografía del Interior de Caja (para las que aplique)" %}</b></label>
-          <input type = "file" id = "interior de caja" name = "interior_de_caja">
-        </div>
-
-        <div class = "row justify-content-center mt-2 mb-2">
-          <label for = "Poliza de Seguro"><b>{% trans "Poliza de Seguro" %}</b></label>
-          <input type = "file" id = "Poliza de Seguro" name = "Poliza_de_Seguro">
-        </div>
-
-        <div class = "row justify-content-center">
-          <!-- INE -->
-          <label for = "GPS"><b>{% trans "Especificaciones de servicio del proveedor de GPS" %}</b></label>
-          <input type = "file" id = "GPS" name = "GPS">
-        </div>
-
-        <input type = "text" name = 'truck' value = "truck" hidden = "true" readonly/>
-
-        <div class = "row justify-content-center mt-2 mb-2">
-          <button type = "submit" class = "btn btn-secondary" id = "submit">{% trans "Upload Files" %}</button>
-        </div>
-        <!--end of form-->
-    </form>
-</div>
-
-<div class="row justify-content-center mt-5">
-  <div class="col-md-8">
-    <h3>{% trans "New Driver" %}</h3>
-  </div>
-</div>
-
-<div class="container col-md-8">
-    <form method = "post" action = "new_unit" enctype = "multipart/form-data">
-        {% csrf_token %}
-
-        <div class = "row justify-content-center mt-2 mb-2">
-          <label for = "Licencia"><b>{% trans "Licencia" %}</b></label>
-          <input type = "file" id = "Licencia" name = "Licencia">
-        </div>
-
-        <div class = "row justify-content-center mt-2 mb-2">
-          <label for = "Comprobante de Domicilio"><b>{% trans "Comprobante de Domicilio" %}</b></label>
-          <input type = "file" id = "Comprobante de Domicilio" name = "Comprobante_Domicilio">
-        </div>
-
-        <div class = "row justify-content-center mt-2 mb-2">
-          <label for = "Certificaciones de Terceros"><b>{% trans "Certificaciones de Terceros (si aplica)" %}</b></label>
-          <input type = "file" id = "Certificaciones de Terceros" name = "Certificaciones_Terceros">
-        </div>
-
-        <div class = "row justify-content-center mt-2 mb-2">
-          <label for = "INE"><b>{% trans "INE" %}</b></label>
-          <input type = "file" id = "INE" name = "INE">
-        </div>
-
-        <input type = "text" name = 'driver' value = "driver" hidden = "true" readonly/>
-
-        <div class = "row justify-content-center mt-2 mb-2">
-          <button type = "submit" class = "btn btn-secondary" id = "submit">{% trans "Upload Files" %}</button>
-        </div>
-    </form>
-</div>
+<script type="application/javascript">
+  $('.custom-file-input').on('change',function(){
+      //get the file name
+      var fileName = $(this).val();
+      //replace the "Choose a file" label
+      $(this).next('.custom-file-label').html(fileName);
+  })
+</script>
 {% endblock %}
