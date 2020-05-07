@@ -153,6 +153,7 @@ def Accept_Order(request):
             cur_order = order.objects.get(id=jsn['order_id'])
             offer = counter_offer(trucker_user = me, order = cur_order, counter_price = jsn['counter_price'])
             offer.save()
+            messages.info(request, _("Counter Offer on order " + cur_order.customer_order_no) + " sent to " + cur_order.shipping_company.user.profile.company_name+"!")
             return HttpResponseRedirect('/trucker')
 
         elif 'big_submit' in request.POST:
@@ -506,16 +507,23 @@ def upload_new_unit_docs(request):
 
 @login_required
 @allowed_users(allowed_roles=['Trucker'])
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def download_docs(request):
     s3 = boto3.resource('s3') #setup to get from AWS
     #setup to download off AWS
     #create folder to store files
-    aws_dir = os.path.join('docs/CF'+str(request.user.id))
+    if request.method == "POST":
+        jdp = json.dumps(request.POST) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        cur_order = order.objects.filter(id = jsn['order_id']).first() #this is if the user wants to download order docs into .zip
+        aws_dir = 'docs/{order}'.format(order = "order" +str(cur_order.id))
+        zip_file_name = "Order-"+cur_order.customer_order_no+".zip"
+    else:
+        aws_dir = os.path.join('docs/CF'+str(request.user.id)) #this is if user wants to download their corporate docs into .zip
+        zip_file_name = "Trucker-"+str(request.user.id)+".zip"
     #create zip file
     byte = BytesIO()
     zip = zipfile.ZipFile(byte, "w")
-    zip_file_name = "Trucker-"+str(request.user.id)+".zip"
     #download files
     bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
     objs = bucket.objects.filter(Prefix=aws_dir) #get folder

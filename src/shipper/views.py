@@ -38,6 +38,8 @@ import magic
 from CargoFul import settings
 from django.template.loader import get_template
 from django.template.loader import render_to_string
+from io import BytesIO
+import zipfile
 
 # Create your views here.
 
@@ -842,3 +844,36 @@ def view_carta_porte(request):
             else:
                 pass
         ReturnHttpResponseRedirect('/shipper')
+
+@login_required
+@allowed_users(allowed_roles=['Shipper'])
+@api_view(['POST'])
+def download_my_docs(request):
+    s3 = boto3.resource('s3') #setup to get from AWS
+    #setup to download off AWS
+    #create folder to store files
+    if request.method == "POST":
+        jdp = json.dumps(request.POST) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        cur_order = order.objects.filter(id = jsn['order_id']).first() #this is if the user wants to download order docs into .zip
+        aws_dir = 'docs/{order}'.format(order = "order" +str(cur_order.id))
+        zip_file_name = "Order-"+cur_order.customer_order_no+".zip"
+    #create zip file
+    byte = BytesIO()
+    zip = zipfile.ZipFile(byte, "w")
+    #download files
+    bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
+    objs = bucket.objects.filter(Prefix=aws_dir) #get folder
+    for obj in objs: #iterate over file objects in folder
+        path, filename = os.path.split(obj.key)
+        data = obj.get()['Body'].read()
+        open(filename, 'wb').write(data)
+        zip.write(filename) #write file to zip folder
+        os.unlink(filename)
+    zip.close()
+    resp = HttpResponse(
+        byte.getvalue(),
+        content_type = "application/x-zip-compressed"
+    )
+    resp['Content-Disposition'] = 'attachment; filename = %s' % zip_file_name
+    return resp

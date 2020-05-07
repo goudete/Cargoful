@@ -1,5 +1,5 @@
 {% extends 'shipper/base.html'%}
-
+{% load static %}
 {% load i18n %}
 {% block content %}
 <!--styling to make table overflow scroll -->
@@ -16,6 +16,14 @@
     background-color: white;
     color: black;
   }
+  #subbutton{
+    visibility: hidden;
+  }
+
+  svg:hover {
+  fill: gray;
+  cursor: pointer;
+}
 </style>
 <!-- messages end here -->
 
@@ -27,7 +35,7 @@
 </div>
 <div class="row justify-content-center pt-2" id = 'dashboard'>
   <div class="col-md-8">
-    <div class="card">
+    <div class="card shadow p-3 mb-5 bg-white rounded">
     <table class="table table-striped">
       {% if counter_offers|length > 0 %}
       <thead>
@@ -35,8 +43,8 @@
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <tr>
           <th scope = 'col'>{% trans "Order Number" %}</th>
-          <th scope = 'col'>{% trans "Original Price" %}</th>
           <th scope = 'col'>{% trans "Company" %}</th>
+          <th scope = 'col'>{% trans "Original Price" %}</th>
           <th scope = 'col'>{% trans "Counter Offer" %}</th>
           <th scope = 'col'></th>
         </tr>
@@ -45,16 +53,24 @@
         {% for c in counter_offers %}
         <tr>
           <td>{{ c.order.customer_order_no }}</td>
-          <td>{{ c.order.price }}</td>
           <td>{{ c.trucker_user.user.profile.company_name }}</td>
+          <td>{{ c.order.price }}</td>
           <td>{{ c.counter_price }}</td>
           <td>
-            <form action = 'review_counter_offer' method = 'POST'>
+            <form action = 'review_counter_offer' method = 'post'>
               {% csrf_token %}
               <input type = 'number' name = 'counter_offer_id' value = {{c.id}} hidden = 'true'>
               <input type = 'number' name = 'counter_offer_order_id' value = {{c.order.id}} hidden = 'true'>
-              <button type = 'submit' class = 'btn btn-secondary'>{% trans "Review" %}</button>
-              <button type = 'submit' class = 'btn btn-danger' formaction = 'deny_counter_offer'>{% trans "Deny" %}</button>
+              <label>
+                <b>
+                  <input type="submit" id="subbutton"/>
+                  {% trans "View" %}
+                  <svg class="bi bi-eye" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 001.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0014.828 8a13.133 13.133 0 00-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 001.172 8z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM4.5 8a3.5 3.5 0 117 0 3.5 3.5 0 01-7 0z" clip-rule="evenodd"/>
+                  </svg>
+                </b>
+              </label>
             </form>
           </td>
         </tr>
@@ -85,7 +101,7 @@
 </div>
 <div class="row justify-content-center pt-2" id = 'dashboard'>
   <div class="col-md-8">
-    <div class="card">
+    <div class="card shadow p-3 mb-5 bg-white rounded">
     <table class="table table-striped">
       {% if status_updates|length > 0 %}
       <thead>
@@ -120,7 +136,13 @@
             <form action = 'read_status_update' method = 'POST'>
               {% csrf_token %}
               <input type = 'number' name = 'status_id' value = {{s.id}} hidden = 'true'>
-              <button type = 'submit' class = 'btn btn-success'>Ok</button>
+              <label>
+                <input type="submit" id="subbutton"/>
+                {% "Ok" %}
+                <svg class="bi bi-check" width="2em" height="2em" viewBox="0 0 16 16" fill="green" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+                </svg>
+              </label>
             </form>
           </td>
         </tr>
@@ -153,27 +175,41 @@
 <!-- start of pending requests table -->
 <div class="row justify-content-center pt-2" id = 'dashboard'>
   <div class="col-md-8">
-    <div class="card">
+    <div class="card shadow p-3 mb-5 bg-white rounded">
     <table class="table table-striped">
       {% if requests|length > 0 %}
       <thead>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <tr>
-          <th scope = 'col'>{% trans "Company Name" %}</th>
+          <th scope = 'col'></th>
           <th scope = 'col'></th>
         </tr>
       </thead>
       <tbody>
         {% for r in requests %}
         <tr>
-          <td>{{ r.from_user.profile.company_name }}</td>
+          <td>{{ r.from_user.profile.company_name }}{% trans " would like to connect" %}</td>
           <td>
             <form action = 'accept_request' method = 'POST'>
               {% csrf_token %}
               <input type = 'number' name = 'request_id' value = {{r.id}} hidden = 'true'>
-              <button type = 'submit' class = 'btn btn-success'>{% trans "Accept" %}</button>
-              <button type = 'submit' formaction = 'deny_request' class = 'btn btn-danger'>{% trans "Decline" %}</button>
+              <label>
+                <input type="submit" formaction = 'deny_request' id="subbutton"/>
+                {% trans "Deny" %}
+                <svg class="bi bi-x-circle" width="2em" height="2em" viewBox="0 0 16 16" fill="red" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z" clip-rule="evenodd"/>
+                  <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 010 .708l-7 7a.5.5 0 01-.708-.708l7-7a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+                  <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 000 .708l7 7a.5.5 0 00.708-.708l-7-7a.5.5 0 00-.708 0z" clip-rule="evenodd"/>
+                </svg>
+              </label>
+              <label>
+                <input type="submit" id="subbutton"/>
+                {% trans "Accept" %}
+                <svg class="bi bi-check" width="2em" height="2em" viewBox="0 0 16 16" fill="green" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+                </svg>
+              </label>
             </form>
           </td>
         </tr>

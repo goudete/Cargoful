@@ -25,4 +25,5 @@ urlpatterns = [
     path('upload_orden_de_embarco_from_order', views.upload_orden_de_embarco_from_order), #for uploading orden de embarco form order
     path('download_carta_porte', views.download_carta_porte), #this is for downloading a carta porte doc
     path('view_carta_porte', views.view_carta_porte), #this is for viewing a carta porte
+    path('download_my_docs', views.download_my_docs), #for downloading all documents
 ]

@@ -40,6 +40,14 @@
     background-color: white;
     color: black;
   }
+  #subbutton{
+    visibility: hidden;
+  }
+
+  svg:hover {
+  fill: gray;
+  cursor: pointer;
+}
 </style>
 <!-- messages end here -->
 <div class="row justify-content-center mt-5">
@@ -62,9 +70,11 @@
           <th scope = 'col'>{% trans "Pickup Address" %}</th>
           <th scope = 'col'>{% trans "Delivery Address" %}</th>
           <th scope = 'col'>{% trans "Distance" %}</th>
-          <th scope = 'col'>{% trans "Pickup Date" %}</th>
-          <th scope = 'col'>{% trans "Pickup Time" %}</th>
+          <!-- <th scope = 'col'>{% trans "Pickup Date" %}</th>
+          <th scope = 'col'>{% trans "Pickup Time" %}</th> -->
           <th scope="col">{% trans "Price" %}</th>
+          <th scope ="col"></th>
+          <th scope = "col"></th>
         </tr>
       </thead>
       <tbody>
@@ -75,9 +85,33 @@
           <td>{{ my.pickup_address }}</td>
           <td>{{ my.delivery_address }}</td>
           <td>{{ my.distance }} KM</td>
-          <td>{{ my.pickup_date }}</td>
-          <td>{{ my.pickup_time }}</td>
+          <!-- <td>{{ my.pickup_date }}</td>
+          <td>{{ my.pickup_time }}</td> -->
           <td>{{ my.price }}</td>
+          <!-- button to download all docs associated w/ order -->
+          <td>
+            <form action = "download_my_docs" method = "post">
+              {% csrf_token %}
+              <input type = "text" id = "order" name = "order" value = "order" hidden = "true" readonly/>
+              <input type = 'number' id = 'order_id' name = 'order_id' value = {{my.id}} hidden = 'true' readonly/>
+              <button type = 'submit' class = 'btn btn-secondary'>{% trans "Download" %}</button>
+            </form>
+          </td>
+          <!-- icon to review order -->
+          <td>
+            <form action = 'review_my_order' method = 'post'>
+              {% csrf_token %}
+              <input type = 'number' id = 'order_id' name = 'order_id' value = {{my.id}} hidden = 'true' readonly/>
+              <label>
+                <b>
+                  <input type="submit" id="subbutton"/>
+                  <svg class="bi bi-three-dots-vertical" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M9.5 13a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" clip-rule="evenodd"/>
+                  </svg>
+                </b>
+              </label>
+            </form>
+          </td>
         </tr>
         {% endfor %}
       </tbody>
