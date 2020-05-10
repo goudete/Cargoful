@@ -148,7 +148,7 @@ def activate(request, uidb64, token):
         print(user.profile.email_confirmed)
         print("here2")
         user.profile.save()
-        login(request, user)
+        # login(request, user)
         # return redirect('home')
         return HttpResponseRedirect('/../../email_confirmed')#HttpResponse('Thank you for your email confirmation. You can now ...')
     else:

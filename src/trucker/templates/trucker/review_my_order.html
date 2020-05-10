@@ -92,12 +92,12 @@
           <input type = 'number' name = 'order_id' value = {{order.id}} hidden = 'true' readonly/>
 
           <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <button type="submit" class="btn btn-outline-secondary">{% trans "Upload" %}</button>
-            </div>
             <div class="custom-file">
               <input type="file" name = "carta_porte" class="custom-file-input" id="inputGroupFile02">
               <label class="custom-file-label" for="inputGroupFile01">Escoger Archivo</label>
+            </div>
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-outline-secondary">{% trans "Upload" %}</button>
             </div>
           </div>
 <!--

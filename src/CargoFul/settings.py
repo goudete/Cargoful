@@ -30,11 +30,8 @@ environ.Env.read_env(env_file)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-#should be handled with env
 SECRET_KEY = env("SECRET_KEY")
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = []
@@ -78,6 +75,11 @@ LANGUAGES = (
     ('en', _('English')),
     ('es-mx', _('Spanish')),
 )
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'authorization.backends.EmailBackend',
+]
 
 ROOT_URLCONF = 'CargoFul.urls'
 
