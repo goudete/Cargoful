@@ -6,6 +6,7 @@ from .models import Profile
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 from django import forms
+from crispy_forms.helper import FormHelper
 
 class CreateUserForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
@@ -51,3 +52,14 @@ class ProfileForm(forms.ModelForm):
                 'unique': 'This number is already registered, please enter a new one'
             }
         }
+class EditUserInfo(forms.Form):
+    first_name = forms.CharField(max_length=100, required = False)
+    last_name = forms.CharField(max_length=100, required = False)
+    email = forms.EmailField(required = False)
+    company_name = forms.CharField(max_length=100, required = False)
+    username = forms.CharField(max_length=100, required = False)
+
+    def __init__(self, *args, **kwargs):
+        super(EditUserInfo, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
