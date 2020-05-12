@@ -19,6 +19,8 @@ from django.utils.translation import gettext as _
 from django.utils import translation
 from django.conf import settings
 from django.template.loader import get_template
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 def register_view(request):
     if request.method == 'POST':
@@ -171,3 +173,45 @@ def set_language_es(request):
     response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/accounts/login'))
     response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_language)
     return response
+
+def editProfileView(request):
+    if request.method == "POST":
+        user = request.user
+        if "info_submit" in request.POST: #they changed profile info
+            form = EditUserInfo(request.POST)
+            print("here 1")
+            print(form.errors)
+            if form.is_valid():
+                print("here")
+                cd = form.cleaned_data
+                if len(cd['first_name']) > 0:
+                    user.first_name = cd['first_name']
+                if len(cd['last_name']) > 0:
+                    user.last_name = cd['last_name']
+                if len(cd['email']) > 0:
+                    user.email = cd['email']
+                if len(cd['company_name']) > 0:
+                    user.profile.company_name = cd['company_name']
+                if len(cd['username']) > 0:
+                    user.username = cd['username']
+                user.save()
+                messages.info(request, "Profile information successfully updated!")
+            else:
+                pform = PasswordChangeForm(user = request.user)
+                return render(request,'profiles/edit_profile.html',{'form':form,'pform': pform})
+        else: #they changed their password
+            pform = PasswordChangeForm(user=request.user, data=request.POST)
+            if pform.is_valid():
+                pform.save()
+                update_session_auth_hash(request, pform.user)
+                messages.info(request, "Password successfully updated!")
+            else:
+                form = EditUserInfo()
+                return render(request,'profiles/edit_profile.html',{'form':form,'pform': pform})
+        if user.profile.user_type == "Shipper":
+            return HttpResponseRedirect('/shipper')
+        else:
+            return HttpResponseRedirect('/trucker')
+    form = EditUserInfo()
+    pform = PasswordChangeForm(user = request.user)
+    return render(request,'profiles/edit_profile.html',{'form':form,'pform': pform})
