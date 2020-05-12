@@ -195,6 +195,7 @@ def editProfileView(request):
                 if len(cd['username']) > 0:
                     user.username = cd['username']
                 user.save()
+                user.profile.save()
                 messages.info(request, "Profile information successfully updated!")
             else:
                 pform = PasswordChangeFormCustom(user = request.user)
