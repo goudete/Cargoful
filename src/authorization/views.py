@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .forms import CreateUserForm, ProfileForm, EditUserInfo
+from .forms import CreateUserForm, ProfileForm, EditUserInfo, PasswordChangeFormCustom
 from .models import Profile
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
@@ -197,10 +197,10 @@ def editProfileView(request):
                 user.save()
                 messages.info(request, "Profile information successfully updated!")
             else:
-                pform = PasswordChangeForm(user = request.user)
+                pform = PasswordChangeFormCustom(user = request.user)
                 return render(request,'profiles/edit_profile.html',{'form':form,'pform': pform})
         else: #they changed their password
-            pform = PasswordChangeForm(user=request.user, data=request.POST)
+            pform = PasswordChangeFormCustom(user=request.user, data=request.POST)
             if pform.is_valid():
                 pform.save()
                 update_session_auth_hash(request, pform.user)
@@ -213,5 +213,5 @@ def editProfileView(request):
         else:
             return HttpResponseRedirect('/trucker')
     form = EditUserInfo()
-    pform = PasswordChangeForm(user = request.user)
+    pform = PasswordChangeFormCustom(user = request.user)
     return render(request,'profiles/edit_profile.html',{'form':form,'pform': pform})

@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from shipper.models import shipper
 from .models import Profile
 from django.utils.translation import gettext_lazy as _
@@ -61,5 +61,12 @@ class EditUserInfo(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(EditUserInfo, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
+
+
+class PasswordChangeFormCustom(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super(PasswordChangeFormCustom, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_show_labels = False
