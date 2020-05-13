@@ -38,12 +38,26 @@ def Available_Orders(request):
         counter_offers = counter_offer.objects.filter(trucker_user = me).exclude(status = 0).exclude(status = 3)
         num_notifications = len(list(connect_requests)) + len(list(order_notifications)) + len(list(counter_offers))
         connections = Friend.objects.friends(request.user) #get the current shippers connected w/ this trucker
+
+        #getting list of orders that have pedning counter offers from this trucker
+        pending_counter_offers = counter_offer.objects.filter(trucker_user = me).filter(status = 0) #pending counter offers
+        pco_orders = [] # empty list, will be filled by pending counter offer (pco) orders
+        for pco in pending_counter_offers:
+            pco_orders.append(pco.order)
+        pcos = set(pco_orders) #make it a set to avoid duplicates
+
+        denied_counter_offers = counter_offer.objects.filter(status = 1) #denied counter offers
+        dco_orders = []#will be filled w/ orders in denied counter offers
+        for dco in denied_counter_offers:
+            dco_orders.append(dco.order)
+        dcos = set(dco_orders) #make it a set to avoid duplicates
+
         avail = order.objects.filter(status__exact=1) #all available orders
         available = [] #list of orders posted by shippers connected with trucker
         for a in avail:
             if a.shipping_company.user in connections:
                 available.append(a)
-        return render(request, 'trucker/available_orders.html', {'available': available, 'me' : me, 'num_notifications': num_notifications})
+        return render(request, 'trucker/available_orders.html', {'available': available, 'me' : me, 'num_notifications': num_notifications, 'pcos': pcos, 'dcos': dcos})
 
 
 @login_required
@@ -210,7 +224,21 @@ def Show_Connects(request):
         else:
             connections.append(p.to_user)
             pending.append(p.to_user)
-    return render(request, 'trucker/connects.html', {'pending': pending, 'connections': connections, 'me' : me, 'num_notifications': num_notifications})
+    query_set = [] #empty list (will be filled by shippers if the following if statement is true)
+    if request.method == "POST" and "specific_search" in request.POST:
+        #if this is true, then the trucker is searching for someone within his connections list
+        jdp = json.dumps(request.POST) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        query = jsn['query'] #what was queried in searchbar
+        #get the ppl whose company names match your query
+        queries = query.split(" ") #turns a search like "trucking company" -> [trucking, company]
+        for word in queries:
+            shippers = Profile.objects.filter(user_type = "Shipper").filter(company_name__icontains = word).distinct() #get shippers that have any of the words in company name
+            for shipper in shippers:
+                query_set.append(shipper.user)
+    else:
+        query_set = connections+pending
+    return render(request, 'trucker/connects.html', {'pending': pending, 'connections': connections, 'me' : me, 'num_notifications': num_notifications, 'query_set': query_set})
 
 @login_required
 @allowed_users(allowed_roles = ['Trucker'])
@@ -539,6 +567,7 @@ def download_docs(request):
         content_type = "application/x-zip-compressed"
     )
     resp['Content-Disposition'] = 'attachment; filename = %s' % zip_file_name
+    print(resp['Content-Disposition'])
     return resp
 
 @login_required

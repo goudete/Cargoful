@@ -26,7 +26,19 @@
     <h3>{% trans "My Shippers" %}</h3>
   </div>
 </div>
-
+<!-- search bar for specific shipper-->
+<div class="row justify-content-center mt-1">
+  <div class = "col-md-10">
+    <form class="form-inline" action = "/trucker/connection_requests" method = "POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type = "text" name = "specific_search" value = "specific_search" hidden = 'true' readonly/>
+        <input class="form-control shadow bg-white" type="search" name = "query" placeholder="{% trans 'Search My Shippers' %}" aria-label="Search" size="30"/>
+      </div>
+      <input type = 'submit' style="display: none;">
+    </form>
+  </div>
+</div>
 <!-- start of connections table -->
 <div class="row justify-content-center pt-2" id = 'dashboard'>
   <div class="col-md-10">
@@ -45,16 +57,18 @@
       </thead>
       <tbody>
         {% for c in connections %}
-        <tr>
-          <td>{{ c.profile.company_name }}</td>
-          <td>{{ c.profile.user.email }}</td>
-          <td>{{ c.profile.phone }}</td>
-          {% if c not in pending %}
-          <td style = "color: green;">{% trans "Connected" %} <img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></td>
-          {% else %}
-          <td style = "color: orange;">{% trans "Pending" %} <img src="{% static 'imgs/orange_arrow_2.png' %}" alt="" border=3 height=15 width=15></img></td>
+          {% if c in query_set %}
+          <tr>
+            <td>{{ c.profile.company_name }}</td>
+            <td>{{ c.profile.user.email }}</td>
+            <td>{{ c.profile.phone }}</td>
+            {% if c not in pending %}
+            <td style = "color: green;">{% trans "Connected" %} <img src="{% static 'imgs/green_check.png' %}" alt="" border=3 height=15 width=15></img></td>
+            {% else %}
+            <td style = "color: orange;">{% trans "Pending" %} <img src="{% static 'imgs/orange_arrow_2.png' %}" alt="" border=3 height=15 width=15></img></td>
+            {% endif %}
+          </tr>
           {% endif %}
-        </tr>
         {% endfor %}
       </tbody>
       {% else %}

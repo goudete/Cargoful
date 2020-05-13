@@ -40,6 +40,8 @@ from django.template.loader import get_template
 from django.template.loader import render_to_string
 from io import BytesIO
 import zipfile
+from botocore.config import Config
+
 
 # Create your views here.
 
@@ -513,7 +515,21 @@ def show_connects(request):
         else:
             connections.append(p.to_user)
             pending.append(p.to_user)
-    return render(request, 'shipper/connects.html', {'pending': pending, 'connections': connections, 'num_notifications': num_notifications})
+    query_set = [] #empty list (will be filled by shippers if the following if statement is true)
+    if request.method == "POST" and "specific_search" in request.POST:
+        #if this is true, then the trucker is searching for someone within his connections list
+        jdp = json.dumps(request.POST) #get request into json form
+        jsn = json.loads(jdp) #get dictionary from json
+        query = jsn['query'] #what was queried in searchbar
+        #get the ppl whose company names match your query
+        queries = query.split(" ") #turns a search like "trucking company" -> [trucking, company]
+        for word in queries:
+            truckers = Profile.objects.filter(user_type = "Trucker").filter(company_name__icontains = word).distinct() #get truckers that have any of the words in company name
+            for trucker in truckers:
+                query_set.append(trucker.user)
+    else:
+        query_set = connections+pending
+    return render(request, 'shipper/connects.html', {'pending': pending, 'connections': connections, 'num_notifications': num_notifications, 'query_set': query_set})
 
 @login_required
 @allowed_users(allowed_roles=['Shipper'])

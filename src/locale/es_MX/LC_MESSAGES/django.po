@@ -434,7 +434,7 @@ msgstr " Eliminado Exitosamente"
 
 #: shipper/models.py:55
 msgid "Weight"
-msgstr "Peso"
+msgstr "Peso (Tons)"
 
 #: shipper/templates/shipper/base.html:76
 #: shipper/templates/shipper/dashboard.html:94
@@ -683,8 +683,17 @@ msgstr "Contraoferta"
 msgid "Company"
 msgstr "Compañía"
 
+<<<<<<< Updated upstream
 #: shipper/templates/shipper/notifications.html:40
 #: trucker/templates/trucker/confirm_order.html:111
+=======
+#: .\shipper\templates\shipper\notifications.html:47
+msgid "Original Price"
+msgstr "Precio original (MXN)"
+
+#: .\shipper\templates\shipper\notifications.html:48
+#: .\trucker\templates\trucker\confirm_order.html:111
+>>>>>>> Stashed changes
 msgid "Counter Offer"
 msgstr "Contraoferta"
 
@@ -767,7 +776,7 @@ msgstr "Calculando precio recomendado"
 
 #: shipper/templates/shipper/post_order.html:172
 msgid "Cargoful Price Recommendation"
-msgstr "Precio recomendado por Cargoful"
+msgstr "Precio recomendado por Cargoful (MXN)"
 
 #: shipper/templates/shipper/post_order.html:172
 msgid ""
@@ -775,7 +784,7 @@ msgid ""
 "Cargoful suggests setting this price."
 msgstr ""
 "En base al tipo de unidad, la distancia y la oferta y demanda actual en el "
-"mercado, Cargoful recomienda ofrecer este precio"
+"mercado, Cargoful recomienda ofrecer este precio(MXN)"
 
 #: shipper/templates/shipper/post_order.html:187
 msgid "Please Specify Contents"
@@ -799,11 +808,11 @@ msgstr "Revisar Embarque"
 
 #: shipper/templates/shipper/review_counter_offer.html:65
 msgid "Your Price"
-msgstr "Tu Precio"
+msgstr "Tu Precio (MXN)"
 
 #: shipper/templates/shipper/review_counter_offer.html:72
 msgid "Counter Price"
-msgstr "Contra Oferta"
+msgstr "Contra Oferta (MXN)"
 
 #: shipper/templates/shipper/review_my_order.html:10
 msgid "Order Specs"

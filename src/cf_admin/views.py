@@ -81,6 +81,7 @@ def download_orden_de_embarco(request):
         bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
         objs = bucket.objects.filter(Prefix=aws_dir) #get folder
         for obj in objs:
+            print(obj)
             path, filename = os.path.split(obj.key)
             if 'orden_de_embarco' in filename:
                 orden_de_embarco = obj.get()['Body'].read()
