@@ -633,10 +633,8 @@ msgid "Negotiable"
 msgstr "Negociable"
 
 #: shipper/templates/shipper/connects.html:33
-#, fuzzy
-#| msgid "Search Truckers"
 msgid "Search My Truckers"
-msgstr "Buscar Transportistas"
+msgstr "Buscar mis Transportistas"
 
 #: shipper/templates/shipper/connects.html:52
 #: trucker/templates/trucker/connects.html:54
@@ -668,7 +666,7 @@ msgstr "Pendiente"
 #: shipper/templates/shipper/connects.html:81
 #: trucker/templates/trucker/connects.html:83
 msgid "No Connections Yet"
-msgstr "Sin conecciones"
+msgstr "Sin conexiones"
 
 #: shipper/templates/shipper/dashboard.html:56
 #: trucker/templates/trucker/my_orders.html:54
@@ -1012,10 +1010,8 @@ msgid "Denied"
 msgstr "Rechazado"
 
 #: trucker/templates/trucker/connects.html:36
-#, fuzzy
-#| msgid "Search Shippers"
 msgid "Search My Shippers"
-msgstr "Buscar Embarcadores"
+msgstr "Buscar mis Embarcadores"
 
 #: trucker/templates/trucker/my_orders.html:36
 msgid ""
@@ -1154,10 +1150,8 @@ msgid "Driver documents uploaded successfully"
 msgstr ""
 
 #: trucker/views.py:590
-#, fuzzy
-#| msgid "Not Uploaded by Trucker "
 msgid "Carta Porte Uploaded for order "
-msgstr "No ha sido subido por el transportista"
+msgstr "Carta Porte Ingresada para el embarque "
 
 #~ msgid "Uploaded"
 #~ msgstr "Ingresados"
