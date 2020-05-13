@@ -63,6 +63,8 @@ class EditUserInfo(forms.Form):
         super(EditUserInfo, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_show_labels = False
+        self.fields['company_name'].disabled = True
+        self.fields['username'].disabled = True
 
 
 class PasswordChangeFormCustom(PasswordChangeForm):
@@ -70,3 +72,6 @@ class PasswordChangeFormCustom(PasswordChangeForm):
         super(PasswordChangeFormCustom, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_show_labels = False
+
+class SettingsForm(forms.Form):
+    order_email_notifications = forms.BooleanField()

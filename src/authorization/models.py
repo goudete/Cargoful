@@ -12,6 +12,7 @@ class Profile(models.Model):
     is_approved = models.BooleanField(default = False)
     created_at = models.DateTimeField(auto_now_add=True)
     email_confirmed = models.BooleanField(default = False)
+    order_email_notifications = models.BooleanField(default = True)
     #for picking type of company
     company_type = models.CharField(_('Corporation Type'),max_length = 15)
 

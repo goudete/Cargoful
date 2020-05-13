@@ -21,6 +21,7 @@ from django.conf import settings
 from django.template.loader import get_template
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+import json
 
 def register_view(request):
     if request.method == 'POST':
@@ -200,6 +201,20 @@ def editProfileView(request):
             else:
                 pform = PasswordChangeFormCustom(user = request.user)
                 return render(request,'profiles/edit_profile.html',{'form':form,'pform': pform})
+        elif "notifications_submit" in request.POST: #they changed their notifications
+            user = request.user
+            jdp = json.dumps(request.POST) #get request into json form
+            jsn = json.loads(jdp) #get dictionary from json
+            jsn.pop("csrfmiddlewaretoken") #remove unnecessary stuff
+            print(jsn)
+            if 'order_email_notifications' in  jsn:
+                user.profile.order_email_notifications = True
+                print("here")
+            else:
+                user.profile.order_email_notifications = False
+            user.profile.save()
+            messages.info(request, "Notification Preferences successfully updated!")
+
         else: #they changed their password
             pform = PasswordChangeFormCustom(user=request.user, data=request.POST)
             if pform.is_valid():
@@ -213,6 +228,12 @@ def editProfileView(request):
             return HttpResponseRedirect('/shipper')
         else:
             return HttpResponseRedirect('/trucker')
+    user = request.user
     form = EditUserInfo()
+    form.fields['first_name'].widget.attrs['placeholder'] = user.first_name #add placeholders based on user information
+    form.fields['last_name'].widget.attrs['placeholder'] = user.last_name
+    form.fields['email'].widget.attrs['placeholder'] = user.email
+    form.fields['company_name'].widget.attrs['placeholder'] = user.profile.company_name
+    form.fields['username'].widget.attrs['placeholder'] = user.username
     pform = PasswordChangeFormCustom(user = request.user)
     return render(request,'profiles/edit_profile.html',{'form':form,'pform': pform})
